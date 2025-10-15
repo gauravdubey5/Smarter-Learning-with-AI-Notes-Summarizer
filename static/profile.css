@@ -1,0 +1,37 @@
+#imageInput {
+    display: none;
+}
+
+.upload-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: rgb(27, 1, 1);
+    font-size: 24px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.upload-label:hover {
+    background-color: #748fac;
+}
+
+.preview {
+    margin-top: 15px;
+    width: 150px;
+    height: 150px;
+    border: 2px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius:100px;
+}
+.preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

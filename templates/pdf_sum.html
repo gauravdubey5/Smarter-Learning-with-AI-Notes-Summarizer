@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            height:100%;
+            margin:0;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: linear-gradient(120deg, #34898f, #480647);
+            color:#dbeafe;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+      
+            }
+        header {
+            background: linear-gradient(150deg,#141e41 40%, #103c76 60%);
+            padding: 30px 20px;
+            display: flex;
+            max-width: 100%;
+            max-height: 60px;
+            }
+        header ul {
+            list-style: none;
+            }
+        .nnav-liks {
+            position: absolute; top: 20px; left: 70px;
+            display: flex;
+            gap: 10px
+            }
+        .nnav-liks li a {
+            padding: 10px 20px;
+            border: none;
+            /* background: #7961dd; */
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative; bottom: 10px;
+            transition: 0.3s ease;
+            
+            }
+        .nnav-liks li a:hover {
+            background: #489cc3;
+            transform: scale(1.05);
+            }
+        nav a {
+            text-decoration: none; 
+            color: white; 
+            }
+
+            nav a:hover {
+            color: cyan; 
+            }
+        
+
+        
+        .container{
+            
+            text-align: center;
+            }
+
+        .container div {
+            margin-top: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* centers horizontally */
+            justify-content: center;
+            }
+
+        h1{
+            color: white; 
+            font-size: 30px;
+            font-weight: bold;
+            
+            }
+            
+        input[type="file"] {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 20px;
+            width: 300px;
+            height: 100px;
+            background: linear-gradient(120deg, #3ed5f0, #8d1c89);
+            color: white;
+            cursor: pointer;
+            border: none;
+            }
+
+        input[type="file"]::-webkit-file-upload-button {
+            visibility: hidden;
+        }
+        input[type="file"]::before {
+            content: 'Choose File';
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: linear-gradient(120deg, #3ed5f0, #8d1c89);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            }
+
+
+ 
+        div button {
+            font-size: 20px;
+            width: 200px;
+            height: 50px;
+            border-radius: 30px;
+            margin-top: 30px;
+            background: linear-gradient(120deg, #3ed5f0, #8d1c89);
+            border: none;
+            cursor: pointer;
+            }
+        button:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            background: linear-gradient(120deg, #27798a 50%, #0f8e24);
+            color: white;
+            
+            }
+        .footer p {
+            margin-bottom: 10px;
+            color: white;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 20%;
+            }
+      
+
+    </style>
+</head>
+<body>
+    <header>
+    <nav>
+        <ul class="nnav-liks" id="btn">
+          <li><a href="/home">Home</a></li>
+          <li><a href="/feature">Features</a></li>
+          <li><a href="/help">Help</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+    </nav>
+    </header>
+    <div class="container">
+        <div>
+            <h1>PDF Summarizer</h1>
+            <input type="file" id="fileInput" accept=".txt,.pdf,.docx"><br>
+            <button>Summarize PDF</button>
+        </div>
+    </div>
+    <footer class="footer">
+      <p>&copy; 2025 AI Notes Summarizer. All rights reserved.</p> 
+    </footer>
+</body>
+</html>

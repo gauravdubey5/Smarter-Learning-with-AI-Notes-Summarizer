@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/signup.css">
+    
+</head>
+<body>
+    <header>
+    <nav>
+        <ul class="nnav-liks" id="btn">
+          <li><a href="/home">Home</a></li>
+          <li><a href="/feature">Features</a></li>
+          <li><a href="/help">Help</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+    </nav>
+    </header>
+    <div class="container">
+        
+        <div class="signup">
+            <h3>Sign Up</h3>
+            <form action="/forgot" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Your name" required>
+                <br><br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Your Email" required>
+                <br><br><br>
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="">  -- Select Gender --</option> 
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <br><br><br>
+                <label for="question">Security Questions:</label>
+                    <select id="question" name="question" required>
+                        <option value="">-- Select a Question --</option>
+                        <option value="pet">What is your pet's name?</option>
+                        <option value="birthplace">What is your birth place?</option>
+                        <option value="father">What is your father's first name?</option>
+                        <option value="course">What is your course?</option>
+                    </select>
+                <br><br><br>
+                <label for="answer" id="ans">Your Answer:</label>
+                <input type="text" id="answer" name="answer" placeholder="Type your answer here...">
+                <br><br><br>
+                <button type="submit">Get Password</button>
+            </form>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2025 AI Notes Summarizer. All rights reserved.</p>
+    </footer>
+</body>
+</html>

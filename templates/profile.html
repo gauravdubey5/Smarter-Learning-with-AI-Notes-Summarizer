@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <style>
+        body {
+        height:100%;
+        margin:0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(120deg, #34898f, #480647);
+        color:#dbeafe;
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+
+    }
+        h2 {
+            color: #fbbf24;
+            text-align: center;
+        }
+        .cont1 {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .cont1 img {
+            border-radius: 50%;
+            border: 3px solid #fbbf24;
+        }
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 10px 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(120deg, rgb(24, 65, 90) 40%, rgb(94, 5, 75) 100%  );
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .container input[type="file"] {
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+        .container p {
+            margin: 50px 0;
+        }
+        #logout {
+            text-align: center;
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background: linear-gradient(120deg, #2ef15f, #8908a0);
+            color: white;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+            text-decoration: none;
+        }
+        #logout:hover {
+            background: linear-gradient(120deg, #591c64, #f12e2e);
+            transform: scale(1.1);
+        }
+        #delete {
+            
+            text-align: center;
+            display: inline-block;
+            margin-top: 20px;
+            margin-left: 370px;
+            padding: 10px 15px;
+            background: linear-gradient(120deg, #2ef15f, #8908a0);
+            color: white;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+            text-decoration: none;
+        }
+        #delete:hover {
+            background: linear-gradient(120deg, #f7511f, #f12e2e);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+            <h2>Welcome, {{ user['name'] }}</h2>
+    <div class="cont1">
+        {% if user['gender'] == 'male' %}
+        <img src="/static/uploads/male.png" alt="Profile Picture" width="120" height="120" >
+        {% elif user['gender'] == 'female' %}
+        <img src="/static/uploads/female.png" alt="Profile Picture" width="120" height="120" >
+        {% elif user['gender']== 'other' %}
+        <img src="/static/uploads/other.jpg" alt="Profile Picture" width="120" height="120" >
+        {% else %}
+        <img src="/static/uploads/img.png" alt="Profile Picture" width="120" height="120" >
+        {% endif %}
+    </div>
+    <div class="container">
+        <p><strong>Email:</strong> {{ user['email'] }}</p>
+        <p><strong>Gender: </strong> {{ user['gender'] }}</p>
+
+        <a id="logout" href="{{ url_for('logout') }}">Logout</a>
+        <a id="delete" href="{{ url_for('delete') }}">Delete Account</a>
+    </div>
+</body>
+</html>

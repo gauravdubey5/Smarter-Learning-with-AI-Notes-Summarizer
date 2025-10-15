@@ -1,0 +1,157 @@
+body {
+        height:100%;
+        margin:0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(120deg, #34898f, #480647);
+        color:#dbeafe;
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+
+    }
+    header {
+        background: linear-gradient(150deg,#141e41 40%, #103c76 60%);
+        padding: 30px 20px;
+        display: flex;
+        max-width: 100%;
+        max-height: 60px;
+    }
+    header ul {
+        list-style: none;
+    }
+
+    .nnav-liks {
+        position: absolute; top: 10px; left: 20px;
+        display: flex;
+        gap: 10px
+    }
+    .nnav-liks li a {
+        padding: 10px 20px;
+        border: none;
+        
+        color: white;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.3s ease;
+        
+    }
+    .nnav-liks li a:hover {
+        background: #489cc3;
+        transform: scale(1.05);
+    }
+
+    /* css for about */
+    .about{
+        margin-bottom: 25%;
+    }
+    .about h1{
+        color: #5ba2d2;
+        font-size: 50px;
+        font-weight: 700;
+        margin-top: 100px;
+        margin-bottom: 100px;
+        text-align: center;
+        font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .about p{
+        color: rgb(252, 219, 249);
+        font-size: 20px;
+        font-weight: 500;
+        margin-top: -15px;
+        margin-bottom: 30px;
+        margin-left: 30px;
+        margin-right: 30px;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    }
+
+    .footer p {
+    margin-bottom: 10px;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    }
+
+/* css for features */
+
+nav a {
+  text-decoration: none; 
+  color: white;
+}
+
+nav a:hover {
+  color: cyan;
+}
+
+h2{
+    color: #09141a;
+    font-size: 30px;
+    font-weight: 700;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    text-align: left;
+    font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.feature p{
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: -15px;
+    margin-bottom: 30px;
+    text-align: left;
+    margin-left: 70px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.feature h1{
+    color: white;
+    
+}
+.feature h1 span {
+      color: #5ba2d2;
+    }
+
+.search-bar {
+    text-align: center;
+    margin-top: 20px;
+}
+.search-bar input[type="text"] {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+.search-bar button {
+    padding: 10px 20px;
+    background-color: #489cc3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.search-bar button:hover {
+    background-color: #357ab8;
+}
+.footer p {
+    margin-bottom: 10px;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    }
+
+/* for the help */
+
+    h1{
+        color: #5ba2d2;
+        font-size: 50px;
+        font-weight: 700;
+        margin-top: 100px;
+        margin-bottom: 100px;
+        text-align: center;
+        font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif;
+    }
