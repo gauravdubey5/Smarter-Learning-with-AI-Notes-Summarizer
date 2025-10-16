@@ -12,7 +12,7 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-def init_db():
+def init_db(): # Initialize the database and create the users table if it doesn't exist
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute('''
@@ -29,7 +29,9 @@ def init_db():
     conn.commit()
     conn.close()
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
+# Directory to save uploaded files
+
+UPLOAD_FOLDER = os.path.join('static', 'uploads') 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -37,11 +39,12 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
+# Route for index page 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+#Route for signup page
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -72,6 +75,7 @@ def signup():
 
     return render_template('signup.html')
 
+# Route for login page
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -96,13 +100,14 @@ def login():
 
     return render_template("login.html")
 
-
+#Route for logout
 @app.route("/logout")
 def logout():
     session.clear()
     flash("You have been logged out.", "info")
     return redirect(url_for("login"))
 
+#Route for profile page
 @app.route("/profile")
 def profile():
     if "user_id" not in session:
@@ -118,23 +123,27 @@ def profile():
 
     return render_template("profile.html", user=user)
 
-
+#Route for About Page
 @app.route('/about')
 def about():
     return render_template('about.html')
 
+#Route for Home Page
 @app.route('/home')
 def home():
     return render_template('index.html')
 
+#Route for Feature Page
 @app.route('/feature')
 def feature():
     return render_template('feature.html')
 
+#Route for Help Page
 @app.route('/help')
 def help():
     return render_template('help.html')
 
+#Route for TextSummaries Page
 @app.route('/textsummaries')
 def textsummaries():
     if "user_id" not in session:
@@ -142,6 +151,7 @@ def textsummaries():
         return redirect(url_for("login"))
     return render_template('text_sum.html')
 
+#Route for PDFSummaries Page
 @app.route('/pdf_summaries')
 def pdfsummaries():
     if "user_id" not in session:
@@ -149,6 +159,7 @@ def pdfsummaries():
         return redirect(url_for("login"))
     return render_template('pdf_sum.html')
 
+#Route for the Text To Speech Page
 @app.route('/text_to_speech')
 def text_to_speech():
     if "user_id" not in session:
@@ -156,6 +167,7 @@ def text_to_speech():
         return redirect(url_for("login"))
     return render_template('text_to_speech.html')
 
+#Route For Deleting Account
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
 
@@ -171,7 +183,8 @@ def delete():
     else:
         flash("You must be logged in to delete your account.", "warning")
         return redirect(url_for("login"))
-    
+
+# Route for Forgot Password    
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot():
     if request.method == 'POST':
@@ -198,7 +211,7 @@ def forgot():
 
     return render_template("forgot.html")
 
-
+#Route for the Reset Password
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     if 'reset_user_id' not in session:
@@ -231,5 +244,5 @@ def reset_password():
 
 
 if __name__ == '__main__':
-    init_db()
+    init_db() #Calling the init_db function to ensure the database is set up
     app.run(debug=True)

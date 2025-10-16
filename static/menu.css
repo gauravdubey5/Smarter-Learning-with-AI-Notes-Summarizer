@@ -45,7 +45,7 @@ body {
         margin-bottom: 25%;
     }
     .about h1{
-        color: #5ba2d2;
+        color: black;
         font-size: 50px;
         font-weight: 700;
         margin-top: 100px;
@@ -145,13 +145,30 @@ h2{
     }
 
 /* for the help */
-
-    h1{
-        color: #5ba2d2;
+    .help {
+        height: 100%;
+        margin-bottom: 40%;
+        border-radius: 50px;
+        
+    }
+    .help h1{
+        color: #09141a;
         font-size: 50px;
         font-weight: 700;
         margin-top: 100px;
         margin-bottom: 100px;
         text-align: center;
         font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .help input{
+        background: linear-gradient(150deg,#2036a48a , black  );
+        
+    }
+    .help button{
+        background: linear-gradient(120deg,#780d74 , #bd1496 );
+        border-radius: 60px;
+    }
+    .help button:hover{
+        background: linear-gradient(120deg, green , rgb(26, 231, 26));
+        transform: scale(1.08);
     }
