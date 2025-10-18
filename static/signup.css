@@ -1,4 +1,4 @@
-/* Body for all Pages */
+/* Body of Signup Pages */
 body {
         height:100%;
         margin:0;
@@ -10,7 +10,7 @@ body {
 
     }
 
-    /*Header For all Pages*/
+    /*Header of Pages*/
     header {
         background: linear-gradient(150deg,#141e41 40%, #103c76 60%);
         padding: 30px 20px;
@@ -45,74 +45,8 @@ body {
         background: #489cc3;
         transform: scale(1.05);
     }
-    /*  Costomise the lable of all page */
-    label {
-        position: absolute; left: 30px;
-        display: flex;
-        text-align: left;
-        margin-bottom: 8px;
-        color: #fff;
-        font-size: 20px;
-        align-items: left;
-        
-    }
-    /* Costomise Inpue of all pages */
-    input{
-        position: absolute;  right: 20px;
-        width: 50%;
-        padding: 8px;
-        margin-bottom: 6px;
-        border: 1px solid #ccc;
-        border-radius: 60px;
-        box-sizing: border-box;
-        
-    }
-    input::hover{
-        border: 1px solid #4cafef;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        transform: translateY(-8px);
-    }
-    select{
-        position: absolute;  right: 20px;
-        width: 50%;
-        padding: 8px;
-        margin-bottom: 6px;
-        border: 1px solid #ccc;
-        border-radius: 60px;
-        box-sizing: border-box;
-    }
-
-    /* Costomise the Buttons of all Pages */
-    button {
-        width: 100%;
-        padding: 10px;
-        background: linear-gradient(120deg, #328a99, #8d1c89);
-        color: white;
-        border: none;
-        border-radius: 60px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: 0.3s ease;
-
-    }
-    button:hover {
-        background-color: #304a7e;
-        color: whitesmoke;
-        transform: scale(1.1);
-        opacity: 0.9;
-    }
-    /* Heading For All Pages */
-    h3{
-        color: rgb(17, 170, 175);
-        margin-bottom: 20px;
-        font-size: 28px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        position: absolute;
-        
-        top: 10px; left: 50%; transform: translate(-50%, 0%);
-    }
-
-    /* Styling for Signup Pages */
+    
+    /* Styling of Signup Pages */
     .signup {
       text-align: center;
       padding: 100px 30px;
@@ -147,7 +81,56 @@ body {
         font-size: 12px;
         border-radius: 6px;
     }
-    
+
+        /* Heading of Pages */
+    h3{
+        color: rgb(17, 170, 175);
+        margin-bottom: 20px;
+        font-size: 28px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        position: absolute;
+        
+        top: 10px; left: 50%; transform: translate(-50%, 0%);
+    }
+
+
+    /*  Costomise the lable of the page */
+    label {
+        position: absolute; left: 30px;
+        display: flex;
+        text-align: left;
+        margin-bottom: 8px;
+        color: #fff;
+        font-size: 20px;
+        align-items: left;
+        
+    }
+    /* Costomise Inpue of the pages */
+    input{
+        position: absolute;  right: 20px;
+        width: 50%;
+        padding: 8px;
+        margin-bottom: 6px;
+        border: 1px solid #ccc;
+        border-radius: 60px;
+        box-sizing: border-box;
+        
+    }
+    input::hover{
+        border: 1px solid #4cafef;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        transform: translateY(-8px);
+    }
+    select{
+        position: absolute;  right: 20px;
+        width: 50%;
+        padding: 8px;
+        margin-bottom: 6px;
+        border: 1px solid #ccc;
+        border-radius: 60px;
+        box-sizing: border-box;
+    }
+    /* Answer Of selected Qoestion */
     #answer{
         position: absolute;  right: 20px;
         width: 50%;
@@ -158,6 +141,28 @@ body {
         box-sizing: border-box;
     
     }
+
+    /* Costomise the Buttons of the Pages */
+    button {
+        width: 100%;
+        padding: 10px;
+        background: linear-gradient(120deg, #328a99, #8d1c89);
+        color: white;
+        border: none;
+        border-radius: 60px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: 0.3s ease;
+
+    }
+    button:hover {
+        background-color: #304a7e;
+        color: whitesmoke;
+        transform: scale(1.1);
+        opacity: 0.9;
+    }
+
+        /* For Gogin Link */
     
     #log{
         color: white;
@@ -178,7 +183,7 @@ nav a:hover {
   color: cyan;
 }
 
-/* Footer for all Pages */
+/* Footer of Pages */
 .footer p {
     margin-bottom: 10px;
     color: white;
