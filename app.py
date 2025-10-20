@@ -128,10 +128,6 @@ def profile():
 def about():
     return render_template('about.html')
 
-#Route for Home Page
-@app.route('/home')
-def home():
-    return render_template('index.html')
 
 #Route for Feature Page
 @app.route('/feature')

@@ -1,3 +1,4 @@
+/* Body OF Index Page */
 body {
       height:100%;
       margin:0;
@@ -8,6 +9,7 @@ body {
       -moz-osx-font-smoothing:grayscale;
       
     }
+    /* Header Of Index page */
     header {
       background: linear-gradient(150deg,#141e41 40%, #103c76 60%);      padding: 10px 20px;
       display: flex;
@@ -17,13 +19,13 @@ body {
     header ul {
       list-style: none;
     }
-    
+    /* Container Of Index Page */
     .container {
       text-align: center;
       padding: 60px 20px;
       margin-bottom: 0%;
     }
-
+/* Fof Heading of index page */
     h1 {
       color: white;
       font-size: 28px;
@@ -40,15 +42,15 @@ body {
       margin-bottom: 40px;
       font-size: 16px;
     }
-
-    .plans {
+/* For Types Of input Of Summarizer */
+    .types {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
       gap: 50px;
     }
-
-    .plan {
+/* For Text Summarizer and Text To Speech */
+    .type {
       background: #111;
       color: #fff;
       border-radius: 16px;
@@ -58,16 +60,16 @@ body {
       transition: transform 0.3s ease;
     }
 
-    .plan:hover {
+    .type:hover {
       transform: translateY(-8px);
     }
 
-    .plan h2 {
+    .type h2 {
       font-size: 22px;
       margin-bottom: 8px;
     }
 
-    .plan {
+    .type {
       background: linear-gradient(160deg, #1a1a1a, #2e2e2e);
       border: 2px solid #4cafef;
       position: relative;
@@ -78,7 +80,7 @@ body {
       margin: 15px 0;
       color: #4cafef;
     }
-
+/* For List of index page */
     ul {
       list-style: none;
       padding: 0;
@@ -91,7 +93,7 @@ body {
       font-size: 14px;
       color: #ccc;
     }
-
+/* Use for botton in index page */
     .btn {
       display: inline-block;
       padding: 12px 20px;
@@ -107,7 +109,7 @@ body {
       background: #4cafef;
       color: #fff;
     }
-
+/* this is for Intermediate or pdf like input */
     .pro {
       background: linear-gradient(160deg, #1a1a1a, #2e2e2e);
       border: 2px solid #4cafef;
@@ -126,7 +128,7 @@ body {
       font-size: 12px;
       border-radius: 6px;
     }
-
+/* this is use for corner button (Login And Signup ) */
 .corner-buttons {
     color: white;
     position: absolute;
@@ -135,7 +137,7 @@ body {
     display: flex;
     gap: 10px; 
 }
-
+/* For Login Botton */
 .btn1 {
   padding: 10px 18px;
   border: none;
@@ -146,7 +148,7 @@ body {
   position: absolute; top: 20px; right: 160px;
   display: flex; gap: 10px;
 }
-
+/* For Signup Botton */
 .btn2 {
   padding: 10px 18px;
   border: none;
@@ -157,13 +159,13 @@ body {
   position: absolute; top: 20px; right: 50px;
   display: flex; gap: 10px;
 }
-
+/* For Login */
 .btn1.login {
   background: linear-gradient(120deg, #328a99, #8d1c89);
   color: #333;
 }
 
-
+/* For Signup */
 .btn2.signup {
   background: linear-gradient(120deg, #328a99, #8d1c89);
   color: white;
@@ -175,6 +177,7 @@ body {
   transform: scale(1.2);
   opacity: 0.9;
 }
+/* Hover effect */
 .btn2:hover {
   transform: scale(1.2);
   background: linear-gradient(120deg, #9e2cb7, #d10cce);
@@ -189,6 +192,7 @@ body {
     flex-direction: column;
   }
 }
+/* for Footer in Home page */
 .footer p {
     margin-bottom: 10px;
     color: white;

@@ -1,3 +1,4 @@
+/* Body For Login Page */
 body {
         height:100%;
         margin:0;
@@ -8,6 +9,7 @@ body {
         -moz-osx-font-smoothing:grayscale;
 
     }
+    /* Header For Login Page */
     header {
         background: linear-gradient(150deg,#141e41 40%, #103c76 60%);
         padding: 30px 20px;
@@ -15,9 +17,11 @@ body {
         max-width: 100%;
         max-height: 60px;
     }
+    /* For Header List Styling */
     header ul {
         list-style: none;
     }
+    /* For Heade Link */
     .nnav-liks {
         position: absolute; top: 10px; left: 20px;
         display: flex;
@@ -38,7 +42,7 @@ body {
         background: #489cc3;
         transform: scale(1.05);
     }
-    
+    /* Container Of Login Page */
     .container {
       text-align: center;
       /* padding: 60px 20px; */
@@ -76,6 +80,8 @@ body {
         font-size: 12px;
         border-radius: 6px;
     }
+
+    /* Lable Of Login Page */
     label {
         display: block;
         text-align: left;
@@ -83,6 +89,7 @@ body {
         color: #fff;
         font-size: 20px;
     }
+    /* Input Of Login Page */
     input{
         width: 100%;
         padding: 8px;
@@ -96,6 +103,8 @@ body {
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         transform: translateY(-8px);
     }
+
+    /* For Button in the Login page */
     button {
         width: 100%;
         padding: 10px;
@@ -114,6 +123,8 @@ body {
         transform: scale(1.05);
         opacity: 0.9;
     }
+
+    /* Heading Of Login page */
     h3{
         color: white;
         margin-bottom: 20px;

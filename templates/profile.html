@@ -17,6 +17,16 @@
             color: #fbbf24;
             text-align: center;
         }
+        #gohome{
+            background: linear-gradient(120deg , rgb(160, 14, 14), rgb(228, 228, 17));
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 10px 15px;
+            color: white;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+            border-radius: 60px;
+        }
         .cont1 {
             text-align: center;
             margin-top: 30px;
@@ -63,6 +73,7 @@
             border-radius: 4px;
             transition: background 0.3s ease;
             text-decoration: none;
+            border-radius: 60px;
         }
         #logout:hover {
             background: linear-gradient(120deg, #591c64, #f12e2e);
@@ -80,6 +91,7 @@
             border-radius: 4px;
             transition: background 0.3s ease;
             text-decoration: none;
+            border-radius: 60px;
         }
         #delete:hover {
             background: linear-gradient(120deg, #f7511f, #f12e2e);
@@ -89,6 +101,7 @@
 </head>
 <body>
             <h2>Welcome, {{ user['name'] }}</h2>
+            <a id="gohome" href="/"> Go to Home</a>
     <div class="cont1">
         {% if user['gender'] == 'male' %}
         <img src="/static/uploads/male.png" alt="Profile Picture" width="120" height="120" >
