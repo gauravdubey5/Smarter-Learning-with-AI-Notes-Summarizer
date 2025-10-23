@@ -17,6 +17,7 @@
             color: #fbbf24;
             text-align: center;
         }
+        
         #gohome{
             background: linear-gradient(120deg , rgb(160, 14, 14), rgb(228, 228, 17));
             text-decoration: none;
@@ -32,8 +33,12 @@
             margin-top: 30px;
         }
         .cont1 img {
-            border-radius: 50%;
-            border: 3px solid #fbbf24;
+                border-radius: 50%;
+                border: 3px solid #fbbf24;
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+
         }
         a {
             color: #3b82f6;
@@ -97,21 +102,22 @@
             background: linear-gradient(120deg, #f7511f, #f12e2e);
             transform: scale(1.1);
         }
+        
     </style>
 </head>
 <body>
             <h2>Welcome, {{ user['name'] }}</h2>
             <a id="gohome" href="/"> Go to Home</a>
     <div class="cont1">
-        {% if user['gender'] == 'male' %}
-        <img src="/static/uploads/male.png" alt="Profile Picture" width="120" height="120" >
-        {% elif user['gender'] == 'female' %}
-        <img src="/static/uploads/female.png" alt="Profile Picture" width="120" height="120" >
-        {% elif user['gender']== 'other' %}
-        <img src="/static/uploads/other.jpg" alt="Profile Picture" width="120" height="120" >
-        {% else %}
-        <img src="/static/uploads/img.png" alt="Profile Picture" width="120" height="120" >
-        {% endif %}
+            {% if user['gender']|lower == 'male' %}
+                <img src="/static/uploads/3d-cartoon-portrait-person-practicing-law-related-profession.jpg" alt="Profile Picture" width="120" height="120">
+            {% elif user['gender']|lower == 'female' %}
+                <img src="/static/uploads/portrait-3d-female-doctor.jpg" alt="Profile Picture" width="120" height="120">
+            {% else %}
+                <img src="/static/uploads/img.png" alt="Profile Picture" width="120" height="120">
+            {% endif %}
+
+
     </div>
     <div class="container">
         <p><strong>Email:</strong> {{ user['email'] }}</p>

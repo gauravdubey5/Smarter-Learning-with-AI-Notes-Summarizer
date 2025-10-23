@@ -48,7 +48,7 @@ def index():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        name = request.form.get('name')
+        name = request.form.get('name').capitalize()
         email = request.form.get('email')
         gender = request.form.get('gender')
         password = request.form.get('password')
@@ -71,7 +71,8 @@ def signup():
         except sqlite3.IntegrityError:
             flash("Email already exists!", "danger")
         conn.close()
-        return redirect(url_for('login'))
+        return redirect(url_for('profile'))
+    
 
     return render_template('signup.html')
 
@@ -94,7 +95,7 @@ def login():
             session["user_id"] = user["id"]
             session["email"] = user["email"]
             flash("Login successful!", "success")
-            return redirect(url_for("profile"))
+            return redirect(url_for("index"))
         else:
             flash("Invalid email or password", "danger")
 
@@ -105,23 +106,25 @@ def login():
 def logout():
     session.clear()
     flash("You have been logged out.", "info")
-    return redirect(url_for("login"))
+    return redirect(url_for("index"))
 
 #Route for profile page
 @app.route("/profile")
 def profile():
-    if "user_id" not in session:
+    if 'user_id' not in session:
         flash("You must log in first", "warning")
         return redirect(url_for("login"))
+    else:
 
-    conn = get_db_connection()
-    user = conn.execute(
-        "SELECT * FROM users WHERE id=?",
-        (session["user_id"],)
-    ).fetchone()
-    conn.close()
+        conn = get_db_connection()
+        user = conn.execute(
+            "SELECT * FROM users WHERE id=?",
+            (session["user_id"],)
+        ).fetchone()
+        conn.close()
+        print(dict(user))
 
-    return render_template("profile.html", user=user)
+        return render_template("profile.html", user=user)
 
 #Route for About Page
 @app.route('/about')
@@ -161,7 +164,8 @@ def text_to_speech():
     if "user_id" not in session:
         flash("Please login first!", "warning")
         return redirect(url_for("login"))
-    return render_template('text_to_speech.html')
+    else:
+        return render_template('text_to_speech.html')
 
 #Route For Deleting Account
 @app.route('/delete', methods=['GET', 'POST'])
