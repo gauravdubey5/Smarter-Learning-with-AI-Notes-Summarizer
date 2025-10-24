@@ -139,36 +139,39 @@ body {
 }
 /* For Login Botton */
 .btn1 {
-  padding: 10px 18px;
+  padding: 8px 18px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
   transition: 0.3s ease;
-  position: absolute; top: 20px; right: 160px;
+  position: absolute; top: 5px; right: 160px;
   display: flex; gap: 10px;
 }
 /* For Signup Botton */
 .btn2 {
-  padding: 10px 18px;
+  padding: 8px 10px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
   transition: 0.3s ease;
-  position: absolute; top: 20px; right: 50px;
+  position: absolute; top: 5px; right: 50px;
   display: flex; gap: 10px;
 }
 /* For Login */
 .btn1.login {
   background: linear-gradient(120deg, #328a99, #8d1c89);
   color: #333;
+  text-decoration: none;
 }
 
 /* For Signup */
 .btn2.signup {
   background: linear-gradient(120deg, #328a99, #8d1c89);
   color: white;
+  text-decoration: none;
+  
 }
 
 /* Hover effect */
@@ -201,48 +204,6 @@ body {
     margin-top: 150px;
     }
 
-
- .nnav-liks {
-    position: absolute; top: 20px; left: 70px;
-    display: flex;
-    gap: 10px
-}
-.nnav-liks li a {
-    padding: 10px 20px;
-    border: none;
-    color: white;
-    font-size: 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative; bottom: 10px;
-    transition: 0.3s ease;
-    
-}
-.nnav-liks li a:hover {
-  background: linear-gradient(120deg, #328a99, #8d1c89);
-    transform: scale(1.05);
-}
-.profile-btn{
-    border: none;
-    background: none;  
-    padding: 0;
-    cursor: pointer;
-}
-.profile-btn img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%; 
-    object-fit: cover;  
-}
-.profile-btn:hover {
-    transform: scale(1.05);
-    opacity: 0.8;
-}
-nav a {
-  text-decoration: none;
-  color: white; 
-}
-
 nav a:hover {
   color: cyan; 
 }
@@ -253,4 +214,70 @@ button a {
 
 button a:hover {
   color: cyan; 
+}
+.menu-btn {
+    width: 30px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 22px;
+}
+
+.bar {
+    height: 4px;
+    width: 100%;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+/* When menu button is clicked */
+.menu-btn.open .bar:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+}
+.menu-btn.open .bar:nth-child(2) {
+    opacity: 0;
+}
+.menu-btn.open .bar:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+}
+
+/* Navigation Menu */
+.nav {
+    display: none;
+    position: absolute;
+    top: 10px;
+    left: 50px;
+    background: #1e293b;
+    border-radius: 8px;
+}
+
+.nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+}
+
+.nav ul li {
+    margin: 10px 0;
+}
+
+.nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+    transition: background 0.3s;
+}
+
+.nav ul li a:hover {
+    background: linear-gradient(120deg, #328a99, #8d1c89);
+    transform: scale(1.05);
+    border-radius: 5px;
+}
+
+/* Show menu when active */
+.nav.active {
+    display: block;
 }

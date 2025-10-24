@@ -68,6 +68,19 @@
         .container p {
             margin: 50px 0;
         }
+        #edit {
+            text-align: center;
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background: linear-gradient(120deg, #2ef15f, #8908a0);
+            color: white;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+            text-decoration: none;
+            border-radius: 60px;
+            
+        }
         #logout {
             text-align: center;
             display: inline-block;
@@ -106,7 +119,7 @@
     </style>
 </head>
 <body>
-            <h2>Welcome, {{ user['name'] }}</h2>
+            
             <a id="gohome" href="/"> Go to Home</a>
     <div class="cont1">
             {% if user['gender']|lower == 'male' %}
@@ -119,10 +132,13 @@
 
 
     </div>
-    <div class="container">
+    <div class="container"> 
+        <a id="edit" href="{{ url_for('edit') }}">Edit</a>
+
+        <h2>Welcome, {{ user['name'] }}</h2>
         <p><strong>Email:</strong> {{ user['email'] }}</p>
         <p><strong>Gender: </strong> {{ user['gender'] }}</p>
-
+        
         <a id="logout" href="{{ url_for('logout') }}">Logout</a>
         <a id="delete" href="{{ url_for('delete') }}">Delete Account</a>
     </div>

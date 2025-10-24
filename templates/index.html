@@ -9,25 +9,35 @@
 </head>
 <body>
   <header>
-      <button class="profile-btn">
-        <a href="/profile">
-        <img src="/static/uploads/img.png" alt="Profile" href="/profile">
-        </a>
-      </button>
+      
       <div class="corner-button">
       <button  class="btn1 login"><a href="/login">Login</a></button>
       <button class="btn2 signup"><a href="/signup">Sign Up</a></button>
+        <div class="menu-btn" id="menu-btn">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
     </div>
-      <nav>
-        
-        <ul class="nnav-liks" id="btn">
-          <li><a href="/">Home</a></li>
-          <li><a href="/feature">Features</a></li>
-          <li><a href="/help">Help</a></li>
-          <li><a href="/about">About</a></li>
+
+    <nav class="nav" id="nav">
+        <ul>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/feature">Features</a></li>
+            <li><a href="/help">Help</a></li>
         </ul>
-      </nav>
+    </nav>
     </header>
+    <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const nav = document.getElementById("nav");
+
+    menuBtn.addEventListener("click", () => {
+        nav.classList.toggle("active");
+        menuBtn.classList.toggle("open");
+    });
+</script>
   <div class="container">
     <h1>Smarter Learning with <span>AI Notes Summarizer</span></h1>
     <p class="subtitle">Save time, study better, and understand more with our AI-powered note summarization tool.</p>
