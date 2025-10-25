@@ -19,7 +19,7 @@
         <div class="bar"></div>
     </div>
 
-    <nav class="nav" id="nav">
+    <nav class="sidebar" id="sidebar">
         <ul>
             <li><a href="/profile">Profile</a></li>
             <li><a href="/">Home</a></li>
@@ -28,14 +28,24 @@
             <li><a href="/help">Help</a></li>
         </ul>
     </nav>
+    <div class="overlay" id="overlay"></div>
     </header>
     <script>
     const menuBtn = document.getElementById("menu-btn");
-    const nav = document.getElementById("nav");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
 
     menuBtn.addEventListener("click", () => {
-        nav.classList.toggle("active");
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("show");
         menuBtn.classList.toggle("open");
+    });
+
+    // Close sidebar when clicking outside (on overlay)
+    overlay.addEventListener("click", () => {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("show");
+        menuBtn.classList.remove("open");
     });
 </script>
   <div class="container">

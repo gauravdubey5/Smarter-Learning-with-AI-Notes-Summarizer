@@ -232,7 +232,6 @@ button a:hover {
     transition: all 0.3s;
 }
 
-/* When menu button is clicked */
 .menu-btn.open .bar:nth-child(1) {
     transform: rotate(45deg) translateY(8px);
 }
@@ -243,41 +242,99 @@ button a:hover {
     transform: rotate(-45deg) translateY(-8px);
 }
 
-/* Navigation Menu */
-.nav {
-    display: none;
+/* Sidebar */
+.sidebar {
     position: absolute;
-    top: 10px;
-    left: 50px;
-    background: #1e293b;
-    border-radius: 8px;
+    left: -250px;
+    top: 40px;
+    width: 250px;
+    height: 100vh;
+    background: linear-gradient(150deg,#141e41 40%, #103c76 60%);
+    color: white;
+    transition: left 0.3s ease;
+    padding-top: 70px;
+    z-index: 999;
 }
 
-.nav ul {
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar ul {
     list-style: none;
+    padding: 0;
     margin: 0;
-    padding: 10px;
 }
 
-.nav ul li {
-    margin: 10px 0;
+.sidebar ul li {
+    padding: 15px 20px;
+    text-align: center;
 }
 
-.nav ul li a {
+.sidebar ul li a {
     color: white;
     text-decoration: none;
-    padding: 10px 20px;
     display: block;
     transition: background 0.3s;
+    font-size: 16px;
 }
 
-.nav ul li a:hover {
+.sidebar ul li a:hover {
     background: linear-gradient(120deg, #328a99, #8d1c89);
-    transform: scale(1.05);
-    border-radius: 5px;
+    border-radius: 15px;
+    transform: scale(1.2);
+    opacity: 0.9;
 }
 
-/* Show menu when active */
-.nav.active {
+/* Overlay for mobile */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.overlay.show {
     display: block;
+    opacity: 1;
+}
+
+/* Main content */
+.content {
+    margin-top: 70px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+/* Desktop: push content when sidebar opens */
+@media (min-width: 769px) {
+    .sidebar {
+        left: -250px;
+    }
+    .sidebar.active {
+        left: 0;
+    }
+    .sidebar.active ~ .content {
+        margin-left: 250px;
+    }
+    .overlay {
+        display: none; /* no overlay on desktop */
+    }
+}
+
+/* Mobile: overlay style */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 220px;
+        left: -220px;
+    }
+    .sidebar.active {
+        left: 0;
+    }
 }
