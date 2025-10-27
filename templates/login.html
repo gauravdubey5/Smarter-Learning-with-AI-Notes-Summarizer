@@ -10,15 +10,40 @@
     
 <body>
     <header>
-    <nav>
-        <ul class="nnav-liks" id="btn">
-          <li><a href="/">Home</a></li>
-          <li><a href="/feature">Features</a></li>
-          <li><a href="/help">Help</a></li>
-          <li><a href="/about">About</a></li>
+        <div class="menu-btn" id="menu-btn">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/feature">Features</a></li>
+            <li><a href="/help">Help</a></li>
         </ul>
     </nav>
+    <div class="overlay" id="overlay"></div>
     </header>
+    <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+
+    menuBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("show");
+        menuBtn.classList.toggle("open");
+    });
+
+    // Close sidebar when clicking outside (on overlay)
+    overlay.addEventListener("click", () => {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("show");
+        menuBtn.classList.remove("open");
+    });
+</script>
     
     <div class="container">
         

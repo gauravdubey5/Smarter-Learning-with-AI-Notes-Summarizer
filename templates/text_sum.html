@@ -25,27 +25,129 @@
         header ul {
             list-style: none;
             }
-        .nnav-liks {
-            position: absolute; top: 20px; left: 70px;
-            display: flex;
-            gap: 10px
-            }
-        .nnav-liks li a {
-            padding: 10px 20px;
-            border: none;
-            /* background: #7961dd; */
-            color: white;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            position: relative; bottom: 10px;
-            transition: 0.3s ease;
-            
-            }
-        .nnav-liks li a:hover {
-            background: #489cc3;
-            transform: scale(1.05);
-            }
+        .menu-btn {
+    width: 30px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 22px;
+}
+
+.bar {
+    height: 4px;
+    width: 100%;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.menu-btn.open .bar:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+}
+.menu-btn.open .bar:nth-child(2) {
+    opacity: 0;
+}
+.menu-btn.open .bar:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+}
+
+/* Sidebar */
+.sidebar {
+    position: absolute;
+    left: -250px;
+    top: 82px;
+    width: 250px;
+    height: 100vh;
+    background: linear-gradient(150deg,#141e41 40%, #103c76 60%);
+    color: white;
+    transition: left 0.3s ease;
+    padding-top: 70px;
+    z-index: 999;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    padding: 15px 20px;
+    text-align: center;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    transition: background 0.3s;
+    font-size: 16px;
+}
+
+.sidebar ul li a:hover {
+    background: linear-gradient(120deg, #328a99, #8d1c89);
+    border-radius: 15px;
+    transform: scale(1.2);
+    opacity: 0.9;
+}
+
+/* Overlay for mobile */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Main content */
+.content {
+    margin-top: 70px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+/* Desktop: push content when sidebar opens */
+@media (min-width: 769px) {
+    .sidebar {
+        left: -250px;
+    }
+    .sidebar.active {
+        left: 0;
+    }
+    .sidebar.active ~ .content {
+        margin-left: 250px;
+    }
+    .overlay {
+        display: none; /* no overlay on desktop */
+    }
+}
+
+/* Mobile: overlay style */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 220px;
+        left: -220px;
+    }
+    .sidebar.active {
+        left: 0;
+    }
+}
         nav a {
             text-decoration: none; 
             color: white; 
@@ -128,15 +230,41 @@
 </head>
 <body>
     <header>
-    <nav>
-        <ul class="nnav-liks" id="btn">
-          <li><a href="/">Home</a></li>
-          <li><a href="/feature">Features</a></li>
-          <li><a href="/help">Help</a></li>
-          <li><a href="/about">About</a></li>
+        <div class="menu-btn" id="menu-btn">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/feature">Features</a></li>
+            <li><a href="/help">Help</a></li>
         </ul>
     </nav>
+    <div class="overlay" id="overlay"></div>
     </header>
+    <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+
+    menuBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("show");
+        menuBtn.classList.toggle("open");
+    });
+
+    // Close sidebar when clicking outside (on overlay)
+    overlay.addEventListener("click", () => {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("show");
+        menuBtn.classList.remove("open");
+    });
+</script>
     <div class="container">
         <div>
             <h1>Text Summarizer</h1>

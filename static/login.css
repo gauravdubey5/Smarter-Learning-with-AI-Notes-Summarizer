@@ -27,21 +27,129 @@ body {
         display: flex;
         gap: 10px
     }
-    .nnav-liks li a {
-        padding: 10px 20px;
-        border: none;
-        
-        color: white;
-        font-size: 16px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: 0.3s ease;
-        
+    .menu-btn {
+    width: 30px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 22px;
+}
+
+.bar {
+    height: 4px;
+    width: 100%;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.menu-btn.open .bar:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+}
+.menu-btn.open .bar:nth-child(2) {
+    opacity: 0;
+}
+.menu-btn.open .bar:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+}
+
+/* Sidebar */
+.sidebar {
+    position: absolute;
+    left: -250px;
+    top: 82px;
+    width: 250px;
+    height: 100vh;
+    background: linear-gradient(150deg,#141e41 40%, #103c76 60%);
+    color: white;
+    transition: left 0.3s ease;
+    padding-top: 70px;
+    z-index: 999;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    padding: 15px 20px;
+    text-align: center;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    transition: background 0.3s;
+    font-size: 16px;
+}
+
+.sidebar ul li a:hover {
+    background: linear-gradient(120deg, #328a99, #8d1c89);
+    border-radius: 15px;
+    transform: scale(1.2);
+    opacity: 0.9;
+}
+
+/* Overlay for mobile */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Main content */
+.content {
+    margin-top: 70px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+/* Desktop: push content when sidebar opens */
+@media (min-width: 769px) {
+    .sidebar {
+        left: -250px;
     }
-    .nnav-liks li a:hover {
-        background: #489cc3;
-        transform: scale(1.05);
+    .sidebar.active {
+        left: 0;
     }
+    .sidebar.active ~ .content {
+        margin-left: 250px;
+    }
+    .overlay {
+        display: none; /* no overlay on desktop */
+    }
+}
+
+/* Mobile: overlay style */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 220px;
+        left: -220px;
+    }
+    .sidebar.active {
+        left: 0;
+    }
+}
     /* Container Of Login Page */
     .container {
       text-align: center;
