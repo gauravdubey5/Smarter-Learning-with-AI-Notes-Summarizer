@@ -11,10 +11,11 @@ body {
     }
     /* Header Of Index page */
     header {
+      position: relative;
       background: linear-gradient(150deg,#141e41 40%, #103c76 60%);      padding: 10px 20px;
       display: flex;
       max-width: 100%;
-      max-height: 60px;
+      height: 33px;
     }
     header ul {
       list-style: none;
@@ -130,13 +131,15 @@ body {
     }
 /* this is use for corner button (Login And Signup ) */
 .corner-buttons {
-    color: white;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    gap: 10px; 
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      display: flex;
+      align-items: center;
+      z-index: 10; 
 }
+
+
 /* For Login Botton */
 .btn1 {
   padding: 8px 18px;
@@ -145,20 +148,11 @@ body {
   cursor: pointer;
   font-size: 16px;
   transition: 0.3s ease;
-  position: absolute; top: 5px; right: 160px;
-  display: flex; gap: 10px;
+  position: absolute; top: 9px; right: 40px;
+  display: flex;
 }
-/* For Signup Botton */
-.btn2 {
-  padding: 8px 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: 0.3s ease;
-  position: absolute; top: 5px; right: 50px;
-  display: flex; gap: 10px;
-}
+
+
 /* For Login */
 .btn1.login {
   background: linear-gradient(120deg, #328a99, #8d1c89);
@@ -166,13 +160,6 @@ body {
   text-decoration: none;
 }
 
-/* For Signup */
-.btn2.signup {
-  background: linear-gradient(120deg, #328a99, #8d1c89);
-  color: white;
-  text-decoration: none;
-  
-}
 
 /* Hover effect */
 .btn1:hover {
@@ -180,12 +167,24 @@ body {
   transform: scale(1.2);
   opacity: 0.9;
 }
-/* Hover effect */
-.btn2:hover {
-  transform: scale(1.2);
-  background: linear-gradient(120deg, #9e2cb7, #d10cce);
-  opacity: 0.9;
+
+/* for Profile button */
+
+.profile {
+  margin-right: 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute; top: 5px; right: 40px;
+  border: 2px solid white;
+  transition: transform 0.2s ease;
 }
+
+.profile:hover {
+  transform: scale(1.1);
+}
+
 
 /* Responsive for mobile */
 @media (max-width: 600px) {
@@ -216,6 +215,7 @@ button a:hover {
   color: cyan; 
 }
 .menu-btn {
+    margin-top: 7px;
     width: 30px;
     cursor: pointer;
     display: flex;
@@ -246,7 +246,7 @@ button a:hover {
 .sidebar {
     position: absolute;
     left: -250px;
-    top: 40px;
+    top: 53px;
     width: 250px;
     height: 100vh;
     background: linear-gradient(150deg,#141e41 40%, #103c76 60%);

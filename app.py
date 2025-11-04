@@ -42,6 +42,7 @@ def allowed_file(filename):
 # Route for index page 
 @app.route('/')
 def index():
+    print(session)
     return render_template('index.html')
 
 #Route for signup page
