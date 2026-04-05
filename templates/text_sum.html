@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -274,6 +274,301 @@
     </div>
     <footer class="footer">
       <p>&copy; 2025 AI Notes Summarizer. All rights reserved.</p> 
+    </footer>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarizer</title>
+    <style>
+        body {
+            height:100%;
+            margin:0;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: linear-gradient(120deg, #34898f, #480647);
+            color:#dbeafe;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+        }
+        header {
+            background: linear-gradient(150deg,#141e41 40%, #103c76 60%);
+            padding: 30px 20px;
+            display: flex;
+            max-width: 100%;
+            max-height: 60px;
+        }
+        header ul {
+            list-style: none;
+        }
+
+        .menu-btn {
+            width: 30px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 22px;
+        }
+
+        .bar {
+            height: 4px;
+            width: 100%;
+            background-color: white;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .menu-btn.open .bar:nth-child(1) {
+            transform: rotate(45deg) translateY(8px);
+        }
+        .menu-btn.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-btn.open .bar:nth-child(3) {
+            transform: rotate(-45deg) translateY(-8px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: absolute;
+            left: -250px;
+            top: 82px;
+            width: 250px;
+            height: 100vh;
+            background: linear-gradient(150deg,#141e41 40%, #103c76 60%);
+            color: white;
+            transition: left 0.3s ease;
+            padding-top: 70px;
+            z-index: 999;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s;
+            font-size: 16px;
+        }
+
+        .sidebar ul li a:hover {
+            background: linear-gradient(120deg, #328a99, #8d1c89);
+            border-radius: 15px;
+            transform: scale(1.2);
+            opacity: 0.9;
+        }
+
+        /* Overlay for mobile */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Main content */
+        .content {
+            margin-top: 70px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        /* Desktop: push content when sidebar opens */
+        @media (min-width: 769px) {
+            .sidebar {
+                left: -250px;
+            }
+            .sidebar.active {
+                left: 0;
+            }
+            .sidebar.active ~ .content {
+                margin-left: 250px;
+            }
+            .overlay {
+                display: none; /* no overlay on desktop */
+            }
+        }
+
+        /* Mobile: overlay style */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 220px;
+                left: -220px;
+            }
+            .sidebar.active {
+                left: 0;
+            }
+        }
+
+        nav a {
+            text-decoration: none; 
+            color: white; 
+        }
+
+        nav a:hover {
+            color: cyan; 
+        }
+
+        .container{
+            text-align: center;
+        }
+
+        .container div {
+            margin-top: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1{
+            color: white; 
+            font-size: 30px;
+            font-weight: bold;
+        }
+            
+        textarea {
+            width: 500px;
+            height: 300px;
+            border-radius: 30px;
+            background: linear-gradient(160deg, #1a1a1a, #2e2e2e);
+            text-align: left;
+            padding: 15px;
+            font-size: 15px;
+            color: white;
+            border: none;
+            resize: none;
+        }
+
+        textarea::placeholder {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        div button {
+            font-size: 20px;
+            width: 200px;
+            height: 50px;
+            border-radius: 30px;
+            margin-top: 30px;
+            background: linear-gradient(120deg, #3ed5f0, #8d1c89);
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            background: linear-gradient(120deg, #27798a 50%, #0f8e24);
+            color: white;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+            color: white;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .summary-box {
+            margin-top: 30px;
+            width: 500px;
+            min-height: 150px;
+            border-radius: 20px;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            font-size: 15px;
+            color: #e5e7eb;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu-btn" id="menu-btn">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <nav class="sidebar" id="sidebar">
+            <ul>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('feature') }}">Features</a></li>
+                <li><a href="{{ url_for('help_page') }}">Help</a></li>
+                <li><a href="{{ url_for('textsummaries') }}">Text Summarizer</a></li>
+                <li><a href="{{ url_for('pdfsummaries') }}">PDF Summarizer</a></li>
+                <li><a href="{{ url_for('text_to_speech') }}">Text to Speech</a></li>
+            </ul>
+        </nav>
+        <div class="overlay" id="overlay"></div>
+    </header>
+
+    <script>
+        const menuBtn = document.getElementById("menu-btn");
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+
+        menuBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("active");
+            overlay.classList.toggle("show");
+            menuBtn.classList.toggle("open");
+        });
+
+        overlay.addEventListener("click", () => {
+            sidebar.classList.remove("active");
+            overlay.classList.remove("show");
+            menuBtn.classList.remove("open");
+        });
+    </script>
+
+    <div class="container">
+        <div>
+            <h1>Text Summarizer</h1>
+
+            <!-- Form sends text to Flask -->
+            <form method="POST" action="{{ url_for('summarize_form') }}">
+                <textarea name="text" placeholder="Paste Here" required></textarea>
+                <button type="submit">Summarize</button>
+            </form>
+
+
+    <footer class="footer">
+        <p>&copy; 2025 AI Notes Summarizer. All rights reserved.</p> 
     </footer>
 </body>
 </html>
