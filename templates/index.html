@@ -1,96 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-    <link rel="stylesheet" href="/static/style.css">
-    
-</head>
-<body>
-  <header>
-      <div class="corner-button">
-          {% if session.get('user_id') %}
-              <a href="/profile">
-                  <img src="{{ url_for('static', filename='uploads/img.png') }}" 
-                      alt="Profile" class="profile">
-                </a>
-          {% else %}
-            <button class="btn1 login"><a href="/login">Login</a></button>
-          {% endif %}
-        <div class="menu-btn" id="menu-btn">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-    </div>
+{% extends "base.html" %}
 
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/feature">Features</a></li>
-            <li><a href="/help">Help</a></li>
-        </ul>
-    </nav>
-    <div class="overlay" id="overlay"></div>
-    </header>
-    <script>
-    const menuBtn = document.getElementById("menu-btn");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("overlay");
+{% block content %}
 
-    menuBtn.addEventListener("click", () => {
-        sidebar.classList.toggle("active");
-        overlay.classList.toggle("show");
-        menuBtn.classList.toggle("open");
-    });
+<h1 style="font-size:32px;">🚀 AI Notes Summarizer</h1>
 
-    // Close sidebar when clicking outside (on overlay)
-    overlay.addEventListener("click", () => {
-        sidebar.classList.remove("active");
-        overlay.classList.remove("show");
-        menuBtn.classList.remove("open");
-    });
-</script>
-  <div class="container">
-    <h1>Smarter Learning with <span>AI Notes Summarizer</span></h1>
-    <p class="subtitle">Save time, study better, and understand more with our AI-powered note summarization tool.</p>
+<p style="opacity:0.8;">
+    Transform long text & PDFs into short, powerful insights using AI
+</p>
 
-    <div class="types">
-      
-      <div class="type">
-        <h2>Normal</h2>
-        <p class="price">Text Summarizer</p>
-        <ul>
-          <li>✔ Summarize Text</li>
-          <li>✔ Export summaries as text</li>
+<br><br>
 
-        </ul>
-        <a href="/textsummaries" class="btn">Start</a>
-      </div>
+<div style="display:flex; flex-direction:column; gap:15px;">
 
-      <div class="type pro">
-        <h2>Intermediate</h2>
-        <p class="price">PDF Summarizer</p>
-        <ul>
-          <li>✔ Summarize notes</li>
-          <li>✔ Export to PDF & Word</li>
-        </ul>
-        <a href="/pdf_summaries" class="btn">Start</a>
-      </div>
+    <a href="/textsummaries">
+        <button class="home-btn">🧠 Text Summarizer</button>
+    </a>
 
-      <div class="type">
-        <h2>Advance</h2>
-        <p class="price">Text To Speech</p>
-        <ul>
-          <li>✔ Text to speech </li>
-          <li>✔ Priority AI assistance</li>
-        </ul>
-        <a href="/text_to_speech" class="btn">Start</a>
-      </div>
-    </div>
-    <footer class="footer">
-      <p>&copy; 2025 AI Notes Summarizer. All rights reserved.</p> 
-  </div>
-</body>
-</html>
+    <a href="/pdf_summaries">
+        <button class="home-btn">📄 PDF Summarizer</button>
+    </a>
+
+    <a href="/text_to_speech">
+        <button class="home-btn">🔊 Text to Speech</button>
+    </a>
+
+</div>
+
+<br><br>
+
+<!-- ✨ Feature highlight -->
+<div style="margin-top:20px; font-size:14px; opacity:0.7;">
+    ⚡ Fast | 🤖 AI Powered | 📥 Downloadable Summary
+</div>
+
+<style>
+.home-btn {
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    background: linear-gradient(120deg, #00c6ff, #0072ff);
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.home-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0,198,255,0.6);
+}
+</style>
+
+{% endblock %}

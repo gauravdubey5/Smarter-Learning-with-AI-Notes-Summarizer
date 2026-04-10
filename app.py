@@ -14,6 +14,8 @@ import PyPDF2
 from reportlab.pdfgen import canvas as pdf_canvas
 from reportlab.lib.pagesizes import A4
 from io import BytesIO
+from werkzeug.utils import secure_filename
+
 
 # =========================
 # Flask + DB CONFIG
@@ -43,8 +45,17 @@ def init_db():
             gender TEXT NOT NULL,
             password TEXT NOT NULL,
             question TEXT NOT NULL,
-            answer TEXT NOT NULL
+            answer TEXT NOT NULL,
+            profile_pic TEXT
         )
+    ''')
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    text TEXT,
+    summary TEXT
+    )
     ''')
     conn.commit()
     conn.close()
@@ -54,7 +65,7 @@ def init_db():
 # UPLOAD CONFIG (for docs)
 # =========================
 
-DOC_UPLOAD_FOLDER = 'uploads'
+DOC_UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(DOC_UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = DOC_UPLOAD_FOLDER
 
@@ -165,9 +176,9 @@ def index():
 def signup():
     if request.method == 'POST':
         name = request.form.get('name', '').capitalize()
-        email = request.form.get('email')
+        email = request.form.get('email').strip().lower()
         gender = request.form.get('gender')
-        password = request.form.get('password')
+        password = request.form.get('password').strip()
         question = request.form.get('question')
         answer = request.form.get('answer')
 
@@ -195,22 +206,40 @@ def login():
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
+
+        if not email or not password:
+            flash("All fields required!", "danger")
+            return redirect(url_for("login"))
+
+        email = email.strip().lower()
+        password = password.strip()
+
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        print("EMAIL:", email)
+        print("PASSWORD:", password)
+        print("HASH:", hashlib.sha256(password.encode()).hexdigest())
 
         conn = get_db_connection()
+
+        # ✅ ONLY EMAIL MATCH
         user = conn.execute(
-            "SELECT * FROM users WHERE email=? AND password=?",
-            (email, hashed_password)
+            "SELECT * FROM users WHERE email=?",
+            (email,)
         ).fetchone()
+
         conn.close()
 
         if user:
-            session["user_id"] = user["id"]
-            session["email"] = user["email"]
-            flash("Login successful!", "success")
-            return redirect(url_for("index"))
+            # ✅ PASSWORD CHECK SEPARATELY
+            if user["password"] == hashed_password:
+                session["user_id"] = user["id"]
+                session["email"] = user["email"]
+                flash("Login successful!", "success")
+                return redirect(url_for("dashboard"))
+            else:
+                flash("Wrong password!", "danger")
         else:
-            flash("Invalid email or password", "danger")
+            flash("User not found!", "danger")
 
     return render_template("login.html")
 
@@ -241,6 +270,33 @@ def profile():
 # =========================
 # STATIC PAGES
 # =========================
+@app.route('/dashboard')
+def dashboard():
+    if "user_id" not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    user = conn.execute(
+        "SELECT * FROM users WHERE id=?",
+        (session['user_id'],)
+    ).fetchone()
+    conn.close()
+
+    return render_template('dashboard.html', user=user)
+
+@app.route('/history')
+def history():
+    if "user_id" not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    data = conn.execute(
+        "SELECT * FROM history WHERE user_id=?",
+        (session['user_id'],)
+    ).fetchall()
+    conn.close()
+
+    return render_template('history.html', data=data)
 
 @app.route('/about')
 def about():
@@ -281,6 +337,13 @@ def summarize_form():
 
     try:
         summary = generate_summary(text, max_length=150, min_length=40)
+        conn = get_db_connection()
+        conn.execute(
+        "INSERT INTO history (user_id, text, summary) VALUES (?, ?, ?)",
+        (session['user_id'], text, summary)
+        )
+        conn.commit()
+        conn.close()
     except Exception as e:
         flash(f"Error: {e}", "danger")
         return redirect(url_for('textsummaries'))
@@ -388,8 +451,49 @@ def text_to_speech():
 
 
 # =========================
-# ACCOUNT DELETE + FORGOT
+# ACCOUNT EDIT + DELETE + FORGOT
 # =========================
+
+@app.route('/edit-profile', methods=['GET', 'POST'])
+def edit_profile():
+    if "user_id" not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        gender = request.form.get('gender')
+
+        file = request.files.get('profile_pic')
+
+        filename = None
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            conn.execute(
+                "UPDATE users SET profile_pic=? WHERE id=?",
+                (filename, session['user_id'])
+            )
+
+        conn.execute(
+            "UPDATE users SET name=?, gender=? WHERE id=?",
+            (name, gender, session['user_id'])
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('profile'))
+
+    user = conn.execute(
+        "SELECT * FROM users WHERE id=?",
+        (session['user_id'],)
+    ).fetchone()
+    conn.close()
+
+    return render_template('edit_profile.html', user=user)
 
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
@@ -463,12 +567,36 @@ def reset_password():
 
     return render_template('reset_password.html')
 
+@app.route('/change-password', methods=['GET', 'POST'])
+def change_password():
+    if "user_id" not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        old = request.form.get('old_password')
+        new = request.form.get('new_password')
+
+        conn = get_db_connection()
+        user = conn.execute(
+            "SELECT * FROM users WHERE id=?",
+            (session['user_id'],)
+        ).fetchone()
+
+        if hashlib.sha256(old.encode()).hexdigest() == user['password']:
+            conn.execute(
+                "UPDATE users SET password=? WHERE id=?",
+                (hashlib.sha256(new.encode()).hexdigest(), session['user_id'])
+            )
+            conn.commit()
+
+        conn.close()
+        return redirect(url_for('profile'))
+
+    return render_template('change_password.html')
 
 # =========================
 # API: TEXT SUMMARIZATION
 # =========================
-
-
 
 # =========================
 # API: FILE UPLOAD (PDF/TXT)

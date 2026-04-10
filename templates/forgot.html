@@ -1,52 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/static/signup.css">
-    
-</head>
+{% extends "base.html" %}
 
-<body>
-    <header>
-        <div class="menu-btn" id="menu-btn">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-    </div>
+{% block content %}
 
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/feature">Features</a></li>
-            <li><a href="/help">Help</a></li>
-        </ul>
-    </nav>
-    <div class="overlay" id="overlay"></div>
-    </header>
-    <script>
-    const menuBtn = document.getElementById("menu-btn");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("overlay");
-
-    menuBtn.addEventListener("click", () => {
-        sidebar.classList.toggle("active");
-        overlay.classList.toggle("show");
-        menuBtn.classList.toggle("open");
-    });
-
-    // Close sidebar when clicking outside (on overlay)
-    overlay.addEventListener("click", () => {
-        sidebar.classList.remove("active");
-        overlay.classList.remove("show");
-        menuBtn.classList.remove("open");
-    });
-</script>
-    <div class="container">
-        
-        <div class="signup">
             <h3>Sign Up</h3>
             <form action="/forgot" method="post">
                 <label for="name">Name:</label>
@@ -77,10 +32,9 @@
                 <br><br><br>
                 <button type="submit">Get Password</button>
             </form>
-        </div>
-    </div>
+            
     <footer class="footer">
         <p>&copy; 2025 AI Notes Summarizer. All rights reserved.</p>
     </footer>
-</body>
-</html>
+
+{% endblock %}

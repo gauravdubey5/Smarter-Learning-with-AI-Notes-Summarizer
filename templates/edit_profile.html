@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Profile</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+<input type="text" name="name" value="{{ user['name'] }}">
+
+<select name="gender">
+    <option>Male</option>
+    <option>Female</option>
+</select>
+
+<input type="file" name="profile_pic">
+
+<button>Update</button>
+
+</form>
+
+{% endblock %}

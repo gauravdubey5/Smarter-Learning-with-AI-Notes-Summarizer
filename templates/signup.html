@@ -1,92 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/static/signup.css">
-    
-</head>
-<body>
-    <header>
-        <div class="menu-btn" id="menu-btn">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-    </div>
+{% extends "base.html" %}
 
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/feature">Features</a></li>
-            <li><a href="/help">Help</a></li>
-        </ul>
-    </nav>
-    <div class="overlay" id="overlay"></div>
-    </header>
-    <script>
-    const menuBtn = document.getElementById("menu-btn");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("overlay");
+{% block content %}
 
-    menuBtn.addEventListener("click", () => {
-        sidebar.classList.toggle("active");
-        overlay.classList.toggle("show");
-        menuBtn.classList.toggle("open");
-    });
+<h2>Sign Up</h2>
 
-    // Close sidebar when clicking outside (on overlay)
-    overlay.addEventListener("click", () => {
-        sidebar.classList.remove("active");
-        overlay.classList.remove("show");
-        menuBtn.classList.remove("open");
-    });
-</script>
-    <div class="container">
-        
-        <div class="signup">
-            <h3>Sign Up</h3>
-            <form action="/signup" method="post">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" placeholder="Your name"  required >
-                <br><br><br>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Your Email" required>
-                <br><br><br>
-                <label for="gender">Gender:</label>
-                <select id="gender" name="gender" required>
-                    <option value="">  -- Select Gender --</option> 
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-                <br><br><br>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Password" required>
-                <br><br><br>
-                <label for="question">Security Questions:</label>
-                    <select id="question" name="question" required>
-                        <option value="">-- Select a Question --</option>
-                        <option value="pet">What is your pet's name?</option>
-                        <option value="birthplace">What is your birth place?</option>
-                        <option value="father">What is your father's first name?</option>
-                        <option value="course">What is your course?</option>
-                    </select>
-                <br><br><br>
-                <label for="answer" id="ans">Your Answer:</label>
-                <input type="text" id="answer" name="answer" placeholder="Type your answer here...">
-                <br><br><br>
-                <button type="submit">Sign Up</button>
-                <br><br>
-                <nav>
-                <a id="log" href="/login">Already have an account? Login</a>
-                </nav>
-            </form>
-        </div>
-    </div>
-    <footer class="footer">
-        <p>&copy; 2025 AI Notes Summarizer. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+<form method="POST">
+
+    <input type="text" name="name" placeholder="Name" required>
+
+    <input type="email" name="email" placeholder="Email" required>
+
+    <select name="gender" required>
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+    </select>
+
+    <input type="password" name="password" placeholder="Password" required>
+
+    <!-- ✅ SECURITY QUESTION -->
+    <select name="question" required>
+        <option value="">Select Security Question</option>
+        <option>What is your pet name?</option>
+        <option>What is your school name?</option>
+        <option>What is your favorite color?</option>
+    </select>
+
+    <!-- ✅ ANSWER -->
+    <input type="text" name="answer" placeholder="Your Answer" required>
+
+    <button type="submit">Signup</button>
+
+</form>
+
+<br>
+
+<p>Already have an account?</p>
+<a href="{{ url_for('login') }}">
+    <button>Login</button>
+</a>
+
+{% endblock %}

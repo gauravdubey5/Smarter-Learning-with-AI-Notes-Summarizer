@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI App</title>
+
+<style>
+body {
+    margin:0;
+    font-family: 'Segoe UI';
+    display:flex;
+    background:#0f172a;
+    color:white;
+}
+
+/* Sidebar */
+.sidebar {
+    width:220px;
+    height:100vh;
+    background:#020617;
+    padding:20px;
+    position:fixed;
+}
+
+.sidebar a {
+    display:block;
+    color:#cbd5f5;
+    text-decoration:none;
+    margin:10px 0;
+}
+
+/* Main */
+.main {
+    margin-left:240px;
+    padding:30px;
+    width:100%;
+}
+
+/* Cards only */
+.card {
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+/* ✅ BUTTON SAFE */
+button {
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    background:#3b82f6;
+    color:white;
+}
+
+/* 📱 Mobile Fix */
+.menu-btn {
+    display:none;
+    font-size:20px;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+
+@media(max-width:768px) {
+    .sidebar {
+        display:none;
+        position:absolute;
+        width:200px;
+        z-index:1000;
+    }
+
+    .sidebar.active {
+        display:block;
+    }
+
+    .main {
+        margin-left:0;
+    }
+
+    .menu-btn {
+        display:block;
+    }
+}
+.card {
+    opacity:0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s ease forwards;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity:1;
+        transform: translateY(0);
+    }
+}
+button:hover {
+    box-shadow: 0 0 15px rgba(59,130,246,0.7);
+}
+</style>
+
+/* ❌ REMOVE global input styling */
+</style>
+
+</head>
+
+<body>
+<div class="menu-btn" onclick="toggleMenu()">☰ Menu</div>
+<div class="sidebar">
+    <h3>🚀 AI App</h3>
+
+    <a href="/dashboard">Dashboard</a>
+    <a href="/textsummaries">Text</a>
+    <a href="/pdf_summaries">PDF</a>
+    <a href="/history">History</a>
+    <a href="/profile">Profile</a>
+</div>
+
+<div class="main">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+<script>
+function toggleMenu() {
+    document.querySelector(".sidebar").classList.toggle("active");
+}
+document.querySelectorAll('.card').forEach((card, i) => {
+    card.style.animationDelay = i * 0.2 + "s";
+});
+</script>
+</html>

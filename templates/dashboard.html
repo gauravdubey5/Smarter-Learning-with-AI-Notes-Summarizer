@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- 📊 Stats -->
+<div class="stats">
+    <div class="stat-box">
+        <h3>{{ user['name'] }}</h3>
+        <p>User</p>
+    </div>
+
+    <div class="stat-box">
+        <h3>{{ user['email'] }}</h3>
+        <p>Email</p>
+    </div>
+
+    <div class="stat-box">
+        <h3>Active</h3>
+        <p>Status</p>
+    </div>
+</div>
+
+<!-- 🚀 Features -->
+<div class="grid">
+
+    <div class="card">
+        <h3>🧠 Text Summarizer</h3>
+        <p>Generate summary from text</p>
+        <a href="/textsummaries"><button>Open</button></a>
+    </div>
+
+    <div class="card">
+        <h3>📄 PDF Summarizer</h3>
+        <p>Upload PDF and summarize</p>
+        <a href="/pdf_summaries"><button>Open</button></a>
+    </div>
+
+    <div class="card">
+        <h3>📁 History</h3>
+        <p>Check previous summaries</p>
+        <a href="/history"><button>View</button></a>
+    </div>
+
+</div>
+
+{% endblock %}
