@@ -1,13 +1,12 @@
 {% extends "base.html" %}
-
 {% block content %}
 
-<h2>📁 History</h2>
+<h2>History</h2>
 
-{% for item in data %}
 <div class="card">
-    <p>{{ item['summary'] }}</p>
+  <p><strong>SEO Summary</strong></p>
+  <p>Created: Today</p>
+  <button class="btn">Copy</button>
 </div>
-{% endfor %}
 
 {% endblock %}

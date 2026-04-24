@@ -1,46 +1,111 @@
 {% extends "base.html" %}
-
 {% block content %}
 
-<!-- 📊 Stats -->
-<div class="stats">
-    <div class="stat-box">
-        <h3>{{ user['name'] }}</h3>
-        <p>User</p>
-    </div>
+<h1 style="margin-bottom:20px;">Dashboard 🚀</h1>
 
-    <div class="stat-box">
-        <h3>{{ user['email'] }}</h3>
-        <p>Email</p>
-    </div>
-
-    <div class="stat-box">
-        <h3>Active</h3>
-        <p>Status</p>
-    </div>
+<div class="card" style="height:300px;">
+  <canvas id="chart"></canvas>
 </div>
 
-<!-- 🚀 Features -->
+<!-- 🔥 STATS CARDS -->
 <div class="grid">
 
-    <div class="card">
-        <h3>🧠 Text Summarizer</h3>
-        <p>Generate summary from text</p>
-        <a href="/textsummaries"><button>Open</button></a>
-    </div>
+  <div class="card stat">
+    <h2>120</h2>
+    <p>Total Summaries</p>
+  </div>
 
-    <div class="card">
-        <h3>📄 PDF Summarizer</h3>
-        <p>Upload PDF and summarize</p>
-        <a href="/pdf_summaries"><button>Open</button></a>
-    </div>
+  <div class="card stat">
+    <h2>45</h2>
+    <p>PDF Uploaded</p>
+  </div>
 
-    <div class="card">
-        <h3>📁 History</h3>
-        <p>Check previous summaries</p>
-        <a href="/history"><button>View</button></a>
-    </div>
+  <div class="card stat">
+    <h2>15</h2>
+    <p>Today Usage</p>
+  </div>
 
 </div>
+
+<!-- 🔥 CHART SECTION -->
+<div class="card">
+  <h3>Usage Overview 📊</h3>
+  <canvas id="chart" height="100"></canvas>
+</div>
+
+<!-- 🔥 RECENT ACTIVITY -->
+<div class="card">
+  <h3>Recent Activity 🕘</h3>
+
+  <div class="activity">
+    <p><strong>PDF Summary</strong> generated</p>
+    <span>2 mins ago</span>
+  </div>
+
+  <div class="activity">
+    <p><strong>Text Summary</strong> created</p>
+    <span>10 mins ago</span>
+  </div>
+
+</div>
+
+<!-- 🔥 QUICK ACTIONS -->
+<div class="card">
+  <h3>Quick Actions ⚡</h3>
+  <br>
+  <a href="/text"><button class="btn">Text Summarizer</button></a>
+  <a href="/pdf"><button class="btn">PDF Summarizer</button></a>
+</div>
+
+<!-- 🔥 CHART JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('chart');
+
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    datasets: [{
+      label: 'Usage',
+      data: [5, 10, 8, 15, 12, 20],
+      borderColor: '#3b82f6',
+      backgroundColor: 'rgba(59,130,246,0.2)',
+      tension: 0.4
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      x: { ticks: { color: '#aaa' } },
+      y: { ticks: { color: '#aaa' } }
+    }
+  }
+});
+</script>
+
+<!-- 🔥 EXTRA STYLING -->
+<style>
+.activity {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.activity span {
+  color: #888;
+  font-size: 12px;
+}
+
+/* hover animation */
+.card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s;
+}
+</style>
 
 {% endblock %}

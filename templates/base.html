@@ -1,130 +1,335 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>AI App</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* BODY */
 body {
-    margin:0;
-    font-family: 'Segoe UI';
-    display:flex;
-    background:#0f172a;
-    color:white;
+  background: linear-gradient(135deg, #020617, #0f172a);
+  color: #fff;
+  display: flex;
 }
 
-/* Sidebar */
+/* LIGHT MODE */
+body.light {
+  background: #f1f5f9;
+  color: #111;
+}
+
+body.light .sidebar {
+  background: #ffffff;
+}
+
+body.light .card {
+  background: #ffffff;
+  color: #000;
+}
+
+body.light .sidebar a {
+  color: #333;
+}
+
+body.light .sidebar a:hover {
+  background: #e2e8f0;
+}
+
+/* SIDEBAR */
 .sidebar {
-    width:220px;
-    height:100vh;
-    background:#020617;
-    padding:20px;
-    position:fixed;
+  width: 220px;
+  height: 100vh;
+  padding: 20px;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  overflow: hidden;
 }
 
+/* COLLAPSE */
+.sidebar.collapse {
+  width: 70px;
+}
+
+/* BUTTON */
+.toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+/* LINKS */
 .sidebar a {
-    display:block;
-    color:#cbd5f5;
-    text-decoration:none;
-    margin:10px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  color: #ccc;
+  text-decoration: none;
+  transition: 0.3s;
+  position: relative;
 }
 
-/* Main */
+/* HOVER */
+.sidebar a:hover {
+  background: #3b82f6;
+  color: #fff;
+}
+.sidebar {
+  flex-shrink: 0;   /* 🔥 VERY IMPORTANT */
+}
+
 .main {
-    margin-left:240px;
-    padding:30px;
-    width:100%;
+  flex: 1;
+  padding: 30px;
+  min-width: 0;     /* 🔥 FIXES OVERFLOW BUG */
+}
+/* TEXT HIDE */
+.sidebar.collapse a span {
+  display: none;
 }
 
-/* Cards only */
+/* CENTER ICON */
+.sidebar.collapse a {
+  justify-content: center;
+}
+/* 🌞 LIGHT MODE GLOBAL FIX */
+body.light {
+  background: #f1f5f9;
+  color: #111;
+}
+
+/* SIDEBAR */
+body.light .sidebar {
+  background: #ffffff;
+}
+
+/* LINKS */
+body.light .sidebar a {
+  color: #333;
+}
+
+body.light .sidebar a:hover {
+  background: #e2e8f0;
+  color: #000;
+}
+
+/* CARDS */
+body.light .card {
+  background: #ffffff;
+  color: #111;
+}
+
+/* HEADINGS */
+body.light h1,
+body.light h2,
+body.light h3 {
+  color: #111;
+}
+
+/* PARAGRAPH / TEXT */
+body.light p,
+body.light span,
+body.light label {
+  color: #444;
+}
+
+/* INPUTS */
+body.light input,
+body.light select,
+body.light textarea {
+  background: #f9fafb;
+  color: #111;
+  border: 1px solid #ddd;
+}
+
+/* BUTTON */
+body.light .btn {
+  background: #3b82f6;
+  color: white;
+}
+
+/* SPECIAL TEXT (email etc) */
+body.light .email {
+  color: #555;
+}
+
+/* TOOLTIP */
+.sidebar a::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 75px;
+  background: #111;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translateY(-50%);
+  top: 50%;
+  transition: 0.2s;
+}
+
+.sidebar.collapse a:hover::after {
+  opacity: 1;
+}
+
+/* MAIN */
+.main {
+  flex: 1;
+  padding: 30px;
+  transition: 0.3s;
+}
+
+/* CARD */
 .card {
-    background:#1e293b;
-    padding:20px;
-    border-radius:12px;
-    margin-bottom:20px;
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
 }
 
-/* ✅ BUTTON SAFE */
-button {
-    padding:10px;
-    border-radius:8px;
-    border:none;
-    background:#3b82f6;
-    color:white;
+/* BUTTON */
+.btn {
+  background: #3b82f6;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
 }
 
-/* 📱 Mobile Fix */
-.menu-btn {
-    display:none;
-    font-size:20px;
-    cursor:pointer;
-    margin-bottom:10px;
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
-@media(max-width:768px) {
-    .sidebar {
-        display:none;
-        position:absolute;
-        width:200px;
-        z-index:1000;
-    }
-
-    .sidebar.active {
-        display:block;
-    }
-
-    .main {
-        margin-left:0;
-    }
-
-    .menu-btn {
-        display:block;
-    }
-}
-.card {
-    opacity:0;
-    transform: translateY(20px);
-    animation: fadeUp 0.5s ease forwards;
+/* THEME BUTTON */
+.theme-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  cursor: pointer;
 }
 
-@keyframes fadeUp {
-    to {
-        opacity:1;
-        transform: translateY(0);
-    }
-}
-button:hover {
-    box-shadow: 0 0 15px rgba(59,130,246,0.7);
+.stat {
+  text-align: center;
 }
 </style>
-
-/* ❌ REMOVE global input styling */
-</style>
-
 </head>
 
 <body>
-<div class="menu-btn" onclick="toggleMenu()">☰ Menu</div>
-<div class="sidebar">
-    <h3>🚀 AI App</h3>
 
-    <a href="/dashboard">Dashboard</a>
-    <a href="/textsummaries">Text</a>
-    <a href="/pdf_summaries">PDF</a>
-    <a href="/history">History</a>
-    <a href="/profile">Profile</a>
+<div class="sidebar">
+
+  <button onclick="toggleSidebar()" class="toggle-btn">☰</button>
+
+  <a href="/dashboard" data-tooltip="Dashboard">📊 <span>Dashboard</span></a>
+  <a href="/textsummaries" data-tooltip="Text">📝 <span>Text</span></a>
+  <a href="/pdf_summaries" data-tooltip="PDF">📄 <span>PDF</span></a>
+  <a href="/history" data-tooltip="History">🕘 <span>History</span></a>
+  <a href="/profile" data-tooltip="Profile">👤 <span>Profile</span></a>
+  <a href="/help" data-tooltip="Help">📚 <span>Help</span></a>
+
+
+  <button onclick="toggleTheme()" class="theme-btn" id="themeToggle">🌙</button>
+
 </div>
 
 <div class="main">
-    {% block content %}{% endblock %}
+  {% block content %}{% endblock %}
 </div>
 
-</body>
 <script>
-function toggleMenu() {
-    document.querySelector(".sidebar").classList.toggle("active");
+function toggleSidebar() {
+  document.querySelector(".sidebar").classList.toggle("collapse");
 }
-document.querySelectorAll('.card').forEach((card, i) => {
-    card.style.animationDelay = i * 0.2 + "s";
-});
+
+/* THEME SYSTEM (FIXED) */
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById("themeToggle");
+
+  body.classList.toggle("light");
+
+  if (body.classList.contains("light")) {
+    localStorage.setItem("theme", "light");
+    btn.innerText = "☀️";
+  } else {
+    localStorage.setItem("theme", "dark");
+    btn.innerText = "🌙";
+  }
+}
+
+/* LOAD THEME */
+window.onload = function() {
+  const savedTheme = localStorage.getItem("theme");
+  const btn = document.getElementById("themeToggle");
+
+  if (savedTheme === "light") {
+    document.body.classList.add("light");
+    btn.innerText = "☀️";
+  } else {
+    btn.innerText = "🌙";
+  }
+}
+let chartInstance;
+
+function initChart() {
+  const ctx = document.getElementById('chart');
+
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Mon','Tue','Wed','Thu','Fri','Sat'],
+      datasets: [{
+        data: [5,10,8,15,12,20],
+        borderColor: '#3b82f6',
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
+}
+
+function toggleSidebar() {
+  document.querySelector(".sidebar").classList.toggle("collapse");
+
+  setTimeout(() => {
+    if (chartInstance) {
+      chartInstance.resize();   // 🔥 FIX
+    }
+  }, 300);
+}
+
+window.onload = initChart;
 </script>
+
+</body>
 </html>

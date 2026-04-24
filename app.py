@@ -1,7 +1,7 @@
 import os
 import sqlite3
 import hashlib
-
+import uuid
 from flask import (
     Flask, render_template, request, redirect, flash,
     url_for, session, jsonify, send_file
@@ -9,7 +9,6 @@ from flask import (
 
 from transformers import pipeline
 import torch
-from werkzeug.utils import secure_filename
 import PyPDF2
 from reportlab.pdfgen import canvas as pdf_canvas
 from reportlab.lib.pagesizes import A4
@@ -22,7 +21,7 @@ from werkzeug.utils import secure_filename
 # =========================
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
-app.secret_key = "mysecretkey"
+app.secret_key = os.environ.get("SECRET_KEY", "fallback-secret")
 
 DB_NAME = "users.db"
 
@@ -88,8 +87,12 @@ device = 0 if torch.cuda.is_available() else -1
 print("Device set to use", "cuda" if device == 0 else "cpu")
 
 # Initialize summarization pipeline (BART - facebook/bart-large-cnn)
-summarizer = pipeline('summarization', model='facebook/bart-large-cnn', device=device)
-
+model='sshleifer/distilbart-cnn-12-6'
+summarizer = pipeline(
+    "summarization",
+    model=model,
+    device=device
+)
 
 def extract_text_from_pdf(path):
     text = []
@@ -125,7 +128,7 @@ def generate_summary(text, max_length=150, min_length=40):
     min_length = max(min_length, 5)
 
     # For long texts, split into chunks to avoid model max tokens
-    CHUNK_SIZE = 1000  # characters
+    CHUNK_SIZE = 800  # characters
     chunks = [text[i:i + CHUNK_SIZE] for i in range(0, len(text), CHUNK_SIZE)]
 
     summaries = []
@@ -215,9 +218,7 @@ def login():
         password = password.strip()
 
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        print("EMAIL:", email)
-        print("PASSWORD:", password)
-        print("HASH:", hashlib.sha256(password.encode()).hexdigest())
+        
 
         conn = get_db_connection()
 
@@ -297,16 +298,6 @@ def history():
     conn.close()
 
     return render_template('history.html', data=data)
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-
-@app.route('/feature')
-def feature():
-    return render_template('feature.html')
-
 
 @app.route('/help')
 def help_page():
@@ -389,7 +380,7 @@ def pdf_summarize():
         return redirect(url_for('pdfsummaries'))
 
     if file and allowed_doc_file(file.filename):
-        filename = secure_filename(file.filename)
+        filename = str(uuid.uuid4()) + "_" + secure_filename(file.filename)
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(path)
 
@@ -397,14 +388,22 @@ def pdf_summarize():
         text = extract_text_from_pdf(path)
 
         if not text.strip():
+
             flash("PDF me text nahi mila!", "warning")
+            if os.path.exists(path):
+                os.remove(path)
+
             return redirect(url_for('pdfsummaries'))
+        
 
         # Generate summary
         summary = generate_summary(text)
 
         # Save summary in session (temporary)
         session['pdf_summary'] = summary
+
+        if os.path.exists(path):
+            os.remove(path)
 
         return render_template('pdf_result.html', summary=summary)
 
@@ -469,7 +468,7 @@ def edit_profile():
 
         filename = None
         if file and file.filename:
-            filename = secure_filename(file.filename)
+            filename = str(uuid.uuid4()) + "_" + secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             conn.execute(
@@ -615,7 +614,7 @@ def upload_file():
         return jsonify({'error': 'No selected file'}), 400
 
     if file and allowed_doc_file(file.filename):
-        filename = secure_filename(file.filename)
+        filename = str(uuid.uuid4()) + "_" + secure_filename(file.filename)
         save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(save_path)
 
@@ -625,6 +624,11 @@ def upload_file():
         else:
             with open(save_path, 'r', encoding='utf-8', errors='ignore') as f:
                 text = f.read()
+
+        # ✅ DELETE FILE
+        if os.path.exists(save_path):
+            os.remove(save_path)
+
 
         return jsonify({'text': text})
     else:
@@ -682,10 +686,6 @@ def summary_pdf():
         mimetype='application/pdf'
     )
 
-
-# =========================
-# MAIN
-# =========================
 
 if __name__ == '__main__':
     init_db()

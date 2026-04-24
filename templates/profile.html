@@ -2,23 +2,142 @@
 
 {% block content %}
 
-<div class="card">
-    <h2>{{ user['name'] }}</h2>
+<div class="profile-container">
 
-    {% if user['profile_pic'] %}
-        <img src="{{ url_for('static', filename='uploads/' + user['profile_pic']) }}" 
-            style="border-radius:50%; width:120px; margin-bottom:15px;">    {% else %}
-        <img src="/static/default.png">
-    {% endif %}
+  <!-- HEADER -->
+  <div class="profile-header">
+    <img src="{% if user.profile_pic %}/static/uploads/{{ user.profile_pic }}{% else %}https://i.pravatar.cc/150{% endif %}" class="avatar">
+    <h2>{{ user.name }}</h2>
+    <p class="email">{{ user.email }}</p>
+  </div>
 
-    <p>Email: {{ user['email'] }}</p>
-    <p>Gender: {{ user['gender'] }}</p>
+  <!-- GRID -->
+  <div class="profile-grid">
 
-    <br>
+    <!-- PERSONAL -->
+    <div class="card">
+      <h3>👤 Personal Info</h3>
+      <p><strong>Gender:</strong> {{ user.gender }}</p>
+      <p><strong>Status:</strong> Active</p>
+    </div>
 
-    <a href="/edit-profile"><button>Edit</button></a>
-    <a href="/change-password"><button>Change Password</button></a>
-    <a href="/logout"><button>Logout</button></a>
+    <!-- ACTIVITY -->
+    <div class="card">
+      <h3>📊 Activity</h3>
+      <p>Total Summaries: --</p>
+      <p>PDF Uploaded: --</p>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="card">
+      <h3>⚙️ Account Actions</h3>
+
+      <a href="/edit-profile">
+        <button class="btn">✏️ Edit Profile</button>
+      </a>
+
+      <a href="/change-password">
+        <button class="btn">🔐 Change Password</button>
+      </a>
+
+      <a href="/logout">
+        <button class="btn logout">🚪 Logout</button>
+      </a>
+
+      <button class="btn danger" onclick="confirmDelete()">🗑️ Delete Account</button>
+
+    </div>
+
+  </div>
+
 </div>
+
+<style>
+
+/* CONTAINER */
+.profile-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* HEADER */
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  border: 3px solid #3b82f6;
+}
+
+.email {
+  color: #aaa;
+}
+
+/* GRID */
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+a {
+  text-decoration: none;
+}
+
+/* BUTTON */
+.btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
+}
+
+.btn.logout {
+  background: #6366f1;
+}
+
+.btn.logout:hover {
+  background: #4f46e5;
+}
+
+.btn.danger {
+  background: #ef4444;
+}
+
+.btn.danger:hover {
+  background: #dc2626;
+}
+
+</style>
+
+<script>
+function confirmDelete() {
+  if (confirm("Are you sure you want to delete your account?")) {
+    window.location.href = "/delete";
+  }
+}
+</script>
 
 {% endblock %}

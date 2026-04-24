@@ -1,35 +1,144 @@
 {% extends "base.html" %}
-
 {% block content %}
 
+<style>
+.input-box {
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  resize: none;
+}
+
+body.light .input-box {
+  background: #f9fafb;
+  color: #111;
+  border: 1px solid #ddd;
+}
+
+.output-box {
+  margin-top: 20px;
+}
+
+.loader {
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-left: 8px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+body.light .loader {
+  border-top: 3px solid #111;
+}
+.copy-btn {
+  margin-top: 10px;
+  background: #10b981;
+}
+
+.copy-btn:hover {
+  background: #059669;
+}
+
+.copy-msg {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #22c55e;
+}
+
+</style>
+
 <div class="card">
+  <h2>🧠 Text Summarizer</h2>
 
-    <h2>🧠 Text Summarizer</h2>
+  <!-- 🔥 FORM IMPORTANT -->
+  <form method="POST">
 
-    <form method="POST" action="{{ url_for('summarize_form') }}">
+    <textarea name="text" placeholder="Paste your text..." class="input-box"></textarea>
 
-        <textarea name="text" placeholder="Paste text here..." class="custom-textarea"></textarea>
+    <br><br>
 
-        <br>
+    <button class="btn" id="summarizeBtn">
+      <span id="btnText">Summarize</span>
+      <span id="loader" class="loader" style="display:none;"></span>
+    </button>
 
-        <button>Summarize</button>
+  </form>
+  <div class="card output-box">
+  <h3>Summary Output</h3>
 
-    </form>
+  <p id="outputText">{{ summary if summary else "" }}</p>
+
+  <!-- 🔥 COPY BUTTON -->
+  <button class="btn copy-btn" onclick="copyText()">📋 Copy</button>
+
+  <!-- FEEDBACK -->
+  <span id="copyMsg" class="copy-msg"></span>
+</div>
+
+  <!-- OUTPUT -->
+  <div class="card output-box">
+    <h3>Summary Output</h3>
+    <p id="outputText">{{ summary if summary else "" }}</p>
+  </div>
 
 </div>
 
-<style>
-.custom-textarea {
-    width:100%;
-    height:180px;
-    padding:12px;
-    border-radius:10px;
-    border:none;
-    outline:none;
-    background:#1e293b;
-    color:white;
-    margin-top:10px;
+<script>
+
+/* 🔥 LOADING BUTTON */
+document.querySelector("form").addEventListener("submit", function() {
+  document.getElementById("btnText").innerText = "Processing...";
+  document.getElementById("loader").style.display = "inline-block";
+});
+
+/* 🔥 TYPING EFFECT */
+function typeEffect(text, elementId, speed = 15) {
+  let i = 0;
+  const el = document.getElementById(elementId);
+  el.innerHTML = "";
+
+  function typing() {
+    if (i < text.length) {
+      el.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing, speed);
+    }
+  }
+
+  typing();
 }
-</style>
+
+/* 🔥 APPLY EFFECT AFTER LOAD */
+window.onload = function() {
+  const summary = `{{ summary | safe }}`;
+  if (summary) {
+    typeEffect(summary, "outputText");
+  }
+};
+function copyText() {
+  const text = document.getElementById("outputText").innerText;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const msg = document.getElementById("copyMsg");
+    msg.innerText = "✅ Copied!";
+    
+    setTimeout(() => {
+      msg.innerText = "";
+    }, 2000);
+  });
+}
+</script>
 
 {% endblock %}
