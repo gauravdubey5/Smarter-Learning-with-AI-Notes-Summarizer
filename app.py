@@ -15,7 +15,6 @@ from reportlab.lib.pagesizes import A4
 from io import BytesIO
 from werkzeug.utils import secure_filename
 
-
 # =========================
 # Flask + DB CONFIG
 # =========================
@@ -76,6 +75,7 @@ def allowed_doc_file(filename):
         '.' in filename and
         filename.rsplit('.', 1)[1].lower() in DOC_ALLOWED_EXTENSIONS
     )
+
 
 
 # =========================

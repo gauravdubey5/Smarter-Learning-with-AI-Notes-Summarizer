@@ -1,106 +1,76 @@
-# 🚀 AI Notes Summarizer
+# 🧠 AI Study Assistant
 
-A powerful AI-based web application that summarizes text and PDF documents using NLP models.
+### Smart Summaries • Key Points • Quiz Generator
 
----
-
-## 🔥 Features
-
-* ✨ Text Summarization
-* 📄 PDF Summarization
-* 🔊 Text to Speech
-* 👤 User Authentication (Login/Signup)
-* 📥 Download Summary as PDF
+An AI-powered application that helps students convert long lectures, videos, or notes into short summaries, key insights, and interactive quizzes for better learning.
 
 ---
 
-## 🛠️ Tech Stack
+## 📌 Problem
 
-* **Frontend:** HTML, CSS
-* **Backend:** Flask (Python)
-* **AI Model:** HuggingFace Transformers (BART)
-* **Database:** SQLite
+Students often struggle to revise long lectures and extract important points quickly.
 
 ---
 
-## 📂 Project Structure
+## 💡 Solution
 
-```
-final project/
-│
-├── static/
-├── templates/
-├── uploads/
-├── app.py
-├── users.db
-└── README.md
-```
+This tool uses AI to:
+
+* Convert audio/video → text
+* Generate short summaries
+* Extract key points
+* Create quizzes for revision
 
 ---
 
-## ⚙️ Installation & Setup
+## ✨ Features
 
-1. Clone the repository:
-
-```
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
-```
-
-2. Navigate to the project folder:
-
-```
-cd YOUR_REPO
-```
-
-3. Install dependencies:
-
-```
-pip install flask transformers torch PyPDF2 reportlab
-```
-
-4. Run the application:
-
-```
-python app.py
-```
-
-5. Open in browser:
-
-```
-http://127.0.0.1:7860
-```
+* 🎧 Audio / YouTube → Text (Whisper)
+* ✍️ AI Summarization
+* 📌 Key Points Extraction
+* ❓ Quiz Generator (MCQs) 🔥
+* 🌍 Multi-language Support 🔥
+* 💬 Chat with Notes 🔥
 
 ---
 
-## 🎯 Usage
+## ⚙️ Tech Stack
 
-* Login / Signup
-* Enter text or upload PDF
-* Click summarize
-* View summary
-* Download as PDF
-
----
-
-## 📸 Screenshots
-
-(Add your project screenshots here)
+* Python
+* Streamlit
+* Whisper
+* Transformers (Flan-T5)
 
 ---
 
-## 🤝 Contributing
+## 🚀 How It Works
 
-Feel free to fork this repo and contribute 🚀
+1. Upload audio / paste YouTube link
+2. Convert speech to text
+3. Generate summary
+4. Extract key points
+5. Generate quiz
 
 ---
 
-## 📜 License
+## 🎯 Future Scope
 
-This project is open-source and free to use.
+* Flashcards generation
+* Notes bookmarking
+* Personalized study assistant
+
+---
+
+## 🙌 Inspiration
+
+Inspired by open-source AI tools and enhanced with additional features.
 
 ---
 
 ## 👨‍💻 Author
 
-**Gaurav Dubey**
-DevOps Learner 🚀
+GAURAV
+UJJWAL SHRIVASTAWA
+VISHAL SHARMA
+HIMANSHU MISHRA
+SHIVANAND KUMAR
