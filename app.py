@@ -48,13 +48,14 @@ def init_db():
         )
     ''')
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS history (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    text TEXT,
-    summary TEXT
-    )
-    ''')
+        CREATE TABLE IF NOT EXISTS history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            text TEXT,
+            summary TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        ''')
     conn.commit()
     conn.close()
 
@@ -124,6 +125,17 @@ def generate_summary(text, max_length=150, min_length=40):
     max_length = to_int(max_length, 150)
     min_length = to_int(min_length, 40)
 
+    # 🔥 dynamic adjustment based on input length
+    input_length = len(text.split())
+
+    if input_length < 50:
+        max_length = int(input_length * 0.7)
+        min_length = int(input_length * 0.3)
+
+    # safety
+    max_length = max(max_length, 10)
+    min_length = max(min_length, 5)
+
     max_length = min(max_length, 1024)
     min_length = max(min_length, 5)
 
@@ -178,31 +190,45 @@ def index():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
+
         name = request.form.get('name', '').capitalize()
-        email = request.form.get('email').strip().lower()
+        email = request.form.get('email', '').strip().lower()
         gender = request.form.get('gender')
-        password = request.form.get('password').strip()
+        password = request.form.get('password', '').strip()
         question = request.form.get('question')
         answer = request.form.get('answer')
+        print("SIGNUP DATA:", name, email, gender, password, question, answer)
+
+        # ✅ VALIDATION YAHI LAGEGA
+        if not name or not email or not password or not gender or not question or not answer:
+            flash("All fields are required!", "danger")
+            return redirect(url_for('signup'))
 
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
         conn = get_db_connection()
         cursor = conn.cursor()
+
         try:
             cursor.execute('''
                 INSERT INTO users (name, email, gender, password, question, answer)
                 VALUES (?, ?, ?, ?, ?, ?)
             ''', (name, email, gender, hashed_password, question, answer))
+
             conn.commit()
+            print("✅ INSERT SUCCESS")
+
             flash("Signup successful! Please login.", "success")
-        except sqlite3.IntegrityError:
-            flash("Email already exists!", "danger")
-        conn.close()
-        return redirect(url_for('login'))
+            return redirect(url_for('login'))
+
+        except Exception as e:
+            print("❌ INSERT ERROR:", e)
+            flash("Signup failed!", "danger")
+
+        finally:
+            conn.close()
 
     return render_template('signup.html')
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -214,15 +240,13 @@ def login():
             flash("All fields required!", "danger")
             return redirect(url_for("login"))
 
-        email = email.strip().lower()
+        email = email.strip().lower()   # 🔥 FIX
         password = password.strip()
 
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        
 
         conn = get_db_connection()
 
-        # ✅ ONLY EMAIL MATCH
         user = conn.execute(
             "SELECT * FROM users WHERE email=?",
             (email,)
@@ -230,20 +254,22 @@ def login():
 
         conn.close()
 
+        print("INPUT:", hashed_password)
+        print("EMAIL:", email)
+        print("USER:", user)
+
         if user:
-            # ✅ PASSWORD CHECK SEPARATELY
+            print("DB:", user["password"])
+
             if user["password"] == hashed_password:
                 session["user_id"] = user["id"]
-                session["email"] = user["email"]
-                flash("Login successful!", "success")
                 return redirect(url_for("dashboard"))
             else:
-                flash("Wrong password!", "danger")
+                print("❌ Wrong password")
         else:
-            flash("User not found!", "danger")
+            print("❌ User not found")
 
     return render_template("login.html")
-
 
 @app.route("/logout")
 def logout():
@@ -277,13 +303,62 @@ def dashboard():
         return redirect(url_for('login'))
 
     conn = get_db_connection()
+
     user = conn.execute(
         "SELECT * FROM users WHERE id=?",
         (session['user_id'],)
     ).fetchone()
+    chart_data = conn.execute("""
+    SELECT DATE(created_at) as date, COUNT(*) as count
+    FROM history
+    WHERE user_id=?
+    GROUP BY DATE(created_at)
+    ORDER BY DATE(created_at) DESC
+    LIMIT 7
+    """, (session['user_id'],)).fetchall()
+
+    # reverse for chart
+    chart_labels = [row["date"] for row in chart_data][::-1]
+    chart_values = [row["count"] for row in chart_data][::-1]
+
+
+    # 🔥 RECENT ACTIVITY
+    recent = conn.execute("""
+    SELECT text, created_at FROM history
+    WHERE user_id=?
+    ORDER BY created_at DESC
+    LIMIT 5
+    """, (session['user_id'],)).fetchall()
+    # 🔥 TOTAL SUMMARIES
+    total = conn.execute(
+        "SELECT COUNT(*) FROM history WHERE user_id=?",
+        (session['user_id'],)
+    ).fetchone()[0]
+
+    # 🔥 PDF COUNT (optional logic)
+    pdf_count = conn.execute(
+        "SELECT COUNT(*) FROM history WHERE user_id=? AND text LIKE '%.pdf%'",
+        (session['user_id'],)
+    ).fetchone()[0]
+    today = conn.execute("""
+        SELECT COUNT(*) FROM history 
+        WHERE user_id=? 
+        AND DATE(created_at) = DATE('now')
+        """, (session['user_id'],)
+        ).fetchone()[0]
+    
     conn.close()
 
-    return render_template('dashboard.html', user=user)
+    return render_template(
+    'dashboard.html',
+    user=user,
+    total=total,
+    pdf_count=pdf_count,
+    today=today,
+    chart_labels=chart_labels,
+    chart_values=chart_values,
+    recent=recent
+)
 
 @app.route('/history')
 def history():
@@ -302,6 +377,12 @@ def history():
 @app.route('/help')
 def help_page():
     return render_template('help.html')
+
+@app.route("/team")
+def team():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    return render_template("team.html")
 
 
 # =========================
@@ -341,7 +422,7 @@ def summarize_form():
 
     return render_template('text_result.html', summary=summary)
 
-@app.route('/summarize', methods=['POST'])
+@app.route('/summarize', methods=['GET', 'POST'])
 def summarize():
     data = request.get_json(force=True, silent=True) or {}
 

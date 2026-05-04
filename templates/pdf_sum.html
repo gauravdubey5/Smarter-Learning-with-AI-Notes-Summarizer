@@ -1,28 +1,52 @@
 {% extends "base.html" %}
 {% block content %}
-<style>.dropzone {
+
+<style>
+.container-box {
+  max-width: 700px;
+  margin: auto;
+}
+
+.header {
+  margin-bottom: 15px;
+}
+
+.sub-text {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.dropzone {
   border: 2px dashed #3b82f6;
   padding: 40px;
   text-align: center;
   border-radius: 12px;
-  margin-bottom: 20px;
   background: rgba(255,255,255,0.03);
   transition: 0.3s;
+  cursor: pointer;
 }
 
 .dropzone:hover {
   background: rgba(59,130,246,0.1);
 }
 
-/* LIGHT MODE */
 body.light .dropzone {
   background: #f9fafb;
   border: 2px dashed #3b82f6;
   color: #111;
 }
+
+.file-name {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
 .btn {
   margin-top: 15px;
 }
+
 .loader {
   border: 3px solid rgba(255,255,255,0.3);
   border-top: 3px solid white;
@@ -38,35 +62,57 @@ body.light .dropzone {
   100% { transform: rotate(360deg); }
 }
 
-/* Light mode */
 body.light .loader {
   border-top: 3px solid #111;
 }
-
 </style>
 
+<div class="card container-box">
 
-<div class="card">
-  <h2>📄 PDF Summarizer</h2>
+  <div class="header">
+    <h2>📄 PDF Summarizer</h2>
+    <div class="sub-text">Upload a PDF and generate a concise summary instantly.</div>
+  </div>
 
-  <div class="dropzone">
-  <p>📄 Drag & Drop PDF here</p>
-  <input type="file" name="pdf">
+  <form method="POST" action="/pdf-summarize" enctype="multipart/form-data">
+
+    <div class="dropzone" onclick="document.getElementById('fileInput').click()">
+      <p>📄 Click or Drag & Drop PDF here</p>
+      <input type="file" id="fileInput" name="file" accept=".pdf" hidden required>
+      <div class="file-name" id="fileName">No file selected</div>
+    </div>
+
+    <button type="submit" class="btn" id="summarizeBtn">
+      <span id="btnText">Summarize</span>
+      <span id="loader" class="loader" style="display:none;"></span>
+    </button>
+
+  </form>
+
 </div>
 
-  <br>
-
-  <button class="btn" id="summarizeBtn">
-  <span id="btnText">Summarize</span>
-  <span id="loader" class="loader" style="display:none;"></span>
-</button>
-</div>
 <script>
+
+// 🔥 Show selected file name
+const fileInput = document.getElementById("fileInput");
+const fileName = document.getElementById("fileName");
+
+fileInput.addEventListener("change", () => {
+  if (fileInput.files.length > 0) {
+    fileName.innerText = fileInput.files[0].name;
+  } else {
+    fileName.innerText = "No file selected";
+  }
+});
+
+// 🔥 Loading state
 document.querySelector("form").addEventListener("submit", function() {
   const btn = document.getElementById("summarizeBtn");
   document.getElementById("btnText").innerText = "Processing...";
   document.getElementById("loader").style.display = "inline-block";
   btn.disabled = true;
 });
+
 </script>
+
 {% endblock %}

@@ -2,15 +2,21 @@
 {% block content %}
 
 <style>
+.container-box {
+  max-width: 800px;
+  margin: auto;
+}
+
 .input-box {
   width: 100%;
-  height: 120px;
-  padding: 12px;
-  border-radius: 10px;
+  height: 150px;
+  padding: 14px;
+  border-radius: 12px;
   border: none;
   background: rgba(255,255,255,0.08);
   color: white;
   resize: none;
+  font-size: 14px;
 }
 
 body.light .input-box {
@@ -19,8 +25,14 @@ body.light .input-box {
   border: 1px solid #ddd;
 }
 
-.output-box {
-  margin-top: 20px;
+.header {
+  margin-bottom: 15px;
+}
+
+.sub-text {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-bottom: 10px;
 }
 
 .loader {
@@ -41,33 +53,30 @@ body.light .input-box {
 body.light .loader {
   border-top: 3px solid #111;
 }
-.copy-btn {
-  margin-top: 10px;
-  background: #10b981;
+
+.btn {
+  margin-top: 15px;
 }
 
-.copy-btn:hover {
-  background: #059669;
+.word-count {
+  font-size: 12px;
+  margin-top: 6px;
+  opacity: 0.7;
 }
-
-.copy-msg {
-  display: block;
-  margin-top: 8px;
-  font-size: 13px;
-  color: #22c55e;
-}
-
 </style>
 
-<div class="card">
-  <h2>🧠 Text Summarizer</h2>
+<div class="card container-box">
 
-  <!-- 🔥 FORM IMPORTANT -->
-  <form method="POST">
+  <div class="header">
+    <h2>🧠 Text Summarizer</h2>
+    <div class="sub-text">Paste your text below and generate a concise summary instantly.</div>
+  </div>
 
-    <textarea name="text" placeholder="Paste your text..." class="input-box"></textarea>
+  <form method="POST" action="/summarize-form">
 
-    <br><br>
+    <textarea name="text" id="textInput" placeholder="Paste your text here..." class="input-box" required></textarea>
+
+    <div class="word-count" id="wordCount">Words: 0</div>
 
     <button class="btn" id="summarizeBtn">
       <span id="btnText">Summarize</span>
@@ -75,64 +84,26 @@ body.light .loader {
     </button>
 
   </form>
-  <div class="card output-box">
-  <h3>Summary Output</h3>
 
-  <p id="outputText">{{ summary if summary else "" }}</p>
-
-  <!-- 🔥 COPY BUTTON -->
-  <button class="btn copy-btn" onclick="copyText()">📋 Copy</button>
-
-  <!-- FEEDBACK -->
-  <span id="copyMsg" class="copy-msg"></span>
 </div>
-
- 
 
 <script>
 
-/* 🔥 LOADING BUTTON */
+// 🔥 Loading state
 document.querySelector("form").addEventListener("submit", function() {
   document.getElementById("btnText").innerText = "Processing...";
   document.getElementById("loader").style.display = "inline-block";
 });
 
-/* 🔥 TYPING EFFECT */
-function typeEffect(text, elementId, speed = 15) {
-  let i = 0;
-  const el = document.getElementById(elementId);
-  el.innerHTML = "";
+// 🔥 Word count
+const textarea = document.getElementById("textInput");
+const wordCount = document.getElementById("wordCount");
 
-  function typing() {
-    if (i < text.length) {
-      el.innerHTML += text.charAt(i);
-      i++;
-      setTimeout(typing, speed);
-    }
-  }
+textarea.addEventListener("input", () => {
+  const words = textarea.value.trim().split(/\s+/).filter(w => w.length > 0);
+  wordCount.innerText = "Words: " + words.length;
+});
 
-  typing();
-}
-
-/* 🔥 APPLY EFFECT AFTER LOAD */
-window.onload = function() {
-  const summary = `{{ summary | safe }}`;
-  if (summary) {
-    typeEffect(summary, "outputText");
-  }
-};
-function copyText() {
-  const text = document.getElementById("outputText").innerText;
-
-  navigator.clipboard.writeText(text).then(() => {
-    const msg = document.getElementById("copyMsg");
-    msg.innerText = "✅ Copied!";
-    
-    setTimeout(() => {
-      msg.innerText = "";
-    }, 2000);
-  });
-}
 </script>
 
 {% endblock %}

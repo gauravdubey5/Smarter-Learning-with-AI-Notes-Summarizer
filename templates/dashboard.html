@@ -1,60 +1,121 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1 style="margin-bottom:20px;">Dashboard 🚀</h1>
+<style>
+.dashboard-container {
+  max-width: 1100px;
+  margin: auto;
+}
 
-<div class="card" style="height:300px;">
-  <canvas id="chart"></canvas>
-</div>
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
 
-<!-- 🔥 STATS CARDS -->
-<div class="grid">
+.stat-card {
+  padding: 20px;
+  text-align: center;
+}
 
-  <div class="card stat">
-    <h2>120</h2>
-    <p>Total Summaries</p>
+.stat-card h2 {
+  font-size: 28px;
+}
+
+.stat-card p {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.activity {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.activity span {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s;
+}
+</style>
+
+<div class="dashboard-container">
+
+  <h1>📊 Dashboard</h1>
+
+  <!-- 🔥 STATS -->
+  <div class="grid-3">
+
+    <div class="card stat-card">
+      <h2>{{ total }}</h2>
+      <p>Total Summaries</p>
+    </div>
+
+    <div class="card stat-card">
+      <h2>{{ pdf_count }}</h2>
+      <p>PDF Uploaded</p>
+    </div>
+
+    <div class="card stat-card">
+      <h2>{{ today }}</h2>
+      <p>Today Usage</p>
+    </div>
+
   </div>
 
-  <div class="card stat">
-    <h2>45</h2>
-    <p>PDF Uploaded</p>
+  <!-- 🔥 CHART -->
+  <div class="card" style="margin-top:20px;">
+    <h3>Usage Overview 📈</h3>
+    <canvas id="chart" height="100"></canvas>
   </div>
 
-  <div class="card stat">
-    <h2>15</h2>
-    <p>Today Usage</p>
+  <!-- 🔥 QUICK ACTIONS -->
+  <div class="card" style="margin-top:20px;">
+    <h3>Quick Actions ⚡</h3>
+    <div class="quick-actions">
+      <a href="/textsummaries"><button class="btn">🧠 Text Summarizer</button></a>
+      <a href="/pdf_summaries"><button class="btn">📄 PDF Summarizer</button></a>
+    </div>
   </div>
 
-</div>
+  <!-- 🔥 RECENT ACTIVITY -->
+  <div class="card" style="margin-top:20px;">
+    <h3>Recent Activity 🕘</h3>
 
-<!-- 🔥 CHART SECTION -->
-<div class="card">
-  <h3>Usage Overview 📊</h3>
-  <canvas id="chart" height="100"></canvas>
-</div>
+    {% if recent %}
+      {% for item in recent %}
+      <div class="activity">
+        <p>
+          <strong>
+            {% if '.pdf' in item.text %}
+              PDF Summary
+            {% else %}
+              Text Summary
+            {% endif %}
+          </strong> created
+        </p>
+        <span>{{ item.created_at }}</span>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p>No activity yet</p>
+    {% endif %}
 
-<!-- 🔥 RECENT ACTIVITY -->
-<div class="card">
-  <h3>Recent Activity 🕘</h3>
-
-  <div class="activity">
-    <p><strong>PDF Summary</strong> generated</p>
-    <span>2 mins ago</span>
   </div>
 
-  <div class="activity">
-    <p><strong>Text Summary</strong> created</p>
-    <span>10 mins ago</span>
-  </div>
-
-</div>
-
-<!-- 🔥 QUICK ACTIONS -->
-<div class="card">
-  <h3>Quick Actions ⚡</h3>
-  <br>
-  <a href="/text"><button class="btn">Text Summarizer</button></a>
-  <a href="/pdf"><button class="btn">PDF Summarizer</button></a>
 </div>
 
 <!-- 🔥 CHART JS -->
@@ -66,10 +127,9 @@ const ctx = document.getElementById('chart');
 new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    labels: {{ chart_labels | tojson }},
     datasets: [{
-      label: 'Usage',
-      data: [5, 10, 8, 15, 12, 20],
+      data: {{ chart_values | tojson }},
       borderColor: '#3b82f6',
       backgroundColor: 'rgba(59,130,246,0.2)',
       tension: 0.4
@@ -78,34 +138,9 @@ new Chart(ctx, {
   options: {
     plugins: {
       legend: { display: false }
-    },
-    scales: {
-      x: { ticks: { color: '#aaa' } },
-      y: { ticks: { color: '#aaa' } }
     }
   }
 });
 </script>
-
-<!-- 🔥 EXTRA STYLING -->
-<style>
-.activity {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
-.activity span {
-  color: #888;
-  font-size: 12px;
-}
-
-/* hover animation */
-.card:hover {
-  transform: translateY(-5px);
-  transition: 0.3s;
-}
-</style>
 
 {% endblock %}

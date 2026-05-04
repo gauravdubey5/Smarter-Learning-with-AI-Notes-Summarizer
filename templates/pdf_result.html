@@ -2,16 +2,88 @@
 
 {% block content %}
 
-<h2>Summary</h2>
+<style>
+.summary-card {
+  max-width: 800px;
+  margin: auto;
+  padding: 25px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+}
 
-<div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:10px;">
+body.light .summary-card {
+  background: #ffffff;
+  border: 1px solid #ddd;
+}
+
+.summary-text {
+  margin-top: 15px;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.btn-group {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-download {
+  background: #3b82f6;
+}
+
+.btn-download:hover {
+  background: #2563eb;
+}
+
+.btn-copy {
+  background: #10b981;
+}
+
+.btn-copy:hover {
+  background: #059669;
+}
+
+.copy-msg {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #22c55e;
+}
+</style>
+
+<div class="summary-card">
+  <h2>📄 Summary Result</h2>
+
+  <div class="summary-text" id="summaryText">
     {{ summary }}
+  </div>
+
+  <div class="btn-group">
+    <a href="{{ url_for('download_summary') }}">
+      <button class="btn btn-download">⬇️ Download PDF</button>
+    </a>
+
+    <button class="btn btn-copy" onclick="copySummary()">📋 Copy</button>
+  </div>
+
+  <span id="copyMsg" class="copy-msg"></span>
 </div>
 
-<br>
+<script>
+function copySummary() {
+  const text = document.getElementById("summaryText").innerText;
 
-<a href="{{ url_for('download_summary') }}">
-    <button>Download PDF</button>
-</a>
+  navigator.clipboard.writeText(text).then(() => {
+    const msg = document.getElementById("copyMsg");
+    msg.innerText = "✅ Copied!";
+    
+    setTimeout(() => {
+      msg.innerText = "";
+    }, 2000);
+  });
+}
+</script>
 
 {% endblock %}

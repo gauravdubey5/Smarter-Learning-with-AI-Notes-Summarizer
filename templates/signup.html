@@ -135,40 +135,49 @@ body::before {
 
   <form method="POST">
 
-    <div class="input-group">
-      <i>👤</i>
-      <input type="text" name="name" placeholder="Full Name" required>
-    </div>
+  <div class="input-group">
+    <i>👤</i>
+    <input type="text" name="name" placeholder="Full Name" required>
+  </div>
 
-    <div class="input-group">
-      <i>📧</i>
-      <input type="email" name="email" placeholder="Email Address" required>
-    </div>
+  <div class="input-group">
+    <i>📧</i>
+    <input type="email" name="email" placeholder="Email Address" required>
+  </div>
 
-    <div class="input-group">
-      <i>🔒</i>
-      <input type="password" name="password" placeholder="Password" required>
-    </div>
+  <div class="input-group">
+    <i>🔒</i>
+    <input type="password" name="password" placeholder="Password" required>
+  </div>
 
-    <div class="input-group">
-      <i>❓</i>
-      <select name="question" required>
-        <option value="">Select Security Question</option>
-        <option>Your pet name?</option>
-        <option>Your first school?</option>
-        <option>Your favorite food?</option>
-      </select>
-    </div>
+  <!-- ✅ FIXED GENDER (IMPORTANT) -->
+  <div class="input-group">
+    <i>⚧️</i>
+    <select name="gender" required>
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+  </div>
 
-    <div class="input-group">
-      <i>✍️</i>
-      <input type="text" name="answer" placeholder="Your Answer" required>
-    </div>
+  <div class="input-group">
+    <i>❓</i>
+    <select name="question" required>
+      <option value="">Select Security Question</option>
+      <option value="Your pet name?">Your pet name?</option>
+      <option value="Your first school?">Your first school?</option>
+      <option value="Your favorite food?">Your favorite food?</option>
+    </select>
+  </div>
 
-    <button class="btn">Sign Up</button>
+  <div class="input-group">
+    <i>✍️</i>
+    <input type="text" name="answer" placeholder="Your Answer" required>
+  </div>
 
-  </form>
+  <button class="btn">Sign Up</button>
 
+</form>
   <div class="footer">
     Already have an account? <a href="/login">Login</a>
   </div>
