@@ -1,12 +1,84 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>History</h2>
+<style>
+.history-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  color: white;
+}
 
-<div class="card">
-  <p><strong>SEO Summary</strong></p>
-  <p>Created: Today</p>
-  <button class="btn">Copy</button>
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  backdrop-filter: blur(10px);
+}
+
+.card h3 {
+  margin-bottom: 5px;
+}
+
+.card small {
+  opacity: 0.6;
+}
+
+.btn {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+</style>
+
+<div class="history-container">
+
+<h2>📜 Your History</h2>
+
+{% if history %}
+{% for item in history %} <div class="card"> <h3>{{ item.title }}</h3> <small>{{ item.created_at }}</small> <p id="text{{ loop.index }}">{{ item.summary }}</p>
+
+```
+  <button class="btn" onclick="copyText('text{{ loop.index }}')">
+    Copy
+  </button>
+
+  <a href="/delete/{{ item.id }}">
+  <button class="btn-delete">Delete</button>
+</a>
+
 </div>
+```
+
+{% endfor %}
+{% else %}
+
+  <p>No history found.</p>
+{% endif %}
+
+</div>
+
+<script>
+function copyText(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
+}
+</script>
 
 {% endblock %}

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Sign Up | AI App</title>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -88,11 +89,73 @@ body::before {
   opacity: 0.6;
 }
 
+.input-group input {
+  height: 45px;
+  padding: 0 45px 0 40px;  /* important */
+}
+
+.input-group select {
+  width: 100%;
+  height: 48px;
+  padding: 0 40px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  appearance: none;        /* 🔥 default arrow hatao */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.input-group select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5 7l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+select option {
+  background: #1e293b;
+  color: white;
+}
+
 /* Focus glow */
 .input-group input:focus,
 .input-group select:focus {
   outline: none;
   box-shadow: 0 0 0 2px #3b82f6;
+}
+
+.password-group {
+  position: relative;
+}
+
+.password-group input {
+  width: 100%;
+  height: 48px;
+  padding: 0 45px 0 40px; /* space for icon */
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 5px;
+  top: 0;
+  height: 100%;
+  width: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.toggle-eye:hover {
+  color: #3b82f6;
 }
 
 /* Button */
@@ -145,10 +208,19 @@ body::before {
     <input type="email" name="email" placeholder="Email Address" required>
   </div>
 
-  <div class="input-group">
+  <div class="input-group password-group">
     <i>🔒</i>
-    <input type="password" name="password" placeholder="Password" required>
+    <input type="password" id="password" name="password" placeholder="Password" required>
+
+    <button type="button" class="toggle-eye" onclick="togglePassword()">
+      <i class="fa-solid fa-eye"></i>
+    </button>
   </div>
+
+    <div class="input-group">
+      <i>🔒</i>
+      <input type="password" id="confirm_password" placeholder="Confirm Password" required>
+    </div>
 
   <!-- ✅ FIXED GENDER (IMPORTANT) -->
   <div class="input-group">
@@ -195,6 +267,19 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.style.opacity = "0.7";
   });
 });
+// show/hide password
+function togglePassword() {
+  const p = document.getElementById("password");
+  const icon = document.querySelector(".toggle-eye i");
+
+  if (p.type === "password") {
+    p.type = "text";
+    icon.classList.replace("fa-eye", "fa-eye-slash");
+  } else {
+    p.type = "password";
+    icon.classList.replace("fa-eye-slash", "fa-eye");
+  }
+}
 </script>
 
 </body>

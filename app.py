@@ -195,14 +195,40 @@ def signup():
         email = request.form.get('email', '').strip().lower()
         gender = request.form.get('gender')
         password = request.form.get('password', '').strip()
+        confirm = request.form.get('confirm_password')
         question = request.form.get('question')
         answer = request.form.get('answer')
-        print("SIGNUP DATA:", name, email, gender, password, question, answer)
+        print("SIGNUP DATA:", name, email, gender, password, confirm, question, answer)
 
         # ✅ VALIDATION YAHI LAGEGA
         if not name or not email or not password or not gender or not question or not answer:
             flash("All fields are required!", "danger")
             return redirect(url_for('signup'))
+        
+        # 🔴 Password match check
+
+        if password != confirm:
+            flash("Passwords do not match!", "danger")
+            return redirect(url_for('signup'))
+        
+         # 🔴 Password strength check
+
+        if len(password) < 6:
+            flash("Password must be at least 6 characters!", "warning")
+            return redirect(url_for('signup'))
+        
+         # 🔴 Check if email already exists
+        existing_user = conn.execute(
+            "SELECT * FROM users WHERE email=?",
+            (email,)
+        ).fetchone()
+
+        if existing_user:
+            conn.close()
+            flash("Email already registered!", "danger")
+            return redirect(url_for('signup'))
+
+        # 🔐 Hash password (better than plain)
 
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
@@ -360,23 +386,44 @@ def dashboard():
     recent=recent
 )
 
-@app.route('/history')
+@app.route("/history")
 def history():
     if "user_id" not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for("login"))
 
     conn = get_db_connection()
+
     data = conn.execute(
-        "SELECT * FROM history WHERE user_id=?",
-        (session['user_id'],)
+        "SELECT id, text, summary, created_at FROM history WHERE user_id=? ORDER BY id DESC",
+        (session["user_id"],)
     ).fetchall()
+
     conn.close()
 
-    return render_template('history.html', data=data)
+    return render_template("history.html", history=data)
+@app.route("/delete/<int:id>")
+def delete(id):
+    conn = get_db_connection()
+    conn.execute("DELETE FROM history WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('history'))
 
-@app.route('/help')
+@app.route('/help', methods=['GET'])
 def help_page():
-    return render_template('help.html')
+    query = request.args.get("query", "").lower()
+
+    faqs = [
+        {"q": "How to summarize text?", "a": "Go to dashboard → Text Summarizer → paste text."},
+        {"q": "How to summarize PDF?", "a": "Upload PDF in PDF section."},
+        {"q": "Forgot password?", "a": "Use forgot password option."},
+        {"q": "Where to see history?", "a": "Go to dashboard → history."}
+    ]
+
+    if query:
+        faqs = [f for f in faqs if query in f["q"].lower() or query in f["a"].lower()]
+
+    return render_template("help.html", faqs=faqs, query=query)
 
 @app.route("/team")
 def team():

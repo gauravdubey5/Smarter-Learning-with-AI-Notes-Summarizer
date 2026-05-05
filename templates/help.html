@@ -1,18 +1,137 @@
 {% extends "base.html" %}
-
 {% block content %}
 
+<style>
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  color: white;
+}
 
-        <h1>Get Help</h1>
-        
-        <search class="search-bar">
-            <form action="/help" method="get">
-                <input type="text" name="query" placeholder="Search...">
-                <button type="submit">Search</button>
-            </form>
-       
-     <footer class="footer">
-        <p>&copy; 2025 AI Notes Summarizer. All rights reserved.</p>
-    </footer>
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
-    {% endblock %}
+.search-bar input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+.search-bar button {
+  padding: 12px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.faq {
+  margin-bottom: 20px;
+}
+
+.chatbox {
+  margin-top: 30px;
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.chat-messages {
+  height: 150px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.chat-input {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+.chat-input button {
+  padding: 10px;
+  background: #3b82f6;
+  border: none;
+  color: white;
+  border-radius: 8px;
+}
+body {
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: white;
+}
+</style>
+
+<div class="container">
+
+<h2>🆘 Help Center</h2>
+
+<form method="GET" class="search-bar">
+  <input type="text" name="query" placeholder="Search help..." value="{{ query }}">
+  <button>Search</button>
+</form>
+
+{% for faq in faqs %}
+
+<div class="faq">
+  <h3>{{ faq.q }}</h3>
+  <p>{{ faq.a }}</p>
+</div>
+{% endfor %}
+
+<!-- Chatbot -->
+
+<div class="chatbox">
+  <h3>🤖 Ask Help Bot</h3>
+
+  <div id="chat" class="chat-messages"></div>
+
+  <div class="chat-input">
+    <input type="text" id="msg" placeholder="Ask something...">
+    <button onclick="sendMsg()">Send</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+function sendMsg() {
+  const input = document.getElementById("msg");
+  const chat = document.getElementById("chat");
+
+  let userMsg = input.value;
+  if (!userMsg) return;
+
+  chat.innerHTML += "<p><b>You:</b> " + userMsg + "</p>";
+
+  let reply = "Sorry, I don't understand.";
+
+  if (userMsg.toLowerCase().includes("pdf")) {
+    reply = "Go to PDF summarizer section.";
+  } else if (userMsg.toLowerCase().includes("text")) {
+    reply = "Use text summarizer from dashboard.";
+  } else if (userMsg.toLowerCase().includes("password")) {
+    reply = "Use forgot password option.";
+  }
+
+  chat.innerHTML += "<p><b>Bot:</b> " + reply + "</p>";
+
+  input.value = "";
+  chat.scrollTop = chat.scrollHeight;
+}
+</script>
+
+{% endblock %}
