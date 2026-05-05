@@ -190,34 +190,29 @@ def index():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-
         name = request.form.get('name', '').capitalize()
         email = request.form.get('email', '').strip().lower()
         gender = request.form.get('gender')
         password = request.form.get('password', '').strip()
-        confirm = request.form.get('confirm_password')
         question = request.form.get('question')
         answer = request.form.get('answer')
-        print("SIGNUP DATA:", name, email, gender, password, confirm, question, answer)
 
-        # ✅ VALIDATION YAHI LAGEGA
+        print("SIGNUP DATA:", name, email, gender, password, question, answer)
+
+        # ✅ validation
         if not name or not email or not password or not gender or not question or not answer:
             flash("All fields are required!", "danger")
             return redirect(url_for('signup'))
-        
-        # 🔴 Password match check
 
-        if password != confirm:
-            flash("Passwords do not match!", "danger")
-            return redirect(url_for('signup'))
-        
-         # 🔴 Password strength check
+
 
         if len(password) < 6:
             flash("Password must be at least 6 characters!", "warning")
             return redirect(url_for('signup'))
-        
-         # 🔴 Check if email already exists
+
+        # 🔥 FIX START (conn yaha banega)
+        conn = get_db_connection()
+
         existing_user = conn.execute(
             "SELECT * FROM users WHERE email=?",
             (email,)
@@ -228,15 +223,11 @@ def signup():
             flash("Email already registered!", "danger")
             return redirect(url_for('signup'))
 
-        # 🔐 Hash password (better than plain)
-
+        # 🔐 hash password
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
         try:
-            cursor.execute('''
+            conn.execute('''
                 INSERT INTO users (name, email, gender, password, question, answer)
                 VALUES (?, ?, ?, ?, ?, ?)
             ''', (name, email, gender, hashed_password, question, answer))
@@ -255,6 +246,7 @@ def signup():
             conn.close()
 
     return render_template('signup.html')
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -401,13 +393,7 @@ def history():
     conn.close()
 
     return render_template("history.html", history=data)
-@app.route("/delete/<int:id>")
-def delete(id):
-    conn = get_db_connection()
-    conn.execute("DELETE FROM history WHERE id=?", (id,))
-    conn.commit()
-    conn.close()
-    return redirect(url_for('history'))
+
 
 @app.route('/help', methods=['GET'])
 def help_page():
