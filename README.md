@@ -1,258 +1,278 @@
-# 🚀 AI Notes Summarizer Web App
+# 🚀 SmartLearn – AI Cloud Native EdTech Platform
 
-An advanced **AI-powered web application** that allows users to summarize text and PDF documents efficiently using state-of-the-art NLP models.
+SmartLearn is a modern **AI-powered Cloud Native EdTech Platform** designed to provide scalable, intelligent, and personalized learning experiences. The platform leverages cloud-native technologies, automation, containerization, and AI capabilities to deliver a highly available and efficient educational ecosystem.
 
 ---
 
-## 📌 Overview
+## 📌 Project Overview
 
-This project is a **full-stack AI application** designed to help users quickly extract meaningful insights from large amounts of text.
+SmartLearn aims to bridge the gap between traditional learning systems and modern cloud-native architecture by combining:
 
-Unlike basic summarizers, this system includes:
+* 🤖 AI-powered learning assistance
+* ☁️ Cloud-native infrastructure
+* 🔄 DevOps automation
+* 📊 Scalable microservices architecture
+* 🔐 Secure authentication & authorization
+* 📈 Monitoring and observability
 
-* 🔐 User authentication system
-* 📊 Dashboard with analytics
-* 📄 PDF summarization
-* 🧠 AI-based multi-stage summarization
-* 📜 History tracking
+The platform is designed for students, educators, and institutions looking for a reliable and intelligent learning environment.
+
+---
+
+## 🏗️ Architecture
+
+```text
+                    ┌─────────────────┐
+                    │     Users       │
+                    └────────┬────────┘
+                             │
+                             ▼
+                    ┌─────────────────┐
+                    │   Frontend UI   │
+                    └────────┬────────┘
+                             │
+                             ▼
+                    ┌─────────────────┐
+                    │   API Gateway   │
+                    └────────┬────────┘
+                             │
+      ┌──────────────────────┼──────────────────────┐
+      ▼                      ▼                      ▼
+
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│ AI Service  │      │ User Service│      │ Course Svc  │
+└─────────────┘      └─────────────┘      └─────────────┘
+       │                     │                    │
+       └──────────┬──────────┴──────────┬─────────┘
+                  ▼                     ▼
+          ┌─────────────┐      ┌─────────────┐
+          │  Database   │      │   Storage   │
+          └─────────────┘      └─────────────┘
+```
 
 ---
 
 ## ✨ Key Features
 
-### 🧠 AI Text Summarization
+### 🎓 Learning Features
 
-* Uses **HuggingFace Transformers (BART model)**
-* Dynamic summary length adjustment
-* Handles both short & long text efficiently
+* Personalized learning recommendations
+* AI-driven content assistance
+* Smart course management
+* Progress tracking and analytics
+* Interactive learning experience
 
-### 📄 PDF Summarization
+### ☁️ Cloud Native Features
 
-* Upload PDF → extract text → generate summary
-* Automatic chunking for large documents
+* Microservices architecture
+* Containerized deployment using Docker
+* Kubernetes orchestration
+* Infrastructure as Code (IaC)
+* Auto-scaling capabilities
 
-### 🔐 Authentication System
+### 🔄 DevOps Features
 
-* User signup & login
-* Password hashing (SHA-256)
-* Forgot password & reset functionality
+* CI/CD automation
+* GitHub Actions integration
+* Automated deployments
+* Monitoring and logging
+* Security scanning
 
-### 📊 User Dashboard
+### 📊 Observability
 
-* Track summary usage
-* View recent activity
-* Daily summary analytics
-
-### 🕓 History Management
-
-* Stores all summaries in SQLite database
-* View past summaries anytime
-
-### 📥 Export Features
-
-* Download summary as PDF
-* Clean formatted output
-
-### 📂 File Upload API
-
-* Supports `.pdf` and `.txt`
-* Secure file handling with auto deletion
+* Metrics collection
+* Centralized logging
+* Performance monitoring
+* Health checks
 
 ---
 
 ## 🛠️ Tech Stack
 
-### 🔹 Backend
+### Frontend
 
-* Python (Flask)
-* SQLite (Database)
-* HuggingFace Transformers (BART Model)
+* React.js / Next.js
+* HTML5
+* CSS3
+* JavaScript / TypeScript
 
-### 🔹 Frontend
+### Backend
 
-* HTML, CSS, JavaScript
-* Jinja2 Templates
+* Node.js
+* Express.js
+* REST APIs
 
-### 🔹 Libraries Used
+### AI Layer
 
-* `transformers`
-* `torch`
-* `PyPDF2`
-* `reportlab`
-* `werkzeug`
+* OpenAI APIs
+* Generative AI Integration
+* Recommendation Engine
+
+### Database
+
+* MongoDB
+* PostgreSQL
+
+### DevOps & Cloud
+
+* Docker
+* Kubernetes
+* Terraform
+* GitHub Actions
+* Azure Cloud
+
+### Monitoring
+
+* Prometheus
+* Grafana
 
 ---
 
 ## 📂 Project Structure
 
-```id="code1"
-final_project/
-│── app.py
-│── users.db
-│── static/
-│   ├── uploads/
-│   ├── scripts.js
-│   └── style.css
-│── templates/
-│   ├── index.html
-│   ├── login.html
-│   ├── signup.html
-│   ├── dashboard.html
-│   ├── profile.html
-│   ├── history.html
-│   ├── text_sum.html
-│   ├── pdf_sum.html
-│   ├── team.html
-│   └── ...
+```bash
+SmartLearn/
+│
+├── frontend/
+├── backend/
+├── ai-services/
+├── infrastructure/
+│   ├── terraform/
+│   └── kubernetes/
+│
+├── monitoring/
+├── docs/
+├── docker/
+└── README.md
 ```
 
 ---
 
-## ⚙️ How It Works
+## 🚀 Getting Started
 
-1. User logs in
-2. Inputs text OR uploads PDF
-3. System processes input
-4. AI model generates summary
-5. Summary is stored in database
-6. User can download or view history
+### Prerequisites
 
----
+* Git
+* Docker
+* Kubernetes Cluster
+* Terraform
+* Node.js
+* Azure Subscription
 
-## 🧠 Core AI Logic
-
-* Uses `sshleifer/distilbart-cnn-12-6` model 
-* Splits large text into chunks
-* Performs **multi-stage summarization**
-* Re-summarizes combined output for better accuracy
-
----
-
-## 🚀 Installation & Setup
-
-### 1️⃣ Clone Repository
+### Clone Repository
 
 ```bash
-git clone https://github.com/gauravdubey5/Smarter-Learning-with-AI-Notes-Summarizer.git
-cd Smarter-Learning-with-AI-Notes-Summarizer
+git clone https://github.com/gauravdubey5/SmartLearn-AI-Cloud-Native-EdTech-Platform.git
+
+cd SmartLearn-AI-Cloud-Native-EdTech-Platform
 ```
 
-### 2️⃣ Install Dependencies
+### Install Dependencies
 
 ```bash
-pip install -r requirements.txt
+npm install
 ```
 
-### 3️⃣ Run Application
+### Run Application
 
 ```bash
-python app.py
+npm start
+```
+
+### Docker Deployment
+
+```bash
+docker build -t smartlearn .
+
+docker run -p 3000:3000 smartlearn
 ```
 
 ---
 
-## 🌐 Usage
+## ☁️ Infrastructure Deployment
 
-* Go to `http://localhost:7860`
-* Login / Signup
-* Use:
+### Terraform
 
-  * Text Summarizer
-  * PDF Summarizer
-* Download results
+```bash
+terraform init
 
----
+terraform plan
 
-## 🔥 Unique Features (USP)
+terraform apply
+```
 
-* ⚡ Dynamic summary length adjustment
-* 🧩 Chunk-based processing for large inputs
-* 🔄 Multi-stage summarization pipeline
-* 📊 Built-in analytics dashboard
-* 🔐 Full authentication system
+### Kubernetes
+
+```bash
+kubectl apply -f k8s/
+```
 
 ---
 
-## 🚀 Future Enhancements
+## 🔄 CI/CD Pipeline
 
-### 🤖 Advanced AI Capabilities
+The project supports automated CI/CD workflows:
 
-* Context-aware summarization (better understanding of long documents)
-* Multiple summary modes (short / detailed / bullet points)
-* Keyword & keyphrase extraction
-* Question-answering from summarized content
-
-### 📄 File & Content Support
-
-* Support for DOCX, PPT, and web articles
-* YouTube video summarization (via transcript extraction)
-* Real-time webpage summarizer (Chrome Extension)
-
-### 🎤 Voice & Accessibility
-
-* Text-to-Speech (listen to summaries)
-* Speech-to-Text (voice input for summarization)
-* Accessibility-friendly UI for visually impaired users
-
-### 📊 Analytics & Personalization
-
-* Personalized summary recommendations
-* User behavior tracking & insights
-* Smart dashboard with performance stats
-
-### ☁️ Scalability & DevOps
-
-* Docker containerization
-* CI/CD pipeline (GitHub Actions)
-* Cloud deployment (AWS / Azure / GCP)
-* Load balancing & API scaling
-
-### 🔐 Security Enhancements
-
-* JWT-based authentication
-* OAuth login (Google/GitHub)
-* Rate limiting & API protection
-
-### 📱 UI/UX Improvements
-
-* Fully responsive mobile-first design
-* Dark mode & theme customization
-* Notion-style modern interface
-
-### 🌍 Global Features
-
-* Multi-language summarization
-* Translation + summarization combo
+1. Code Push to GitHub
+2. Automated Build
+3. Security Checks
+4. Docker Image Creation
+5. Deployment to Kubernetes
+6. Monitoring & Verification
 
 ---
 
-## 💼 Use Case
+## 📸 Future Enhancements
 
-* Students summarizing notes
-* Researchers analyzing documents
-* Professionals reviewing reports
-* Anyone saving time while reading
+* AI Tutor Assistant
+* Multi-language Support
+* Live Classroom Integration
+* Student Performance Prediction
+* AI-generated Assessments
+* Advanced Analytics Dashboard
 
 ---
 
-## 👨‍💻 Team
+## 🤝 Contributing
 
-* Gaurav (Leader & Backend)
-* Ujjwal (Leader & Backend)
-* Himanshu (Frontend)
-* Shivanand (Frontend)
-* Vishal (Database)
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+
+```bash
+git checkout -b feature/new-feature
+```
+
+3. Commit changes
+
+```bash
+git commit -m "Add new feature"
+```
+
+4. Push changes
+
+```bash
+git push origin feature/new-feature
+```
+
+5. Open a Pull Request
 
 ---
 
 ## 📜 License
 
-This project is open-source under the MIT License.
+This project is licensed under the MIT License.
 
 ---
 
-## ⭐ Support
+## 👨‍💻 Author
 
-If you like this project, give it a ⭐ on GitHub!
+**Gaurav Dubey**
+
+* GitHub: https://github.com/gauravdubey5
+* LinkedIn: https://www.linkedin.com/in/gaurav-dubey/
 
 ---
+
+⭐ If you found this project useful, consider giving it a star on GitHub.
