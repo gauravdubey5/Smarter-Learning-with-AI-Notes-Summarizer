@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Courses | SmartLearn AI
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/courses.css') }}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="student-course-page">
+
+    <div class="course-page-container">
+
+
+        <div class="student-course-heading">
+
+
+            <div>
+
+
+                <span>
+
+                    MY LEARNING
+
+                </span>
+
+
+                <h1>
+
+                    My Courses
+
+                </h1>
+
+
+                <p>
+
+                    Continue learning
+                    and track your course progress.
+
+                </p>
+
+
+            </div>
+
+
+            <a
+                href="{{ url_for('courses.explore') }}"
+                class="course-primary-button"
+            >
+
+                Explore Courses
+
+            </a>
+
+
+        </div>
+
+
+        {% if enrollments %}
+
+
+        <div class="student-course-grid">
+
+
+            {% for enrollment in enrollments %}
+
+
+            <article class="student-course-card">
+
+
+                <div class="student-course-cover">
+
+
+                    <i class="fa-solid fa-book-open"></i>
+
+
+                    <span>
+
+                        {{ enrollment.course.category }}
+
+                    </span>
+
+
+                </div>
+
+
+                <div class="student-course-content">
+
+
+                    <div class="student-course-level">
+
+                        {{ enrollment.course.level }}
+
+                    </div>
+
+
+                    <h2>
+
+                        {{ enrollment.course.title }}
+
+                    </h2>
+
+
+                    <p>
+
+                        {{
+                            enrollment.course.description[:105]
+                        }}
+
+                        {% if
+                        enrollment.course.description|length
+                        > 105 %}
+
+                        ...
+
+                        {% endif %}
+
+                    </p>
+
+
+                    <div class="student-progress-heading">
+
+
+                        <span>
+
+                            Course Progress
+
+                        </span>
+
+
+                        <strong>
+
+                            {{
+                                enrollment.progress|round|int
+                            }}%
+
+                        </strong>
+
+
+                    </div>
+
+
+                    <div class="student-progress-bar">
+
+
+                        <div
+
+                            style="
+                            width:
+                            {{ enrollment.progress }}%
+                            "
+
+                        ></div>
+
+
+                    </div>
+
+
+                    <form
+
+                        method="POST"
+
+                        action="{{
+                            url_for(
+                                'courses.continue_course',
+                                course_id=enrollment.course.id
+                            )
+                        }}"
+
+                    >
+
+
+                        <button
+                            class="course-primary-button"
+                        >
+
+                            Continue Learning
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+
+                    </form>
+
+
+                </div>
+
+
+            </article>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="course-empty-state">
+
+
+            <i class="fa-solid fa-book-open"></i>
+
+
+            <h2>
+
+                You have not enrolled yet
+
+            </h2>
+
+
+            <p>
+
+                Explore available courses
+                and start learning today.
+
+            </p>
+
+
+            <a
+                href="{{ url_for('courses.explore') }}"
+                class="course-primary-button"
+            >
+
+                Explore Courses
+
+            </a>
+
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+</section>
+
+{% endblock %}

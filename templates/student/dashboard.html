@@ -1,0 +1,1251 @@
+{% extends "base.html" %}
+
+{% block title %}
+Student Dashboard | SmartLearn AI
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="dashboard-sidebar" id="dashboardSidebar">
+
+        <div class="sidebar-profile">
+
+            <div class="student-avatar">
+                {{ current_user.name[0] | upper }}
+            </div>
+
+            <div class="student-info">
+
+                <h3>
+                    {{ current_user.name }}
+                </h3>
+
+                <p>
+                    Student Account
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <a
+                href="{{ url_for('student.dashboard') }}"
+                class="sidebar-link active"
+            >
+
+                <i class="fa-solid fa-table-columns"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a href="{{ url_for('courses.my_courses') }}">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <span>
+                    My Courses
+                </span>
+
+            </a>
+
+
+            <a href="{{ url_for('courses.explore') }}">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+                <span>
+                    Explore Courses
+                </span>
+
+            </a>
+
+
+            <a href="#">
+
+                <i class="fa-solid fa-file-circle-question"></i>
+
+                <span>
+                    Assessments
+                </span>
+
+            </a>
+
+
+            <a href="#">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <span>
+                    My Progress
+                </span>
+
+            </a>
+
+
+            <a href="#">
+
+                <i class="fa-solid fa-trophy"></i>
+
+                <span>
+                    Achievements
+                </span>
+
+            </a>
+
+
+            <div class="sidebar-divider"></div>
+
+
+            <a href="#">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>
+                    My Profile
+                </span>
+
+            </a>
+
+
+            <a href="#">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-upgrade">
+
+            <div class="upgrade-icon">
+
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+            </div>
+
+            <h4>
+                AI Study Assistant
+            </h4>
+
+            <p>
+                Personalised learning support
+                is coming soon.
+            </p>
+
+            <button>
+                Coming Soon
+            </button>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="sidebar-logout"
+        >
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+    </aside>
+
+
+    <!-- MOBILE OVERLAY -->
+
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
+
+
+    <!-- MAIN DASHBOARD -->
+
+    <section class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+
+        <div class="dashboard-topbar">
+
+            <button
+                class="mobile-sidebar-button"
+                id="mobileSidebarButton"
+            >
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+
+            <div class="dashboard-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="search"
+                    placeholder="Search courses, lessons and tests..."
+                >
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+
+                <button class="notification-button">
+
+                    <i class="fa-regular fa-bell"></i>
+
+                    <span></span>
+
+                </button>
+
+
+                <div class="topbar-profile">
+
+                    <div class="small-avatar">
+
+                        {{ current_user.name[0] | upper }}
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            {{ current_user.name }}
+                        </strong>
+
+                        <small>
+                            Student
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-content">
+
+
+            <!-- WELCOME -->
+
+            <section class="dashboard-welcome">
+
+
+                <div>
+
+
+                    <span class="dashboard-label">
+
+                        STUDENT DASHBOARD
+
+                    </span>
+
+
+                    <h1>
+
+                        Welcome back,
+                        {{ current_user.name.split()[0] }} 👋
+
+                    </h1>
+
+
+                    <p>
+
+                        Continue your learning journey,
+                        complete today's lessons
+                        and keep your study streak active.
+
+                    </p>
+
+
+                </div>
+
+
+                <div class="welcome-date">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    <div>
+
+                        <small>
+                            TODAY
+                        </small>
+
+                        <strong id="dashboardDate">
+
+                            Loading...
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- STATS -->
+
+
+            <section class="dashboard-stats">
+
+
+                <article class="dashboard-stat-card">
+
+
+                    <div class="stat-icon purple">
+
+                        <i class="fa-solid fa-book-open"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Enrolled Courses
+                        </span>
+
+                        <h2>
+
+                            {{ "%02d" | format(enrolled_courses) }}
+
+                        </h2>
+
+                        <small class="positive">
+
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+
+                            2 active this week
+
+                        </small>
+
+                    </div>
+
+
+                </article>
+
+
+                <article class="dashboard-stat-card">
+
+
+                    <div class="stat-icon green">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Lessons Completed
+                        </span>
+
+                        <h2>
+                            24
+                        </h2>
+
+                        <small class="positive">
+
+                            +4 this week
+
+                        </small>
+
+                    </div>
+
+
+                </article>
+
+
+                <article class="dashboard-stat-card">
+
+
+                    <div class="stat-icon blue">
+
+                        <i class="fa-solid fa-chart-simple"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Average Score
+                        </span>
+
+                        <h2>
+                            86%
+                        </h2>
+
+                        <small class="positive">
+
+                            <i class="fa-solid fa-arrow-up"></i>
+
+                            8% improvement
+
+                        </small>
+
+                    </div>
+
+
+                </article>
+
+
+                <article class="dashboard-stat-card">
+
+
+                    <div class="stat-icon orange">
+
+                        <i class="fa-solid fa-fire"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Study Streak
+                        </span>
+
+                        <h2>
+                            07
+                        </h2>
+
+                        <small>
+
+                            Keep learning today
+
+                        </small>
+
+                    </div>
+
+
+                </article>
+
+
+            </section>
+
+
+            <!-- MAIN GRID -->
+
+
+            <section class="dashboard-grid">
+
+
+                <!-- LEFT -->
+
+
+                <div class="dashboard-left-column">
+
+
+                    <!-- CONTINUE LEARNING -->
+
+
+                    <article class="dashboard-panel">
+
+
+                        <div class="panel-heading">
+
+
+                            <div>
+
+                                <span>
+                                    CONTINUE LEARNING
+                                </span>
+
+                                <h3>
+                                    Pick up where you left off
+                                </h3>
+
+                            </div>
+
+
+                            <a href="#">
+
+                                View all
+
+                                <i class="fa-solid fa-arrow-right"></i>
+
+                            </a>
+
+
+                        </div>
+
+
+                        <div class="continue-course">
+
+
+                            <div class="course-thumbnail">
+
+
+                                <div class="course-thumbnail-icon">
+
+                                    <i class="fa-solid fa-cloud"></i>
+
+                                </div>
+
+
+                                <span>
+
+                                    CLOUD COMPUTING
+
+                                </span>
+
+
+                            </div>
+
+
+                            <div class="course-information">
+
+
+                                <div class="course-category">
+
+                                    <i class="fa-solid fa-layer-group"></i>
+
+                                    Cloud Fundamentals
+
+                                </div>
+
+
+                                <h3>
+
+                                    Microsoft Azure Fundamentals
+
+                                </h3>
+
+
+                                <p>
+
+                                    Chapter 4:
+                                    Azure Virtual Networks
+                                    and Subnets
+
+                                </p>
+
+
+                                <div class="course-progress-info">
+
+
+                                    <span>
+
+                                        Course Progress
+
+                                    </span>
+
+
+                                    <strong>
+
+                                        72%
+
+                                    </strong>
+
+
+                                </div>
+
+
+                                <div class="course-progress-bar">
+
+                                    <div style="width:72%"></div>
+
+                                </div>
+
+
+                                <div class="course-meta">
+
+
+                                    <span>
+
+                                        <i class="fa-regular fa-clock"></i>
+
+                                        18 min remaining
+
+                                    </span>
+
+
+                                    <span>
+
+                                        <i class="fa-solid fa-circle-check"></i>
+
+                                        12 of 17 lessons
+
+                                    </span>
+
+
+                                </div>
+
+
+                                <button class="continue-button">
+
+                                    Continue Learning
+
+                                    <i class="fa-solid fa-play"></i>
+
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                    <!-- PROGRESS -->
+
+
+                    <article class="dashboard-panel">
+
+
+                        <div class="panel-heading">
+
+
+                            <div>
+
+                                <span>
+                                    LEARNING ANALYTICS
+                                </span>
+
+                                <h3>
+                                    Weekly Study Activity
+                                </h3>
+
+                            </div>
+
+
+                            <select>
+
+                                <option>
+                                    This Week
+                                </option>
+
+                                <option>
+                                    Last Week
+                                </option>
+
+                            </select>
+
+
+                        </div>
+
+
+                        <div class="study-chart">
+
+
+                            <div class="chart-y-axis">
+
+                                <span>4h</span>
+
+                                <span>3h</span>
+
+                                <span>2h</span>
+
+                                <span>1h</span>
+
+                                <span>0h</span>
+
+                            </div>
+
+
+                            <div class="chart-bars">
+
+
+                                <div class="chart-column">
+
+                                    <div
+                                        class="chart-bar"
+                                        style="height:45%"
+                                    ></div>
+
+                                    <span>Mon</span>
+
+                                </div>
+
+
+                                <div class="chart-column">
+
+                                    <div
+                                        class="chart-bar"
+                                        style="height:65%"
+                                    ></div>
+
+                                    <span>Tue</span>
+
+                                </div>
+
+
+                                <div class="chart-column">
+
+                                    <div
+                                        class="chart-bar"
+                                        style="height:38%"
+                                    ></div>
+
+                                    <span>Wed</span>
+
+                                </div>
+
+
+                                <div class="chart-column">
+
+                                    <div
+                                        class="chart-bar"
+                                        style="height:82%"
+                                    ></div>
+
+                                    <span>Thu</span>
+
+                                </div>
+
+
+                                <div class="chart-column">
+
+                                    <div
+                                        class="chart-bar active"
+                                        style="height:94%"
+                                    ></div>
+
+                                    <span>Fri</span>
+
+                                </div>
+
+
+                                <div class="chart-column">
+
+                                    <div
+                                        class="chart-bar"
+                                        style="height:57%"
+                                    ></div>
+
+                                    <span>Sat</span>
+
+                                </div>
+
+
+                                <div class="chart-column">
+
+                                    <div
+                                        class="chart-bar"
+                                        style="height:70%"
+                                    ></div>
+
+                                    <span>Sun</span>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="study-summary">
+
+
+                            <div>
+
+                                <span>
+                                    Total Study Time
+                                </span>
+
+                                <strong>
+                                    14h 35m
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Daily Average
+                                </span>
+
+                                <strong>
+                                    2h 05m
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Most Active
+                                </span>
+
+                                <strong>
+                                    Friday
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                </div>
+
+
+                <!-- RIGHT -->
+
+
+                <aside class="dashboard-right-column">
+
+
+                    <!-- STREAK -->
+
+
+                    <article class="dashboard-panel streak-panel">
+
+
+                        <div class="streak-heading">
+
+
+                            <div class="streak-fire">
+
+                                <i class="fa-solid fa-fire"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    CURRENT STREAK
+                                </span>
+
+                                <h3>
+
+                                    7 Days Strong! 🔥
+
+                                </h3>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <p>
+
+                            Complete one lesson today
+                            to continue your learning streak.
+
+                        </p>
+
+
+                        <div class="streak-days">
+
+
+                            <div class="completed">
+
+                                <span>M</span>
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </div>
+
+
+                            <div class="completed">
+
+                                <span>T</span>
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </div>
+
+
+                            <div class="completed">
+
+                                <span>W</span>
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </div>
+
+
+                            <div class="completed">
+
+                                <span>T</span>
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </div>
+
+
+                            <div class="today">
+
+                                <span>F</span>
+
+                                <i class="fa-solid fa-circle"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>S</span>
+
+                                <i class="fa-solid fa-circle"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>S</span>
+
+                                <i class="fa-solid fa-circle"></i>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                    <!-- UPCOMING TEST -->
+
+
+                    <article class="dashboard-panel">
+
+
+                        <div class="panel-heading">
+
+
+                            <div>
+
+                                <span>
+                                    UPCOMING
+                                </span>
+
+                                <h3>
+                                    Assessments
+                                </h3>
+
+                            </div>
+
+
+                            <a href="#">
+                                View all
+                            </a>
+
+
+                        </div>
+
+
+                        <div class="assessment-list">
+
+
+                            <div class="assessment-item">
+
+
+                                <div class="assessment-date">
+
+                                    <strong>12</strong>
+
+                                    <span>JUL</span>
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <h4>
+
+                                        Azure Fundamentals Quiz
+
+                                    </h4>
+
+
+                                    <p>
+
+                                        <i class="fa-regular fa-clock"></i>
+
+                                        30 minutes
+
+                                        <span>•</span>
+
+                                        25 questions
+
+                                    </p>
+
+
+                                </div>
+
+
+                                <button>
+
+                                    <i class="fa-solid fa-chevron-right"></i>
+
+                                </button>
+
+
+                            </div>
+
+
+                            <div class="assessment-item">
+
+
+                                <div class="assessment-date green-date">
+
+                                    <strong>15</strong>
+
+                                    <span>JUL</span>
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <h4>
+
+                                        Linux Essentials Test
+
+                                    </h4>
+
+
+                                    <p>
+
+                                        <i class="fa-regular fa-clock"></i>
+
+                                        20 minutes
+
+                                        <span>•</span>
+
+                                        20 questions
+
+                                    </p>
+
+
+                                </div>
+
+
+                                <button>
+
+                                    <i class="fa-solid fa-chevron-right"></i>
+
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                    <!-- ACTIVITY -->
+
+
+                    <article class="dashboard-panel">
+
+
+                        <div class="panel-heading">
+
+
+                            <div>
+
+                                <span>
+                                    RECENT
+                                </span>
+
+                                <h3>
+                                    Learning Activity
+                                </h3>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="activity-list">
+
+
+                            <div class="activity-item">
+
+
+                                <div class="activity-icon completed">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <h4>
+
+                                        Completed a lesson
+
+                                    </h4>
+
+                                    <p>
+
+                                        Azure Virtual Networks
+
+                                    </p>
+
+                                    <small>
+
+                                        2 hours ago
+
+                                    </small>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+
+                                <div class="activity-icon test">
+
+                                    <i class="fa-solid fa-file-circle-check"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <h4>
+
+                                        Scored 88% in a test
+
+                                    </h4>
+
+                                    <p>
+
+                                        Cloud Computing Basics
+
+                                    </p>
+
+                                    <small>
+
+                                        Yesterday
+
+                                    </small>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+
+                                <div class="activity-icon course">
+
+                                    <i class="fa-solid fa-book-open"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <h4>
+
+                                        Enrolled in a course
+
+                                    </h4>
+
+                                    <p>
+
+                                        Terraform for Beginners
+
+                                    </p>
+
+                                    <small>
+
+                                        2 days ago
+
+                                    </small>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                </aside>
+
+
+            </section>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for('static', filename='js/dashboard.js') }}"
+></script>
+
+{% endblock %}

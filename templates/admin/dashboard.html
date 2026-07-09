@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin Dashboard | SmartLearn AI
+{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+
+    <div class="admin-container">
+
+        <div class="admin-page-header">
+
+            <div>
+
+                <span>
+                    ADMIN DASHBOARD
+                </span>
+
+                <h1>
+
+                    Welcome,
+                    {{ current_user.name }} 👋
+
+                </h1>
+
+                <p>
+
+                    Manage courses,
+                    chapters,
+                    learning content
+                    and assessments.
+
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('admin.add_course') }}"
+                class="admin-primary-button"
+            >
+
+                <i class="fa-solid fa-plus"></i>
+
+                Create Course
+
+            </a>
+
+        </div>
+
+
+        <div class="admin-stat-grid">
+
+
+            <article>
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <div>
+
+                    <span>
+                        Total Courses
+                    </span>
+
+                    <h2>
+                        {{ total_courses }}
+                    </h2>
+
+                </div>
+
+            </article>
+
+
+            <article>
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                <div>
+
+                    <span>
+                        Published Courses
+                    </span>
+
+                    <h2>
+                        {{ published_courses }}
+                    </h2>
+
+                </div>
+
+            </article>
+
+
+            <article>
+
+                <i class="fa-solid fa-layer-group"></i>
+
+                <div>
+
+                    <span>
+                        Total Chapters
+                    </span>
+
+                    <h2>
+                        {{ total_chapters }}
+                    </h2>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+
+        <div class="admin-dashboard-panel">
+
+
+            <div class="admin-panel-heading">
+
+
+                <div>
+
+                    <span>
+
+                        RECENT COURSES
+
+                    </span>
+
+                    <h2>
+
+                        Latest Course Activity
+
+                    </h2>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('admin.courses') }}"
+                >
+
+                    Manage All Courses
+
+                </a>
+
+
+            </div>
+
+
+            {% if recent_courses %}
+
+
+            <div class="admin-recent-list">
+
+
+                {% for course in recent_courses %}
+
+
+                <div class="admin-recent-item">
+
+
+                    <div>
+
+                        <i class="fa-solid fa-book"></i>
+
+                    </div>
+
+
+                    <section>
+
+                        <h3>
+
+                            {{ course.title }}
+
+                        </h3>
+
+                        <p>
+
+                            {{ course.category }}
+
+                            •
+
+                            {{ course.total_chapters }}
+
+                            chapters
+
+                        </p>
+
+                    </section>
+
+
+                    <span>
+
+                        {% if course.is_published %}
+
+                        Published
+
+                        {% else %}
+
+                        Draft
+
+                        {% endif %}
+
+                    </span>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="admin-empty-state">
+
+                <p>
+
+                    No courses created yet.
+
+                </p>
+
+            </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

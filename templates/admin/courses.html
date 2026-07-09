@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Courses | SmartLearn AI
+{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+
+    <div class="admin-container">
+
+        <div class="admin-page-header">
+
+            <div>
+
+                <span>
+                    ADMIN PANEL
+                </span>
+
+                <h1>
+                    Course Management
+                </h1>
+
+                <p>
+
+                    Create,
+                    edit,
+                    publish
+                    and manage course chapters.
+
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('admin.add_course') }}"
+                class="admin-primary-button"
+            >
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add New Course
+
+            </a>
+
+        </div>
+
+
+        {% if courses %}
+
+
+        <div class="admin-course-grid">
+
+
+            {% for course in courses %}
+
+
+            <article class="admin-course-card">
+
+
+                <div class="admin-course-cover">
+
+
+                    <i class="fa-solid fa-book-open"></i>
+
+
+                    <span
+                        class="
+                        course-status
+                        {% if course.is_published %}
+                        published
+                        {% endif %}
+                        "
+                    >
+
+                        {% if course.is_published %}
+
+                        Published
+
+                        {% else %}
+
+                        Draft
+
+                        {% endif %}
+
+                    </span>
+
+
+                </div>
+
+
+                <div class="admin-course-content">
+
+
+                    <span class="course-category">
+
+                        {{ course.category }}
+
+                    </span>
+
+
+                    <h2>
+
+                        {{ course.title }}
+
+                    </h2>
+
+
+                    <p>
+
+                        {{ course.description[:120] }}
+
+                        {% if
+                        course.description|length
+                        > 120 %}
+
+                        ...
+
+                        {% endif %}
+
+                    </p>
+
+
+                    <div class="admin-course-meta">
+
+
+                        <span>
+
+                            <i class="fa-solid fa-signal"></i>
+
+                            {{ course.level }}
+
+                        </span>
+
+
+                        <span>
+
+                            <i class="fa-solid fa-layer-group"></i>
+
+                            {{ course.total_chapters }}
+                            Chapters
+
+                        </span>
+
+
+                        <span>
+
+                            <i class="fa-regular fa-clock"></i>
+
+                            {{ course.duration }}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="admin-course-actions">
+
+
+                        <a
+                            href="{{
+                                url_for(
+                                    'admin.manage_chapters',
+                                    course_id=course.id
+                                )
+                            }}"
+                        >
+
+                            <i class="fa-solid fa-layer-group"></i>
+
+                            Chapters
+
+                        </a>
+
+
+                        <a
+                            href="{{
+                                url_for(
+                                    'admin.edit_course',
+                                    course_id=course.id
+                                )
+                            }}"
+                        >
+
+                            <i class="fa-solid fa-pen"></i>
+
+                            Edit
+
+                        </a>
+
+
+                        <form
+
+                            method="POST"
+
+                            action="{{
+                                url_for(
+                                    'admin.delete_course',
+                                    course_id=course.id
+                                )
+                            }}"
+
+                            onsubmit="
+                            return confirm(
+                            'Delete this course and all chapters?'
+                            )
+                            "
+                        >
+
+                            <button>
+
+                                <i class="fa-solid fa-trash"></i>
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </article>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="admin-empty-state">
+
+
+            <i class="fa-solid fa-book-open"></i>
+
+
+            <h2>
+
+                No courses created yet
+
+            </h2>
+
+
+            <p>
+
+                Create your first learning course
+                and start adding chapters.
+
+            </p>
+
+
+            <a
+                href="{{ url_for('admin.add_course') }}"
+                class="admin-primary-button"
+            >
+
+                Create First Course
+
+            </a>
+
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+</section>
+
+{% endblock %}

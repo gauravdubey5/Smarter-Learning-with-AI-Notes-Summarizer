@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if course %}
+Edit Course
+{% else %}
+Add Course
+{% endif %}
+| SmartLearn AI
+{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+
+    <div class="admin-container">
+
+        <div class="admin-page-header">
+
+            <div>
+
+                <span>
+                    COURSE MANAGEMENT
+                </span>
+
+                <h1>
+
+                    {% if course %}
+
+                    Edit Course
+
+                    {% else %}
+
+                    Create New Course
+
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+            <a
+                href="{{ url_for('admin.courses') }}"
+                class="admin-secondary-button"
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back to Courses
+
+            </a>
+
+        </div>
+
+
+        <form
+            method="POST"
+            class="admin-form-card"
+        >
+
+            <div class="admin-form-grid">
+
+                <div class="admin-form-group">
+
+                    <label>
+                        Course Title
+                    </label>
+
+                    <input
+                        type="text"
+                        name="title"
+                        value="{{ course.title if course else '' }}"
+                        placeholder="Example: Microsoft Azure Fundamentals"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="admin-form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        name="category"
+                        value="{{ course.category if course else '' }}"
+                        placeholder="Example: Cloud Computing"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="admin-form-group">
+
+                    <label>
+                        Course Level
+                    </label>
+
+                    <select name="level">
+
+                        {% for level in [
+                            "Beginner",
+                            "Intermediate",
+                            "Advanced"
+                        ] %}
+
+                        <option
+                            value="{{ level }}"
+
+                            {% if course
+                            and course.level == level %}
+
+                            selected
+
+                            {% endif %}
+                        >
+
+                            {{ level }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="admin-form-group">
+
+                    <label>
+                        Course Duration
+                    </label>
+
+                    <input
+                        type="text"
+                        name="duration"
+                        value="{{ course.duration if course else '' }}"
+                        placeholder="Example: 8 Weeks"
+                    >
+
+                </div>
+
+
+                <div class="admin-form-group full-width">
+
+                    <label>
+                        Course Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        rows="7"
+                        placeholder="Write a detailed course description..."
+                        required
+                    >{{ course.description if course else '' }}</textarea>
+
+                </div>
+
+
+                <label class="publish-checkbox">
+
+                    <input
+                        type="checkbox"
+                        name="is_published"
+
+                        {% if course
+                        and course.is_published %}
+
+                        checked
+
+                        {% endif %}
+                    >
+
+                    <span>
+
+                        Publish this course
+
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="admin-primary-button"
+            >
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                {% if course %}
+
+                Save Changes
+
+                {% else %}
+
+                Create Course
+
+                {% endif %}
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

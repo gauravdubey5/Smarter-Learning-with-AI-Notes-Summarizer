@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ course.title }} | SmartLearn AI
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/courses.css') }}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="course-detail-page">
+
+    <div class="course-page-container">
+
+        <a
+            href="{{ url_for('courses.explore') }}"
+            class="course-back-link"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Explore Courses
+
+        </a>
+
+
+        <section class="course-detail-hero">
+
+
+            <div class="course-detail-content">
+
+
+                <span class="course-detail-category">
+
+                    {{ course.category }}
+
+                </span>
+
+
+                <h1>
+
+                    {{ course.title }}
+
+                </h1>
+
+
+                <p>
+
+                    {{ course.description }}
+
+                </p>
+
+
+                <div class="course-detail-meta">
+
+
+                    <span>
+
+                        <i class="fa-solid fa-signal"></i>
+
+                        {{ course.level }}
+
+                    </span>
+
+
+                    <span>
+
+                        <i class="fa-regular fa-clock"></i>
+
+                        {{ course.duration }}
+
+                    </span>
+
+
+                    <span>
+
+                        <i class="fa-solid fa-layer-group"></i>
+
+                        {{ course.total_chapters }}
+                        Chapters
+
+                    </span>
+
+
+                </div>
+
+
+                {% if enrollment %}
+
+
+                <a
+                    href="#courseChapters"
+                    class="course-primary-button"
+                >
+
+                    Continue Learning
+
+                    <i class="fa-solid fa-arrow-down"></i>
+
+                </a>
+
+
+                {% else %}
+
+
+                <form
+
+                    method="POST"
+
+                    action="{{
+                        url_for(
+                            'courses.enroll',
+                            course_id=course.id
+                        )
+                    }}"
+
+                >
+
+                    <button
+                        class="course-primary-button"
+                    >
+
+                        Enroll in Course
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </form>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+            <div class="course-detail-visual">
+
+
+                <div>
+
+                    <i class="fa-solid fa-graduation-cap"></i>
+
+                </div>
+
+
+                <span>
+
+                    SMARTLEARN COURSE
+
+                </span>
+
+
+            </div>
+
+
+        </section>
+
+
+        <section
+            class="course-chapter-section"
+            id="courseChapters"
+        >
+
+
+            <div class="course-section-heading">
+
+
+                <span>
+
+                    COURSE CONTENT
+
+                </span>
+
+
+                <h2>
+
+                    What you will learn
+
+                </h2>
+
+
+                <p>
+
+                    Complete every chapter
+                    and build your knowledge
+                    step by step.
+
+                </p>
+
+
+            </div>
+
+
+            {% if course.chapters %}
+
+
+            <div class="student-chapter-list">
+
+
+                {% for chapter in course.chapters %}
+
+
+                {% if chapter.is_published %}
+
+
+                <article class="student-chapter-card">
+
+
+                    <div class="student-chapter-number">
+
+                        {{ "%02d" | format(chapter.position) }}
+
+                    </div>
+
+
+                    <div>
+
+
+                        <span>
+
+                            CHAPTER
+                            {{ chapter.position }}
+
+                        </span>
+
+
+                        <h3>
+
+                            {{ chapter.title }}
+
+                        </h3>
+
+
+                        <p>
+
+                            {{
+                                chapter.description
+                                or
+                                "Learning content will be available soon."
+                            }}
+
+                        </p>
+
+
+                    </div>
+
+
+                    {% if enrollment %}
+
+
+                    {% if chapter.lessons %}
+
+                        <a
+
+                            href="{{
+                                url_for(
+                                    'student.learn_lesson',
+                                    lesson_id=chapter.lessons[0].id
+                                )
+                            }}"
+
+                            class="chapter-start-button"
+
+                        >
+
+                            <i class="fa-solid fa-play"></i>
+
+                        </a>
+
+                        {% else %}
+
+                        <span class="chapter-coming-soon">
+
+                            Soon
+
+                        </span>
+
+                        {% endif %}
+
+
+                    {% else %}
+
+
+                    <i class="fa-solid fa-lock chapter-lock"></i>
+
+
+                    {% endif %}
+
+
+                </article>
+
+
+                {% endif %}
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="course-empty-state">
+
+
+                <i class="fa-solid fa-layer-group"></i>
+
+
+                <h3>
+
+                    Course content coming soon
+
+                </h3>
+
+
+            </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

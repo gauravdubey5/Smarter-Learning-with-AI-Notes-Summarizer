@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Chapters | SmartLearn AI
+{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+
+    <div class="admin-container">
+
+
+        <div class="admin-page-header">
+
+
+            <div>
+
+                <span>
+
+                    COURSE CHAPTERS
+
+                </span>
+
+                <h1>
+
+                    {{ course.title }}
+
+                </h1>
+
+                <p>
+
+                    Add and organise
+                    course chapters.
+
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('admin.courses') }}"
+                class="admin-secondary-button"
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back
+
+            </a>
+
+
+        </div>
+
+
+        <div class="chapter-management-grid">
+
+
+            <form
+                method="POST"
+                class="admin-form-card"
+            >
+
+
+                <h2>
+
+                    Add New Chapter
+
+                </h2>
+
+
+                <div class="admin-form-group">
+
+
+                    <label>
+
+                        Chapter Title
+
+                    </label>
+
+
+                    <input
+
+                        type="text"
+
+                        name="title"
+
+                        placeholder="
+                        Example:
+                        Introduction to Azure
+                        "
+
+                        required
+
+                    >
+
+
+                </div>
+
+
+                <div class="admin-form-group">
+
+
+                    <label>
+
+                        Position
+
+                    </label>
+
+
+                    <input
+
+                        type="number"
+
+                        name="position"
+
+                        min="1"
+
+                        value="{{
+                            course.chapters|length + 1
+                        }}"
+
+                    >
+
+
+                </div>
+
+
+                <div class="admin-form-group">
+
+
+                    <label>
+
+                        Description
+
+                    </label>
+
+
+                    <textarea
+
+                        name="description"
+
+                        rows="5"
+
+                        placeholder="
+                        Brief chapter description
+                        "
+
+                    ></textarea>
+
+
+                </div>
+
+
+                <button
+                    class="admin-primary-button"
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add Chapter
+
+                </button>
+
+
+            </form>
+
+
+            <div class="chapter-list-card">
+
+
+                <div class="chapter-list-heading">
+
+
+                    <h2>
+
+                        Course Chapters
+
+                    </h2>
+
+
+                    <span>
+
+                        {{ course.total_chapters }}
+
+                        Chapters
+
+                    </span>
+
+
+                </div>
+
+
+                {% if course.chapters %}
+
+
+                <div class="admin-chapter-list">
+
+
+                    {% for chapter in course.chapters %}
+
+
+                    <article class="admin-chapter-item">
+
+
+                        <div class="chapter-number">
+
+                            {{ chapter.position }}
+
+                        </div>
+
+
+                        <div>
+
+
+                            <h3>
+
+                                {{ chapter.title }}
+
+                            </h3>
+
+
+                            <p>
+
+                                {{
+                                chapter.description
+                                or
+                                "No description added."
+                                }}
+
+                            </p>
+
+
+                        </div>
+
+                        <a
+
+                            href="{{
+                                url_for(
+                                    'admin.manage_lessons',
+                                    chapter_id=chapter.id
+                                )
+                            }}"
+
+                            class="manage-lesson-button"
+
+                        >
+
+                            <i class="fa-solid fa-book-open-reader"></i>
+
+                            Lessons
+
+                        </a>
+                        <form
+
+                            method="POST"
+
+                            action="{{
+                                url_for(
+                                    'admin.delete_chapter',
+                                    chapter_id=chapter.id
+                                )
+                            }}"
+
+                            onsubmit="
+                            return confirm(
+                            'Delete this chapter?'
+                            )
+                            "
+                        >
+
+
+                            <button
+                                class="chapter-delete"
+                            >
+
+                                <i class="fa-solid fa-trash"></i>
+
+                            </button>
+
+
+                        </form>
+
+
+                    </article>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+                {% else %}
+
+
+                <div class="chapter-empty">
+
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+
+                    <p>
+
+                        No chapters added yet.
+
+                    </p>
+
+
+                </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

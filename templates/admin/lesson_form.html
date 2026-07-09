@@ -1,0 +1,448 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{% if lesson %}
+
+Edit Lesson
+
+{% else %}
+
+Add Lesson
+
+{% endif %}
+
+| SmartLearn AI
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="admin-page">
+
+    <div class="admin-container">
+
+        <div class="admin-page-header">
+
+            <div>
+
+                <span>
+
+                    {{ chapter.course.title }}
+
+                </span>
+
+                <h1>
+
+                    {% if lesson %}
+
+                    Edit Lesson
+
+                    {% else %}
+
+                    Create New Lesson
+
+                    {% endif %}
+
+                </h1>
+
+                <p>
+
+                    Chapter:
+                    {{ chapter.title }}
+
+                </p>
+
+            </div>
+
+
+            <a
+
+                href="{{
+                    url_for(
+                        'admin.manage_lessons',
+                        chapter_id=chapter.id
+                    )
+                }}"
+
+                class="admin-secondary-button"
+
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back to Lessons
+
+            </a>
+
+        </div>
+
+
+        <form
+
+            method="POST"
+
+            enctype="multipart/form-data"
+
+            class="lesson-editor-layout"
+
+        >
+
+
+            <section class="lesson-editor-main">
+
+                <div class="admin-form-card">
+
+                    <div class="lesson-form-heading">
+
+                        <div>
+
+                            <span>
+
+                                LESSON INFORMATION
+
+                            </span>
+
+                            <h2>
+
+                                Learning Content
+
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+
+                            Lesson Title
+
+                        </label>
+
+                        <input
+
+                            type="text"
+
+                            name="title"
+
+                            value="{{
+                                lesson.title
+                                if lesson
+                                else ''
+                            }}"
+
+                            placeholder="
+                            Example:
+                            Introduction to Azure
+                            "
+
+                            required
+
+                        >
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+
+                            Written Study Content
+
+                        </label>
+
+                        <textarea
+
+                            name="content"
+
+                            rows="18"
+
+                            placeholder="
+Write complete lesson notes here.
+
+You can include:
+
+Introduction
+
+Important concepts
+
+Examples
+
+Key points
+
+Revision notes
+                            "
+
+                        >{{ lesson.content if lesson else '' }}</textarea>
+
+                        <small>
+
+                            Write structured notes
+                            that students can read
+                            directly on SmartLearn.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <aside class="lesson-editor-sidebar">
+
+                <div class="admin-form-card">
+
+                    <h3>
+
+                        Lesson Settings
+
+                    </h3>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+
+                            Position
+
+                        </label>
+
+                        <input
+
+                            type="number"
+
+                            name="position"
+
+                            min="1"
+
+                            value="{{
+                                lesson.position
+
+                                if lesson
+
+                                else
+
+                                chapter.lessons|length + 1
+                            }}"
+
+                        >
+
+                    </div>
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+
+                            Duration
+
+                        </label>
+
+                        <input
+
+                            type="text"
+
+                            name="duration"
+
+                            value="{{
+                                lesson.duration
+
+                                if lesson
+
+                                else
+
+                                '10 minutes'
+                            }}"
+
+                            placeholder="10 minutes"
+
+                        >
+
+                    </div>
+
+
+                    <label class="publish-checkbox">
+
+                        <input
+
+                            type="checkbox"
+
+                            name="is_published"
+
+                            {% if
+                            not lesson
+                            or lesson.is_published
+                            %}
+
+                            checked
+
+                            {% endif %}
+
+                        >
+
+                        <span>
+
+                            Publish this lesson
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="admin-form-card">
+
+                    <h3>
+
+                        Video Lecture
+
+                    </h3>
+
+                    <div class="admin-form-group">
+
+                        <label>
+
+                            Video URL
+
+                        </label>
+
+                        <input
+
+                            type="url"
+
+                            name="video_url"
+
+                            value="{{
+                                lesson.video_url
+
+                                if lesson
+                                and lesson.video_url
+
+                                else ''
+                            }}"
+
+                            placeholder="
+https://youtube.com/watch?v=...
+                            "
+
+                        >
+
+                        <small>
+
+                            Add a YouTube
+                            or supported video URL.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-form-card">
+
+                    <h3>
+
+                        PDF Study Material
+
+                    </h3>
+
+                    {% if
+                    lesson
+                    and lesson.pdf_file
+                    %}
+
+                    <div class="current-pdf">
+
+                        <i class="fa-solid fa-file-pdf"></i>
+
+                        <div>
+
+                            <strong>
+
+                                PDF uploaded
+
+                            </strong>
+
+                            <span>
+
+                                Upload another PDF
+                                to replace it.
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <div class="admin-form-group">
+
+                        <label>
+
+                            Upload PDF
+
+                        </label>
+
+                        <input
+
+                            type="file"
+
+                            name="pdf_file"
+
+                            accept=".pdf,application/pdf"
+
+                        >
+
+                        <small>
+
+                            PDF files only.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <button
+
+                    type="submit"
+
+                    class="admin-primary-button
+                    lesson-save-button"
+
+                >
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    {% if lesson %}
+
+                    Save Lesson
+
+                    {% else %}
+
+                    Create Lesson
+
+                    {% endif %}
+
+                </button>
+
+            </aside>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

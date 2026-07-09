@@ -1,336 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>AI Study Assistant</title>
+    <meta charset="UTF-8">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-}
+    <title>
+        {% block title %}
+        SmartLearn AI
+        {% endblock %}
+    </title>
 
-/* BODY */
-body {
-  background: linear-gradient(135deg, #020617, #0f172a);
-  color: #fff;
-  display: flex;
-}
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
-/* LIGHT MODE */
-body.light {
-  background: #f1f5f9;
-  color: #111;
-}
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
-body.light .sidebar {
-  background: #ffffff;
-}
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
-body.light .card {
-  background: #ffffff;
-  color: #000;
-}
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
-body.light .sidebar a {
-  color: #333;
-}
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
 
-body.light .sidebar a:hover {
-  background: #e2e8f0;
-}
-
-/* SIDEBAR */
-.sidebar {
-  width: 220px;
-  height: 100vh;
-  padding: 20px;
-  background: rgba(255,255,255,0.03);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  overflow: hidden;
-}
-
-/* COLLAPSE */
-.sidebar.collapse {
-  width: 70px;
-}
-
-/* BUTTON */
-.toggle-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 20px;
-  margin-bottom: 20px;
-  cursor: pointer;
-}
-
-/* LINKS */
-.sidebar a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  color: #ccc;
-  text-decoration: none;
-  transition: 0.3s;
-  position: relative;
-}
-
-/* HOVER */
-.sidebar a:hover {
-  background: #3b82f6;
-  color: #fff;
-}
-.sidebar {
-  flex-shrink: 0;   /* 🔥 VERY IMPORTANT */
-}
-
-.main {
-  flex: 1;
-  padding: 30px;
-  min-width: 0;     /* 🔥 FIXES OVERFLOW BUG */
-}
-/* TEXT HIDE */
-.sidebar.collapse a span {
-  display: none;
-}
-
-/* CENTER ICON */
-.sidebar.collapse a {
-  justify-content: center;
-}
-/* 🌞 LIGHT MODE GLOBAL FIX */
-body.light {
-  background: #f1f5f9;
-  color: #111;
-}
-
-/* SIDEBAR */
-body.light .sidebar {
-  background: #ffffff;
-}
-
-/* LINKS */
-body.light .sidebar a {
-  color: #333;
-}
-
-body.light .sidebar a:hover {
-  background: #e2e8f0;
-  color: #000;
-}
-
-/* CARDS */
-body.light .card {
-  background: #ffffff;
-  color: #111;
-}
-
-/* HEADINGS */
-body.light h1,
-body.light h2,
-body.light h3 {
-  color: #111;
-}
-
-/* PARAGRAPH / TEXT */
-body.light p,
-body.light span,
-body.light label {
-  color: #444;
-}
-
-/* INPUTS */
-body.light input,
-body.light select,
-body.light textarea {
-  background: #f9fafb;
-  color: #111;
-  border: 1px solid #ddd;
-}
-
-/* BUTTON */
-body.light .btn {
-  background: #3b82f6;
-  color: white;
-}
-
-/* SPECIAL TEXT (email etc) */
-body.light .email {
-  color: #555;
-}
-
-/* TOOLTIP */
-.sidebar a::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: 75px;
-  background: #111;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  opacity: 0;
-  pointer-events: none;
-  white-space: nowrap;
-  transform: translateY(-50%);
-  top: 50%;
-  transition: 0.2s;
-}
-
-.sidebar.collapse a:hover::after {
-  opacity: 1;
-}
-
-/* MAIN */
-.main {
-  flex: 1;
-  padding: 30px;
-  transition: 0.3s;
-}
-
-/* CARD */
-.card {
-  background: rgba(255,255,255,0.05);
-  padding: 20px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  backdrop-filter: blur(10px);
-}
-
-/* BUTTON */
-.btn {
-  background: #3b82f6;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-}
-
-/* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-/* THEME BUTTON */
-.theme-btn {
-  margin-top: 20px;
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(255,255,255,0.08);
-  color: white;
-  cursor: pointer;
-}
-
-.stat {
-  text-align: center;
-}
-</style>
+    {% block extra_css %}
+    {% endblock %}
 </head>
 
 <body>
 
-<div class="sidebar">
+<header class="navbar">
 
-  <button onclick="toggleSidebar()" class="toggle-btn">☰</button>
+    <div class="container nav-container">
 
-  <a href="/dashboard" data-tooltip="Dashboard">📊 <span>Dashboard</span></a>
-  <a href="/textsummaries" data-tooltip="Text">📝 <span>Text</span></a>
-  <a href="/pdf_summaries" data-tooltip="PDF">📄 <span>PDF</span></a>
-  <a href="/history" data-tooltip="History">🕘 <span>History</span></a>
-  <a href="/profile" data-tooltip="Profile">👤 <span>Profile</span></a>
-  <a href="/help" data-tooltip="Help">📚 <span>Help</span></a>
-  <a href="/team" data-tooltip="Team">👨‍💻 <span>Team</span></a>
+        <a
+            href="{{ url_for('home') }}"
+            class="brand"
+        >
+
+            <div class="brand-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+            <div>
+
+                <span class="brand-name">
+                    SmartLearn
+                </span>
+
+                <span class="brand-ai">
+                    AI
+                </span>
+
+            </div>
+
+        </a>
 
 
-  <button onclick="toggleTheme()" class="theme-btn" id="themeToggle">🌙</button>
+        <nav class="nav-links">
 
-</div>
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
 
-<div class="main">
-  {% block content %}{% endblock %}
-</div>
+            {% if current_user.is_authenticated %}
 
-<script>
-function toggleSidebar() {
-  document.querySelector(".sidebar").classList.toggle("collapse");
-}
+                {% if current_user.role == "admin" %}
 
-/* THEME SYSTEM (FIXED) */
-function toggleTheme() {
-  const body = document.body;
-  const btn = document.getElementById("themeToggle");
+                    <a href="{{ url_for('admin.dashboard') }}">
+                        Admin
+                    </a>
 
-  body.classList.toggle("light");
+                {% else %}
 
-  if (body.classList.contains("light")) {
-    localStorage.setItem("theme", "light");
-    btn.innerText = "☀️";
-  } else {
-    localStorage.setItem("theme", "dark");
-    btn.innerText = "🌙";
-  }
-}
+                    <a href="{{ url_for('student.dashboard') }}">
+                        Dashboard
+                    </a>
 
-/* LOAD THEME */
-window.onload = function() {
-  const savedTheme = localStorage.getItem("theme");
-  const btn = document.getElementById("themeToggle");
+                {% endif %}
 
-  if (savedTheme === "light") {
-    document.body.classList.add("light");
-    btn.innerText = "☀️";
-  } else {
-    btn.innerText = "🌙";
-  }
-}
-let chartInstance;
+                <a
+                    href="{{ url_for('auth.logout') }}"
+                    class="nav-button"
+                >
+                    Logout
+                </a>
 
-function initChart() {
-  const ctx = document.getElementById('chart');
+            {% else %}
 
-  chartInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Mon','Tue','Wed','Thu','Fri','Sat'],
-      datasets: [{
-        data: [5,10,8,15,12,20],
-        borderColor: '#3b82f6',
-        tension: 0.4
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false
-    }
-  });
-}
+                <a href="{{ url_for('auth.login') }}">
+                    Login
+                </a>
 
-function toggleSidebar() {
-  document.querySelector(".sidebar").classList.toggle("collapse");
+                <a
+                    href="{{ url_for('auth.signup') }}"
+                    class="nav-button"
+                >
+                    Get Started
+                </a>
 
-  setTimeout(() => {
-    if (chartInstance) {
-      chartInstance.resize();   // 🔥 FIX
-    }
-  }, 300);
-}
+            {% endif %}
 
-window.onload = initChart;
-</script>
+        </nav>
+
+    </div>
+
+</header>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        <div class="flash-container">
+
+            {% for category, message in messages %}
+
+                <div class="flash-message {{ category }}">
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                    <button
+                        onclick="this.parentElement.remove()"
+                    >
+                        &times;
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
+
+<main>
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+
+<footer class="footer">
+
+    <p>
+
+        © 2026 SmartLearn AI
+
+        <span>•</span>
+
+        Learn smarter. Achieve more.
+
+    </p>
+
+</footer>
+
+
+<script
+    src="{{ url_for('static', filename='js/main.js') }}"
+></script>
+
+{% block extra_js %}
+{% endblock %}
 
 </body>
+
 </html>

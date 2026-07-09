@@ -1,222 +1,413 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>AI Notes Summarizer</title>
+{% extends "base.html" %}
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-}
+{% block title %}
 
-body {
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: white;
-  overflow-x: hidden;
-}
+SmartLearn AI |
+Learning & Assessment Platform
 
-/* NAVBAR */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 60px;
-  align-items: center;
-}
+{% endblock %}
 
-.logo {
-  font-size: 22px;
-  font-weight: 600;
-}
 
-.nav-btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: none;
-  background: rgba(255,255,255,0.1);
-  color: white;
-  cursor: pointer;
-}
+{% block content %}
 
-/* HERO */
-.hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 60px;
-}
 
-/* LEFT */
-.hero-text {
-  max-width: 500px;
-}
+<section class="hero">
 
-.hero-text h1 {
-  font-size: 48px;
-  line-height: 1.2;
-}
+    <div class="hero-glow glow-one"></div>
 
-.hero-text span {
-  background: linear-gradient(90deg, #06b6d4, #3b82f6);
-  -webkit-background-clip: text;
-  color: transparent;
-}
+    <div class="hero-glow glow-two"></div>
 
-.hero-text p {
-  margin-top: 15px;
-  color: #aaa;
-}
 
-/* BUTTONS */
-.hero-buttons {
-  margin-top: 25px;
-}
+    <div class="container hero-grid">
 
-.btn {
-  padding: 12px 22px;
-  margin-right: 10px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
-  transition: 0.3s;
-}
 
-/* PRIMARY */
-.btn-primary {
-  background: linear-gradient(90deg, #06b6d4, #3b82f6);
-}
+        <div class="hero-content">
 
-.btn-primary:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 20px #3b82f6;
-}
 
-/* SECONDARY */
-.btn-secondary {
-  background: rgba(255,255,255,0.08);
-}
+            <div class="hero-badge">
 
-.btn-secondary:hover {
-  background: #3b82f6;
-}
+                <i class="fa-solid fa-sparkles"></i>
 
-/* RIGHT CARD */
-.hero-card {
-  width: 350px;
-  padding: 25px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 40px rgba(0,0,0,0.3);
-  animation: float 3s ease-in-out infinite;
-}
+                AI-Powered Learning Platform
 
-@keyframes float {
-  0% { transform: translateY(0px);}
-  50% { transform: translateY(-10px);}
-  100% { transform: translateY(0px);}
-}
+            </div>
 
-.hero-card h3 {
-  margin-bottom: 10px;
-}
 
-.hero-card p {
-  color: #aaa;
-  font-size: 14px;
-}
+            <h1>
 
-/* FEATURES */
-.features {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 60px;
-}
+                Learn Smarter.
 
-.feature {
-  padding: 20px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.05);
-  width: 200px;
-  text-align: center;
-  transition: 0.3s;
-}
-a {
-  text-decoration: none;
-}
-a {
-  text-decoration: none;
-  color: inherit;
-}
-a button {
-  text-decoration: none;
-}
+                <span>
+                    Test Your Knowledge.
+                </span>
 
-.feature:hover {
-  transform: translateY(-5px);
-  background: rgba(59,130,246,0.2);
-}
+                Achieve More.
 
-/* FOOTER */
-.footer {
-  text-align: center;
-  margin-top: 60px;
-  color: #777;
-}
-</style>
-</head>
+            </h1>
 
-<body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-  <div class="logo">🚀 AI Notes</div>
-  
-</div>
+            <p>
 
-<!-- HERO -->
-<div class="hero">
+                Study structured courses,
+                complete interactive lessons,
+                take topic-wise assessments
+                and track your learning progress
+                from one intelligent platform.
 
-  <!-- LEFT -->
-  <div class="hero-text">
-    <h1>Turn Long Notes into <span>Smart Insights</span></h1>
-    <p>AI-powered summarization for text & PDFs. Fast, clean, and powerful.</p>
+            </p>
 
-    <div class="hero-buttons">
-      <a href="/signup">
-        <button class="btn btn-primary">Get Started</button>
-      </a>
-      <a href="/login">
-        <button class="btn btn-secondary">Login</button>
-      </a>
+
+            <div class="hero-buttons">
+
+
+                <a
+                    href="{{ url_for('auth.signup') }}"
+                    class="primary-button"
+                >
+
+                    Start Learning Free
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+
+                <a
+                    href="#features"
+                    class="secondary-button"
+                >
+
+                    Explore Features
+
+                </a>
+
+
+            </div>
+
+
+            <div class="hero-trust">
+
+
+                <div>
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Free Learning
+
+                </div>
+
+
+                <div>
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Smart Assessments
+
+                </div>
+
+
+                <div>
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Progress Analytics
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="hero-dashboard">
+
+
+            <div class="dashboard-preview">
+
+
+                <div class="preview-header">
+
+
+                    <div>
+
+
+                        <small>
+                            STUDENT DASHBOARD
+                        </small>
+
+
+                        <h3>
+
+                            Welcome back,
+                            Student 👋
+
+                        </h3>
+
+
+                    </div>
+
+
+                    <div class="preview-profile">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="preview-stats">
+
+
+                    <div>
+
+                        <i class="fa-solid fa-book-open"></i>
+
+                        <span>6</span>
+
+                        <small>
+                            Courses
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        <span>24</span>
+
+                        <small>
+                            Lessons
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        <span>86%</span>
+
+                        <small>
+                            Average
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="learning-card">
+
+
+                    <div class="learning-title">
+
+
+                        <div>
+
+
+                            <small>
+                                CONTINUE LEARNING
+                            </small>
+
+
+                            <h4>
+
+                                Cloud Computing
+                                Fundamentals
+
+                            </h4>
+
+
+                        </div>
+
+
+                        <span>
+                            72%
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div style="width:72%"></div>
+
+                    </div>
+
+
+                    <button>
+
+                        Continue Lesson
+
+                        <i class="fa-solid fa-play"></i>
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
     </div>
-  </div>
 
-  <!-- RIGHT -->
-  <div class="hero-card">
-    <h3>🧠 AI Summary</h3>
-    <p>"AI tools are transforming how developers work by automating repetitive tasks and improving productivity..."</p>
-  </div>
 
-</div>
+</section>
 
-<!-- FEATURES -->
-<div class="features">
-  <div class="feature">⚡ Fast Processing</div>
-  <div class="feature">🤖 AI Powered</div>
-  <div class="feature">📄 PDF Support</div>
-</div>
 
-<!-- FOOTER -->
-<div class="footer">
-  © 2026 AI Notes Summarizer
-</div>
+<section
+    class="features-section"
+    id="features"
+>
 
-</body>
-</html>
+
+    <div class="container">
+
+
+        <div class="section-heading">
+
+
+            <span>
+                PLATFORM FEATURES
+            </span>
+
+
+            <h2>
+
+                Everything you need to
+
+                <strong>
+                    learn effectively
+                </strong>
+
+            </h2>
+
+
+            <p>
+
+                Learn concepts,
+                practise questions,
+                take assessments
+                and understand your progress.
+
+            </p>
+
+
+        </div>
+
+
+        <div class="features-grid">
+
+
+            <article class="feature-card">
+
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-book-open-reader"></i>
+
+                </div>
+
+
+                <h3>
+
+                    Structured Learning
+
+                </h3>
+
+
+                <p>
+
+                    Learn through organised
+                    courses, chapters,
+                    lessons, videos
+                    and study materials.
+
+                </p>
+
+
+            </article>
+
+
+            <article class="feature-card">
+
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-file-circle-question"></i>
+
+                </div>
+
+
+                <h3>
+
+                    Interactive Tests
+
+                </h3>
+
+
+                <p>
+
+                    Attempt timed quizzes,
+                    receive instant results
+                    and review every answer.
+
+                </p>
+
+
+            </article>
+
+
+            <article class="feature-card">
+
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-chart-column"></i>
+
+                </div>
+
+
+                <h3>
+
+                    Progress Analytics
+
+                </h3>
+
+
+                <p>
+
+                    Track completed lessons,
+                    assessment scores
+                    and overall learning growth.
+
+                </p>
+
+
+            </article>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+{% endblock %}

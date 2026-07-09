@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}
+Explore Courses | SmartLearn AI
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/courses.css') }}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="student-course-page">
+
+    <div class="course-page-container">
+
+
+        <div class="student-course-heading">
+
+
+            <div>
+
+
+                <span>
+
+                    COURSE LIBRARY
+
+                </span>
+
+
+                <h1>
+
+                    Explore Courses
+
+                </h1>
+
+
+                <p>
+
+                    Learn new skills
+                    through structured courses
+                    and chapter-wise content.
+
+                </p>
+
+
+            </div>
+
+
+            <a
+                href="{{ url_for('courses.my_courses') }}"
+                class="course-secondary-button"
+            >
+
+                <i class="fa-solid fa-book"></i>
+
+                My Courses
+
+            </a>
+
+
+        </div>
+
+
+        {% if courses %}
+
+
+        <div class="student-course-grid">
+
+
+            {% for course in courses %}
+
+
+            <article class="student-course-card">
+
+
+                <div class="student-course-cover">
+
+
+                    <i class="fa-solid fa-graduation-cap"></i>
+
+
+                    <span>
+
+                        {{ course.category }}
+
+                    </span>
+
+
+                </div>
+
+
+                <div class="student-course-content">
+
+
+                    <div class="student-course-level">
+
+                        {{ course.level }}
+
+                    </div>
+
+
+                    <h2>
+
+                        {{ course.title }}
+
+                    </h2>
+
+
+                    <p>
+
+                        {{ course.description[:110] }}
+
+                        {% if
+                        course.description|length
+                        > 110 %}
+
+                        ...
+
+                        {% endif %}
+
+                    </p>
+
+
+                    <div class="student-course-meta">
+
+
+                        <span>
+
+                            <i class="fa-solid fa-layer-group"></i>
+
+                            {{ course.total_chapters }}
+                            Chapters
+
+                        </span>
+
+
+                        <span>
+
+                            <i class="fa-regular fa-clock"></i>
+
+                            {{ course.duration }}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <a
+
+                        href="{{
+                            url_for(
+                                'courses.course_details',
+                                slug=course.slug
+                            )
+                        }}"
+
+                        class="course-primary-button"
+
+                    >
+
+
+                        {% if
+                        course.id
+                        in enrolled_course_ids %}
+
+                        Continue Course
+
+                        {% else %}
+
+                        View Course
+
+                        {% endif %}
+
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+
+                    </a>
+
+
+                </div>
+
+
+            </article>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="course-empty-state">
+
+
+            <i class="fa-solid fa-book-open"></i>
+
+
+            <h2>
+
+                No published courses available
+
+            </h2>
+
+
+            <p>
+
+                New learning courses
+                will be available soon.
+
+            </p>
+
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+</section>
+
+{% endblock %}

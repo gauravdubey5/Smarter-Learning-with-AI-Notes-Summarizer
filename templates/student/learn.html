@@ -1,0 +1,1063 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+
+{{ lesson.title }}
+| SmartLearn AI
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+
+    rel="stylesheet"
+
+    href="{{
+        url_for(
+            'static',
+            filename='css/learn.css'
+        )
+    }}"
+
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="learning-layout">
+
+
+    <aside
+
+        class="learning-sidebar"
+
+        id="learningSidebar"
+
+    >
+
+
+        <div class="learning-sidebar-header">
+
+
+            <a
+
+                href="{{
+                    url_for(
+                        'courses.course_details',
+                        slug=course.slug
+                    )
+                }}"
+
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Course Overview
+
+            </a>
+
+
+            <span>
+
+                {{ course.category }}
+
+            </span>
+
+
+            <h2>
+
+                {{ course.title }}
+
+            </h2>
+
+
+            <div class="learning-course-progress">
+
+
+                <div>
+
+                    <span>
+
+                        Course Progress
+
+                    </span>
+
+
+                    <strong>
+
+                        {{
+                            course_progress
+                            |round
+                            |int
+                        }}%
+
+                    </strong>
+
+                </div>
+
+
+                <div class="learning-progress-bar">
+
+                    <div
+
+                        style="
+                        width:
+                        {{ course_progress }}%
+                        "
+
+                    ></div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="learning-course-content">
+
+
+            {% for
+            current_chapter
+            in course.chapters
+            %}
+
+
+            {% if
+            current_chapter.is_published
+            %}
+
+
+            <section class="learning-chapter">
+
+
+                <div class="learning-chapter-title">
+
+
+                    <span>
+
+                        Chapter
+
+                        {{ current_chapter.position }}
+
+                    </span>
+
+
+                    <h3>
+
+                        {{ current_chapter.title }}
+
+                    </h3>
+
+
+                </div>
+
+
+                <div class="learning-lesson-list">
+
+
+                    {% for
+                    current_lesson
+                    in current_chapter.lessons
+                    %}
+
+
+                    {% if
+                    current_lesson.is_published
+                    %}
+
+
+                    <a
+
+                        href="{{
+                            url_for(
+                                'student.learn_lesson',
+                                lesson_id=current_lesson.id
+                            )
+                        }}"
+
+                        class="learning-lesson-link
+
+                        {% if
+                        current_lesson.id
+                        == lesson.id
+                        %}
+
+                        active
+
+                        {% endif %}
+
+                        "
+
+                    >
+
+
+                        <div
+
+                            class="
+                            lesson-state
+
+                            {% if
+                            current_lesson.id
+                            in
+                            completed_lesson_ids
+                            %}
+
+                            completed
+
+                            {% endif %}
+                            "
+
+                        >
+
+
+                            {% if
+                            current_lesson.id
+                            in
+                            completed_lesson_ids
+                            %}
+
+
+                            <i
+
+                                class="
+                                fa-solid
+                                fa-check
+                                "
+
+                            ></i>
+
+
+                            {% else %}
+
+
+                            <i
+
+                                class="
+                                fa-solid
+                                fa-play
+                                "
+
+                            ></i>
+
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                        <div>
+
+
+                            <strong>
+
+                                {{
+                                    current_lesson
+                                    .title
+                                }}
+
+                            </strong>
+
+
+                            <small>
+
+                                <i
+
+                                    class="
+                                    fa-regular
+                                    fa-clock
+                                    "
+
+                                ></i>
+
+                                {{
+                                    current_lesson
+                                    .duration
+                                }}
+
+                            </small>
+
+
+                        </div>
+
+
+                    </a>
+
+
+                    {% endif %}
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            </section>
+
+
+            {% endif %}
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    </aside>
+
+
+    <div
+
+        class="learning-overlay"
+
+        id="learningOverlay"
+
+    ></div>
+
+
+    <main class="learning-main">
+
+
+        <header class="learning-topbar">
+
+
+            <button
+
+                id="learningMenuButton"
+
+                class="learning-menu-button"
+
+            >
+
+                <i
+
+                    class="
+                    fa-solid
+                    fa-bars
+                    "
+
+                ></i>
+
+            </button>
+
+
+            <div>
+
+
+                <span>
+
+                    Chapter
+
+                    {{ chapter.position }}
+
+                </span>
+
+
+                <strong>
+
+                    {{ chapter.title }}
+
+                </strong>
+
+
+            </div>
+
+
+            <a
+
+                href="{{
+                    url_for(
+                        'courses.my_courses'
+                    )
+                }}"
+
+            >
+
+                My Courses
+
+            </a>
+
+
+        </header>
+
+
+        <article class="lesson-reader">
+
+
+            <header class="lesson-reader-header">
+
+
+                <div class="lesson-breadcrumb">
+
+
+                    {{ course.title }}
+
+                    <i
+
+                        class="
+                        fa-solid
+                        fa-chevron-right
+                        "
+
+                    ></i>
+
+                    {{ chapter.title }}
+
+
+                </div>
+
+
+                <h1>
+
+                    {{ lesson.title }}
+
+                </h1>
+
+
+                <div class="lesson-reader-meta">
+
+
+                    <span>
+
+                        <i
+
+                            class="
+                            fa-regular
+                            fa-clock
+                            "
+
+                        ></i>
+
+                        {{ lesson.duration }}
+
+                    </span>
+
+
+                    {% if
+                    progress_record
+                    .is_completed
+                    %}
+
+
+                    <span
+
+                        class="
+                        completed-label
+                        "
+
+                    >
+
+                        <i
+
+                            class="
+                            fa-solid
+                            fa-circle-check
+                            "
+
+                        ></i>
+
+                        Completed
+
+                    </span>
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+            </header>
+
+
+            {% if youtube_embed_url %}
+
+
+            <section class="lesson-video-section">
+
+
+                <div class="lesson-video-heading">
+
+
+                    <div>
+
+
+                        <span>
+
+                            VIDEO LECTURE
+
+                        </span>
+
+
+                        <h2>
+
+                            Watch and Learn
+
+                        </h2>
+
+
+                    </div>
+
+
+                    <i
+
+                        class="
+                        fa-solid
+                        fa-circle-play
+                        "
+
+                    ></i>
+
+
+                </div>
+
+
+                <div class="lesson-video">
+
+
+                    <iframe
+
+                        src="{{
+                            youtube_embed_url
+                        }}"
+
+                        title="{{
+                            lesson.title
+                        }}"
+
+                        allow="
+                        accelerometer;
+                        autoplay;
+                        clipboard-write;
+                        encrypted-media;
+                        gyroscope;
+                        picture-in-picture
+                        "
+
+                        allowfullscreen
+
+                    ></iframe>
+
+
+                </div>
+
+
+            </section>
+
+
+            {% endif %}
+
+
+            <section class="lesson-written-content">
+
+
+                <div class="content-section-heading">
+
+
+                    <span>
+
+                        STUDY NOTES
+
+                    </span>
+
+
+                    <h2>
+
+                        Lesson Content
+
+                    </h2>
+
+
+                </div>
+
+
+                {% if lesson.content %}
+
+
+                <div class="lesson-text">
+
+
+                    {{
+
+                        lesson.content
+
+                        |e
+
+                        |replace(
+                            '\n',
+                            '<br>'
+                        )
+
+                        |safe
+
+                    }}
+
+
+                </div>
+
+
+                {% else %}
+
+
+                <div class="lesson-empty-content">
+
+
+                    <i
+
+                        class="
+                        fa-solid
+                        fa-book-open
+                        "
+
+                    ></i>
+
+
+                    <h3>
+
+                        Written notes
+                        coming soon
+
+                    </h3>
+
+
+                </div>
+
+
+                {% endif %}
+
+
+            </section>
+
+
+            {% if lesson.pdf_file %}
+
+
+            <section class="lesson-pdf-card">
+
+
+                <div class="lesson-pdf-icon">
+
+
+                    <i
+
+                        class="
+                        fa-solid
+                        fa-file-pdf
+                        "
+
+                    ></i>
+
+
+                </div>
+
+
+                <div>
+
+
+                    <span>
+
+                        STUDY MATERIAL
+
+                    </span>
+
+
+                    <h3>
+
+                        Lesson PDF Notes
+
+                    </h3>
+
+
+                    <p>
+
+                        Open the complete
+                        study material
+                        in a new tab.
+
+                    </p>
+
+
+                </div>
+
+
+                <a
+
+                    href="{{
+                        url_for(
+                            'student.lesson_pdf',
+                            filename=lesson.pdf_file
+                        )
+                    }}"
+
+                    target="_blank"
+
+                >
+
+                    <i
+
+                        class="
+                        fa-solid
+                        fa-arrow-up-right-from-square
+                        "
+
+                    ></i>
+
+                    Open PDF
+
+                </a>
+
+
+            </section>
+
+
+            {% endif %}
+
+
+            <section class="lesson-completion-card">
+
+
+                <div>
+
+
+                    <span>
+
+                        LESSON PROGRESS
+
+                    </span>
+
+
+                    <h2>
+
+
+                        {% if
+                        progress_record
+                        .is_completed
+                        %}
+
+
+                        Lesson Completed 🎉
+
+
+                        {% else %}
+
+
+                        Finished this lesson?
+
+
+                        {% endif %}
+
+
+                    </h2>
+
+
+                    <p>
+
+
+                        {% if
+                        progress_record
+                        .is_completed
+                        %}
+
+
+                        Your progress
+                        has been saved.
+
+
+                        {% else %}
+
+
+                        Mark this lesson
+                        complete
+                        to update
+                        your course progress.
+
+
+                        {% endif %}
+
+
+                    </p>
+
+
+                </div>
+
+
+                {% if
+                not progress_record
+                .is_completed
+                %}
+
+
+                <form
+
+                    method="POST"
+
+                    action="{{
+                        url_for(
+                            'student.complete_lesson',
+                            lesson_id=lesson.id
+                        )
+                    }}"
+
+                >
+
+
+                    <button>
+
+
+                        <i
+
+                            class="
+                            fa-solid
+                            fa-check
+                            "
+
+                        ></i>
+
+
+                        Mark as Complete
+
+
+                    </button>
+
+
+                </form>
+
+
+                {% else %}
+
+
+                <div class="lesson-completed-icon">
+
+
+                    <i
+
+                        class="
+                        fa-solid
+                        fa-check
+                        "
+
+                    ></i>
+
+
+                </div>
+
+
+                {% endif %}
+
+
+            </section>
+
+
+            <nav class="lesson-navigation">
+
+
+                {% if previous_lesson %}
+
+
+                <a
+
+                    href="{{
+                        url_for(
+                            'student.learn_lesson',
+                            lesson_id=previous_lesson.id
+                        )
+                    }}"
+
+                    class="previous-lesson"
+
+                >
+
+
+                    <i
+
+                        class="
+                        fa-solid
+                        fa-arrow-left
+                        "
+
+                    ></i>
+
+
+                    <div>
+
+
+                        <span>
+
+                            PREVIOUS LESSON
+
+                        </span>
+
+
+                        <strong>
+
+                            {{
+                                previous_lesson
+                                .title
+                            }}
+
+                        </strong>
+
+
+                    </div>
+
+
+                </a>
+
+
+                {% else %}
+
+
+                <div></div>
+
+
+                {% endif %}
+
+
+                {% if next_lesson %}
+
+
+                <a
+
+                    href="{{
+                        url_for(
+                            'student.learn_lesson',
+                            lesson_id=next_lesson.id
+                        )
+                    }}"
+
+                    class="next-lesson"
+
+                >
+
+
+                    <div>
+
+
+                        <span>
+
+                            NEXT LESSON
+
+                        </span>
+
+
+                        <strong>
+
+                            {{
+                                next_lesson
+                                .title
+                            }}
+
+                        </strong>
+
+
+                    </div>
+
+
+                    <i
+
+                        class="
+                        fa-solid
+                        fa-arrow-right
+                        "
+
+                    ></i>
+
+
+                </a>
+
+
+                {% else %}
+
+
+                <a
+
+                    href="{{
+                        url_for(
+                            'courses.course_details',
+                            slug=course.slug
+                        )
+                    }}"
+
+                    class="next-lesson"
+
+                >
+
+
+                    <div>
+
+
+                        <span>
+
+                            COURSE
+
+                        </span>
+
+
+                        <strong>
+
+                            Course Overview
+
+                        </strong>
+
+
+                    </div>
+
+
+                    <i
+
+                        class="
+                        fa-solid
+                        fa-flag-checkered
+                        "
+
+                    ></i>
+
+
+                </a>
+
+
+                {% endif %}
+
+
+            </nav>
+
+
+        </article>
+
+
+    </main>
+
+
+</div>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+
+<script
+
+    src="{{
+        url_for(
+            'static',
+            filename='js/learn.js'
+        )
+    }}"
+
+></script>
+
+
+{% endblock %}
