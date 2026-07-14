@@ -59,6 +59,13 @@ class User(UserMixin, db.Model):
     cascade="all, delete-orphan",
     lazy=True
     )
+    
+    quiz_attempts = db.relationship(
+    "QuizAttempt",
+    back_populates="user",
+    cascade="all, delete-orphan",
+    lazy=True
+)
 
     def set_password(self, password):
 

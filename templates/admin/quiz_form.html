@@ -1,0 +1,396 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{% if quiz %}
+
+Edit Quiz
+
+{% else %}
+
+Create Quiz
+
+{% endif %}
+
+| SmartLearn AI
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="admin-page">
+
+    <div class="admin-container">
+
+        <div class="admin-page-header">
+
+            <div>
+
+                <span>
+
+                    QUIZ MANAGEMENT
+
+                </span>
+
+                <h1>
+
+                    {% if quiz %}
+
+                    Edit Quiz
+
+                    {% else %}
+
+                    Create Quiz
+
+                    {% endif %}
+
+                </h1>
+
+                <p>
+
+                    Chapter :
+                    {{ chapter.title }}
+
+                </p>
+
+            </div>
+
+            <a
+
+                href="{{ url_for('admin.manage_quizzes',chapter_id=chapter.id) }}"
+
+                class="admin-secondary-button"
+
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
+
+        <form
+
+            method="POST"
+
+            class="admin-form"
+
+        >
+
+            <div class="admin-form-card">
+
+                <h2>
+
+                    Basic Information
+
+                </h2>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Quiz Title
+
+                    </label>
+
+                    <input
+
+                        type="text"
+
+                        name="title"
+
+                        required
+
+                        value="{{ quiz.title if quiz else '' }}"
+
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+
+                        Description
+
+                    </label>
+
+                    <textarea
+
+                        name="description"
+
+                        rows="4"
+
+                    >{{ quiz.description if quiz else '' }}</textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+
+                        Instructions
+
+                    </label>
+
+                    <textarea
+
+                        name="instructions"
+
+                        rows="5"
+
+                    >{{ quiz.instructions if quiz else '' }}</textarea>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="admin-form-card">
+
+                <h2>
+
+                    Quiz Settings
+
+                </h2>
+
+
+                <div class="grid-2">
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Time Limit (Minutes)
+
+                        </label>
+
+                        <input
+
+                            type="number"
+
+                            name="time_limit"
+
+                            min="1"
+
+                            value="{{ quiz.time_limit if quiz else 20 }}"
+
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Passing %
+
+                        </label>
+
+                        <input
+
+                            type="number"
+
+                            name="passing_percentage"
+
+                            min="1"
+
+                            max="100"
+
+                            value="{{ quiz.passing_percentage if quiz else 40 }}"
+
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Maximum Attempts
+
+                        </label>
+
+                        <input
+
+                            type="number"
+
+                            name="max_attempts"
+
+                            min="1"
+
+                            value="{{ quiz.max_attempts if quiz else 3 }}"
+
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Negative Marks
+
+                        </label>
+
+                        <input
+
+                            type="number"
+
+                            name="negative_marks"
+
+                            step="0.25"
+
+                            value="{{ quiz.negative_marks if quiz else 0 }}"
+
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="checkbox-group">
+
+                    <label>
+
+                        <input
+
+                            type="checkbox"
+
+                            name="negative_marking"
+
+                            {% if quiz and quiz.negative_marking %}
+                            checked
+                            {% endif %}
+
+                        >
+
+                        Enable Negative Marking
+
+                    </label>
+
+
+                    <label>
+
+                        <input
+
+                            type="checkbox"
+
+                            name="shuffle_questions"
+
+                            {% if quiz and quiz.shuffle_questions %}
+                            checked
+                            {% endif %}
+
+                        >
+
+                        Shuffle Questions
+
+                    </label>
+
+
+                    <label>
+
+                        <input
+
+                            type="checkbox"
+
+                            name="show_result_immediately"
+
+                            {% if not quiz or quiz.show_result_immediately %}
+                            checked
+                            {% endif %}
+
+                        >
+
+                        Show Result Immediately
+
+                    </label>
+
+
+                    <label>
+
+                        <input
+
+                            type="checkbox"
+
+                            name="show_correct_answers"
+
+                            {% if not quiz or quiz.show_correct_answers %}
+                            checked
+                            {% endif %}
+
+                        >
+
+                        Show Correct Answers
+
+                    </label>
+
+
+                    <label>
+
+                        <input
+
+                            type="checkbox"
+
+                            name="is_published"
+
+                            {% if quiz and quiz.is_published %}
+                            checked
+                            {% endif %}
+
+                        >
+
+                        Publish Quiz
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-form-actions">
+
+                <button
+
+                    type="submit"
+
+                    class="admin-primary-button"
+
+                >
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    {% if quiz %}
+
+                    Update Quiz
+
+                    {% else %}
+
+                    Create Quiz
+
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

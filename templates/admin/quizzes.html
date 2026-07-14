@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quiz Management | SmartLearn AI
+{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+
+    <div class="admin-container">
+
+        <div class="admin-page-header">
+
+            <div>
+
+                <span>
+                    QUIZ MANAGEMENT
+                </span>
+
+                <h1>
+
+                    {{ chapter.title }}
+
+                </h1>
+
+                <p>
+
+                    Manage quizzes for this chapter.
+
+                </p>
+
+            </div>
+
+            <div class="admin-header-actions">
+
+                <a
+
+                    href="{{
+                        url_for(
+                            'admin.manage_chapters',
+                            course_id=chapter.course.id
+                        )
+                    }}"
+
+                    class="admin-secondary-button"
+
+                >
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+                <a
+
+                    href="{{
+                        url_for(
+                            'admin.add_quiz',
+                            chapter_id=chapter.id
+                        )
+                    }}"
+
+                    class="admin-primary-button"
+
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Create Quiz
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+        {% for category, message in messages %}
+
+        <div class="alert alert-{{ category }}">
+
+            {{ message }}
+
+        </div>
+
+        {% endfor %}
+
+        {% endif %}
+
+        {% endwith %}
+
+
+        {% if quizzes %}
+
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Title</th>
+
+                        <th>Questions</th>
+
+                        <th>Marks</th>
+
+                        <th>Time</th>
+
+                        <th>Pass %</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for quiz in quizzes %}
+
+                    <tr>
+
+                        <td>
+
+                            <strong>
+
+                                {{ quiz.title }}
+
+                            </strong>
+
+                            <br>
+
+                            <small>
+
+                                {{ quiz.description }}
+
+                            </small>
+
+                        </td>
+
+                        <td>
+
+                            {{ quiz.total_questions }}
+
+                        </td>
+
+                        <td>
+
+                            {{ quiz.total_marks }}
+
+                        </td>
+
+                        <td>
+
+                            {{ quiz.time_limit }} Min
+
+                        </td>
+
+                        <td>
+
+                            {{ quiz.passing_percentage }}%
+
+                        </td>
+
+                        <td>
+
+                            {% if quiz.is_published %}
+
+                            <span class="badge bg-success">
+
+                                Published
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-warning">
+
+                                Draft
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <div class="table-actions">
+
+                                <a
+
+                                    class="btn btn-primary btn-sm"
+
+                                    href="{{
+                                        url_for(
+                                            'admin.edit_quiz',
+                                            quiz_id=quiz.id
+                                        )
+                                    }}"
+
+                                >
+
+                                    Edit
+
+                                </a>
+
+                                <a
+
+                                    class="btn btn-info btn-sm"
+
+                                    href="{{
+                                        url_for(
+                                            'admin.manage_questions',
+                                            quiz_id=quiz.id
+                                        )
+                                    }}"
+
+                                >
+
+                                    Questions
+
+                                </a>
+
+                                <form
+
+                                    method="POST"
+
+                                    action="{{
+                                        url_for(
+                                            'admin.toggle_quiz',
+                                            quiz_id=quiz.id
+                                        )
+                                    }}"
+
+                                    style="display:inline;"
+
+                                >
+
+                                    <button
+
+                                        class="btn btn-secondary btn-sm"
+
+                                    >
+
+                                        {% if quiz.is_published %}
+
+                                        Unpublish
+
+                                        {% else %}
+
+                                        Publish
+
+                                        {% endif %}
+
+                                    </button>
+
+                                </form>
+
+                                <form
+
+                                    method="POST"
+
+                                    action="{{
+                                        url_for(
+                                            'admin.delete_quiz',
+                                            quiz_id=quiz.id
+                                        )
+                                    }}"
+
+                                    style="display:inline;"
+
+                                    onsubmit="return confirm('Delete Quiz?')"
+
+                                >
+
+                                    <button
+
+                                        class="btn btn-danger btn-sm"
+
+                                    >
+
+                                        Delete
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <i class="fa-solid fa-circle-question"></i>
+
+            <h2>
+
+                No Quiz Created
+
+            </h2>
+
+            <p>
+
+                Create your first quiz for this chapter.
+
+            </p>
+
+            <a
+
+                href="{{
+                    url_for(
+                        'admin.add_quiz',
+                        chapter_id=chapter.id
+                    )
+                }}"
+
+                class="admin-primary-button"
+
+            >
+
+                Create Quiz
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

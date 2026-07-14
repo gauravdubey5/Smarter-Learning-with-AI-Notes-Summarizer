@@ -1,0 +1,475 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Quiz Result
+
+{% endblock %}
+
+{% block content %}
+
+<section class="result-page">
+
+<div class="container">
+
+<div class="result-header">
+
+{% if attempt.is_passed %}
+
+<div class="result-icon success">
+
+<i class="fa-solid fa-circle-check"></i>
+
+</div>
+
+<h1>
+
+Congratulations 🎉
+
+</h1>
+
+<h3>
+
+You Passed
+
+</h3>
+
+{% else %}
+
+<div class="result-icon danger">
+
+<i class="fa-solid fa-circle-xmark"></i>
+
+</div>
+
+<h1>
+
+Quiz Completed
+
+</h1>
+
+<h3>
+
+Better Luck Next Time
+
+</h3>
+
+{% endif %}
+
+<p>
+
+{{ quiz.title }}
+
+</p>
+
+</div>
+
+
+<div class="result-grid">
+
+<div class="result-card">
+
+<h4>
+
+Score
+
+</h4>
+
+<h2>
+
+{{ attempt.score }}
+
+/
+
+{{ attempt.total_marks }}
+
+</h2>
+
+</div>
+
+<div class="result-card">
+
+<h4>
+
+Percentage
+
+</h4>
+
+<h2>
+
+{{ attempt.percentage }} %
+
+</h2>
+
+</div>
+
+<div class="result-card">
+
+<h4>
+
+Correct
+
+</h4>
+
+<h2>
+
+{{ attempt.correct_answers }}
+
+</h2>
+
+</div>
+
+<div class="result-card">
+
+<h4>
+
+Wrong
+
+</h4>
+
+<h2>
+
+{{ attempt.wrong_answers }}
+
+</h2>
+
+</div>
+
+<div class="result-card">
+
+<h4>
+
+Skipped
+
+</h4>
+
+<h2>
+
+{{ attempt.skipped_questions }}
+
+</h2>
+
+</div>
+
+<div class="result-card">
+
+<h4>
+
+Time Taken
+
+</h4>
+
+<h2>
+
+{{ total_time }}
+
+</h2>
+
+</div>
+
+</div>
+
+
+<div class="summary-card">
+
+<table class="table">
+
+<tr>
+
+<th>
+
+Total Questions
+
+</th>
+
+<td>
+
+{{ attempt.total_questions }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Answered
+
+</th>
+
+<td>
+
+{{ attempt.answered_questions }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Correct
+
+</th>
+
+<td>
+
+{{ attempt.correct_answers }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Wrong
+
+</th>
+
+<td>
+
+{{ attempt.wrong_answers }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Skipped
+
+</th>
+
+<td>
+
+{{ attempt.skipped_questions }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Marks Obtained
+
+</th>
+
+<td>
+
+{{ attempt.score }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Negative Marks
+
+</th>
+
+<td>
+
+{{ attempt.negative_marks }}
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Passing Percentage
+
+</th>
+
+<td>
+
+{{ quiz.passing_percentage }} %
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Result
+
+</th>
+
+<td>
+
+{% if attempt.is_passed %}
+
+<span class="badge bg-success">
+
+PASS
+
+</span>
+
+{% else %}
+
+<span class="badge bg-danger">
+
+FAIL
+
+</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+
+<h2>
+
+Question Review
+
+</h2>
+
+{% for answer in answers %}
+
+<div class="question-review-card">
+
+<h4>
+
+Q{{ loop.index }}
+
+{{ answer.question.title }}
+
+</h4>
+
+<p>
+
+{{ answer.question.question_text }}
+
+</p>
+
+<p>
+
+<b>Your Answer :</b>
+
+{% if answer.selected_option %}
+
+{{ answer.selected_option.option_key }}
+
+-
+
+{{ answer.selected_option.option_text }}
+
+{% else %}
+
+Not Answered
+
+{% endif %}
+
+</p>
+
+<p>
+
+<b>Correct Answer :</b>
+
+{% for option in answer.question.options %}
+
+{% if option.is_correct %}
+
+{{ option.option_key }}
+
+-
+
+{{ option.option_text }}
+
+{% endif %}
+
+{% endfor %}
+
+</p>
+
+{% if answer.is_correct %}
+
+<div class="alert alert-success">
+
+Correct Answer
+
+</div>
+
+{% else %}
+
+<div class="alert alert-danger">
+
+Wrong Answer
+
+</div>
+
+{% endif %}
+
+{% if answer.question.explanation %}
+
+<div class="alert alert-info">
+
+<b>Explanation</b>
+
+<br>
+
+{{ answer.question.explanation }}
+
+</div>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+
+<div class="result-buttons">
+
+<a
+
+href="{{ url_for('student.dashboard') }}"
+
+class="btn btn-primary"
+
+>
+
+Dashboard
+
+</a>
+
+<a
+
+href="{{ url_for('student.my_courses') }}"
+
+class="btn btn-success"
+
+>
+
+My Courses
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+{% endblock %}

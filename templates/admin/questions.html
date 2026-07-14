@@ -1,0 +1,295 @@
+<!-- ===================================================== -->
+<!-- templates/admin/questions.html -->
+<!-- ===================================================== -->
+
+{% extends "base.html" %}
+
+{% block title %}
+Question Management | SmartLearn AI
+{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+
+<div class="admin-container">
+
+<div class="admin-page-header">
+
+<div>
+
+<span>
+
+QUESTION MANAGEMENT
+
+</span>
+
+<h1>
+
+{{ quiz.title }}
+
+</h1>
+
+<p>
+
+Manage questions for this quiz
+
+</p>
+
+</div>
+
+<div class="admin-header-actions">
+
+<a
+
+href="{{ url_for('admin.manage_quizzes',chapter_id=quiz.chapter_id) }}"
+
+class="admin-secondary-button"
+
+>
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Back
+
+</a>
+
+<a
+
+href="{{ url_for('admin.add_question',quiz_id=quiz.id) }}"
+
+class="admin-primary-button"
+
+>
+
+<i class="fa-solid fa-plus"></i>
+
+Add Question
+
+</a>
+
+</div>
+
+</div>
+
+{% with messages=get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+{% for category,message in messages %}
+
+<div class="alert alert-{{category}}">
+
+{{message}}
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endwith %}
+
+{% if questions %}
+
+<div class="admin-table-wrapper">
+
+<table class="admin-table">
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Question</th>
+
+<th>Type</th>
+
+<th>Difficulty</th>
+
+<th>Marks</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for question in questions %}
+
+<tr>
+
+<td>
+
+{{question.position}}
+
+</td>
+
+<td>
+
+<strong>
+
+{{question.title}}
+
+</strong>
+
+<br>
+
+<small>
+
+{{question.question_text[:120]}}...
+
+</small>
+
+</td>
+
+<td>
+
+{{question.question_type}}
+
+</td>
+
+<td>
+
+{{question.difficulty}}
+
+</td>
+
+<td>
+
+{{question.marks}}
+
+</td>
+
+<td>
+
+{% if question.is_published %}
+
+<span class="badge bg-success">
+
+Published
+
+</span>
+
+{% else %}
+
+<span class="badge bg-warning">
+
+Draft
+
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<div class="table-actions">
+
+<a
+
+href="{{ url_for('admin.edit_question',question_id=question.id) }}"
+
+class="btn btn-primary btn-sm"
+
+>
+
+Edit
+
+</a>
+
+<a
+
+href="{{ url_for('admin.manage_options',question_id=question.id) }}"
+
+class="btn btn-info btn-sm"
+
+>
+
+Options
+
+</a>
+
+<form
+
+method="POST"
+
+action="{{ url_for('admin.delete_question',question_id=question.id) }}"
+
+style="display:inline"
+
+onsubmit="return confirm('Delete Question?')"
+
+>
+
+<button
+
+class="btn btn-danger btn-sm"
+
+>
+
+Delete
+
+</button>
+
+</form>
+
+</div>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% else %}
+
+<div class="empty-state">
+
+<i class="fa-solid fa-circle-question"></i>
+
+<h2>
+
+No Questions Found
+
+</h2>
+
+<p>
+
+Start by creating your first question.
+
+</p>
+
+<a
+
+href="{{ url_for('admin.add_question',quiz_id=quiz.id) }}"
+
+class="admin-primary-button"
+
+>
+
+Add First Question
+
+</a>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</section>
+
+{% endblock %}

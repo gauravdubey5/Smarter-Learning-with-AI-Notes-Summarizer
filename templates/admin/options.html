@@ -1,0 +1,204 @@
+# ============================================================
+# OPTION LIST
+# ============================================================
+
+@admin_bp.route(
+    "/questions/<int:question_id>/options"
+)
+@login_required
+@admin_required
+def manage_options(question_id):
+
+    question = Question.query.get_or_404(question_id)
+
+    options = (
+        Option.query
+        .filter_by(question_id=question.id)
+        .order_by(Option.position)
+        .all()
+    )
+
+    return render_template(
+        "admin/options.html",
+        question=question,
+        options=options
+    )
+
+
+# ============================================================
+# ADD OPTION
+# ============================================================
+
+@admin_bp.route(
+    "/questions/<int:question_id>/options/add",
+    methods=["GET", "POST"]
+)
+@login_required
+@admin_required
+def add_option(question_id):
+
+    question = Question.query.get_or_404(question_id)
+
+    if request.method == "POST":
+
+        option = Option(
+
+            question_id=question.id,
+
+            option_key=request.form.get(
+                "option_key"
+            ),
+
+            option_text=request.form.get(
+                "option_text"
+            ),
+
+            explanation=request.form.get(
+                "explanation"
+            ),
+
+            position=request.form.get(
+                "position",
+                type=int
+            ),
+
+            is_correct=(
+                request.form.get(
+                    "is_correct"
+                )
+                == "on"
+            )
+
+        )
+
+        db.session.add(option)
+
+        db.session.commit()
+
+        flash(
+            "Option added successfully.",
+            "success"
+        )
+
+        return redirect(
+
+            url_for(
+                "admin.manage_options",
+                question_id=question.id
+            )
+
+        )
+
+    return render_template(
+
+        "admin/option_form.html",
+
+        question=question,
+
+        option=None
+
+    )
+
+
+# ============================================================
+# EDIT OPTION
+# ============================================================
+
+@admin_bp.route(
+    "/options/<int:option_id>/edit",
+    methods=["GET", "POST"]
+)
+@login_required
+@admin_required
+def edit_option(option_id):
+
+    option = Option.query.get_or_404(option_id)
+
+    if request.method == "POST":
+
+        option.option_key = request.form.get(
+            "option_key"
+        )
+
+        option.option_text = request.form.get(
+            "option_text"
+        )
+
+        option.explanation = request.form.get(
+            "explanation"
+        )
+
+        option.position = request.form.get(
+            "position",
+            type=int
+        )
+
+        option.is_correct = (
+            request.form.get(
+                "is_correct"
+            )
+            == "on"
+        )
+
+        db.session.commit()
+
+        flash(
+            "Option updated successfully.",
+            "success"
+        )
+
+        return redirect(
+
+            url_for(
+
+                "admin.manage_options",
+
+                question_id=option.question_id
+
+            )
+
+        )
+
+    return render_template(
+
+        "admin/option_form.html",
+
+        question=option.question,
+
+        option=option
+
+    )
+
+
+# ============================================================
+# DELETE OPTION
+# ============================================================
+
+@admin_bp.post(
+    "/options/<int:option_id>/delete"
+)
+@login_required
+@admin_required
+def delete_option(option_id):
+
+    option = Option.query.get_or_404(option_id)
+
+    question_id = option.question_id
+
+    db.session.delete(option)
+
+    db.session.commit()
+
+    flash(
+        "Option deleted successfully.",
+        "success"
+    )
+
+    return redirect(
+
+        url_for(
+            "admin.manage_options",
+            question_id=question_id
+        )
+
+    )

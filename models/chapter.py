@@ -67,6 +67,13 @@ class Chapter(db.Model):
     lazy=True,
     order_by="Lesson.position"
     )
+    quizzes = db.relationship(
+    "Quiz",
+    back_populates="chapter",
+    cascade="all, delete-orphan",
+    lazy=True,
+    order_by="Quiz.created_at.desc()"
+)
 
     @property
     def total_lessons(self):

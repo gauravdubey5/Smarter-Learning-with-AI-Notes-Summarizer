@@ -251,6 +251,19 @@ Manage Chapters | SmartLearn AI
                             Lessons
 
                         </a>
+                        <a
+
+                            href="{{ url_for('admin.manage_quizzes',chapter_id=chapter.id) }}"
+
+                            class="manage-lesson-button"
+
+                            >
+
+                            <i class="fa-solid fa-circle-question"></i>
+
+                            Quiz
+
+                        </a>
                         <form
 
                             method="POST"

@@ -35,7 +35,14 @@ from models.lesson import (
     Lesson,
     LessonProgress
 )
+from models.quiz import Quiz
+from models.question import Question
 
+from models.option import Option
+
+from models.quiz_attempt import QuizAttempt
+
+from models.student_answer import StudentAnswer
 
 login_manager = LoginManager()
 

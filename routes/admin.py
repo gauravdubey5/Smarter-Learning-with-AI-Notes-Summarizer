@@ -26,6 +26,10 @@ from flask_login import (
 from models import db
 from models.course import Course
 from models.chapter import Chapter
+from models.quiz import Quiz
+
+from models.question import Question
+from models.option import Option
 
 
 admin_bp = Blueprint(
@@ -995,6 +999,913 @@ def delete_lesson(
         url_for(
             "admin.manage_lessons",
             chapter_id=chapter_id
+        )
+
+    )
+
+
+# ============================================================
+# QUIZ LIST
+# ============================================================
+
+@admin_bp.route(
+    "/chapters/<int:chapter_id>/quizzes"
+)
+@login_required
+@admin_required
+def manage_quizzes(chapter_id):
+
+    chapter = Chapter.query.get_or_404(
+        chapter_id
+    )
+
+    quizzes = (
+
+        Quiz.query
+
+        .filter_by(
+            chapter_id=chapter.id
+        )
+
+        .order_by(
+            Quiz.created_at.desc()
+        )
+
+        .all()
+
+    )
+
+    return render_template(
+
+        "admin/quizzes.html",
+
+        chapter=chapter,
+
+        quizzes=quizzes
+
+    )
+
+
+# ============================================================
+# CREATE QUIZ
+# ============================================================
+
+@admin_bp.route(
+    "/chapters/<int:chapter_id>/quizzes/add",
+    methods=[
+        "GET",
+        "POST"
+    ]
+)
+@login_required
+@admin_required
+def add_quiz(chapter_id):
+
+    chapter = Chapter.query.get_or_404(
+        chapter_id
+    )
+
+    if request.method == "POST":
+
+        title = request.form.get(
+            "title"
+        ).strip()
+
+        description = request.form.get(
+            "description"
+        )
+
+        instructions = request.form.get(
+            "instructions"
+        )
+
+        quiz = Quiz(
+
+            chapter_id=chapter.id,
+
+            title=title,
+
+            description=description,
+
+            instructions=instructions,
+
+            time_limit=request.form.get(
+                "time_limit",
+                type=int
+            ),
+
+            passing_percentage=request.form.get(
+                "passing_percentage",
+                type=int
+            ),
+
+            max_attempts=request.form.get(
+                "max_attempts",
+                type=int
+            ),
+
+            negative_marking=(
+
+                request.form.get(
+                    "negative_marking"
+                )
+
+                ==
+
+                "on"
+
+            ),
+
+            negative_marks=request.form.get(
+                "negative_marks",
+                type=float
+            ),
+
+            shuffle_questions=(
+
+                request.form.get(
+                    "shuffle_questions"
+                )
+
+                ==
+
+                "on"
+
+            ),
+
+            show_result_immediately=(
+
+                request.form.get(
+                    "show_result_immediately"
+                )
+
+                ==
+
+                "on"
+
+            ),
+
+            show_correct_answers=(
+
+                request.form.get(
+                    "show_correct_answers"
+                )
+
+                ==
+
+                "on"
+
+            ),
+
+            is_published=(
+
+                request.form.get(
+                    "is_published"
+                )
+
+                ==
+
+                "on"
+
+            )
+
+        )
+
+        db.session.add(
+            quiz
+        )
+
+        db.session.commit()
+
+        flash(
+
+            "Quiz created successfully.",
+
+            "success"
+
+        )
+
+        return redirect(
+
+            url_for(
+
+                "admin.manage_quizzes",
+
+                chapter_id=chapter.id
+
+            )
+
+        )
+
+    return render_template(
+
+        "admin/quiz_form.html",
+
+        chapter=chapter,
+
+        quiz=None
+
+    )
+
+
+# ============================================================
+# EDIT QUIZ
+# ============================================================
+
+@admin_bp.route(
+    "/quizzes/<int:quiz_id>/edit",
+    methods=[
+        "GET",
+        "POST"
+    ]
+)
+@login_required
+@admin_required
+def edit_quiz(quiz_id):
+
+    quiz = Quiz.query.get_or_404(
+        quiz_id
+    )
+
+    if request.method == "POST":
+
+        quiz.title = request.form.get(
+            "title"
+        ).strip()
+
+        quiz.description = request.form.get(
+            "description"
+        )
+
+        quiz.instructions = request.form.get(
+            "instructions"
+        )
+
+        quiz.time_limit = request.form.get(
+            "time_limit",
+            type=int
+        )
+
+        quiz.passing_percentage = request.form.get(
+            "passing_percentage",
+            type=int
+        )
+
+        quiz.max_attempts = request.form.get(
+            "max_attempts",
+            type=int
+        )
+
+        quiz.negative_marking = (
+
+            request.form.get(
+                "negative_marking"
+            )
+
+            ==
+
+            "on"
+
+        )
+
+        quiz.negative_marks = request.form.get(
+            "negative_marks",
+            type=float
+        )
+
+        quiz.shuffle_questions = (
+
+            request.form.get(
+                "shuffle_questions"
+            )
+
+            ==
+
+            "on"
+
+        )
+
+        quiz.show_result_immediately = (
+
+            request.form.get(
+                "show_result_immediately"
+            )
+
+            ==
+
+            "on"
+
+        )
+
+        quiz.show_correct_answers = (
+
+            request.form.get(
+                "show_correct_answers"
+            )
+
+            ==
+
+            "on"
+
+        )
+
+        quiz.is_published = (
+
+            request.form.get(
+                "is_published"
+            )
+
+            ==
+
+            "on"
+
+        )
+
+        db.session.commit()
+
+        flash(
+
+            "Quiz updated successfully.",
+
+            "success"
+
+        )
+
+        return redirect(
+
+            url_for(
+
+                "admin.manage_quizzes",
+
+                chapter_id=quiz.chapter_id
+
+            )
+
+        )
+
+    return render_template(
+
+        "admin/quiz_form.html",
+
+        chapter=quiz.chapter,
+
+        quiz=quiz
+
+    )
+
+
+# ============================================================
+# DELETE QUIZ
+# ============================================================
+
+@admin_bp.post(
+    "/quizzes/<int:quiz_id>/delete"
+)
+@login_required
+@admin_required
+def delete_quiz(quiz_id):
+
+    quiz = Quiz.query.get_or_404(
+        quiz_id
+    )
+
+    chapter_id = quiz.chapter_id
+
+    db.session.delete(
+        quiz
+    )
+
+    db.session.commit()
+
+    flash(
+
+        "Quiz deleted successfully.",
+
+        "success"
+
+    )
+
+    return redirect(
+
+        url_for(
+
+            "admin.manage_quizzes",
+
+            chapter_id=chapter_id
+
+        )
+
+    )
+
+
+# ============================================================
+# PUBLISH / UNPUBLISH
+# ============================================================
+
+@admin_bp.post(
+    "/quizzes/<int:quiz_id>/toggle"
+)
+@login_required
+@admin_required
+def toggle_quiz(quiz_id):
+
+    quiz = Quiz.query.get_or_404(
+        quiz_id
+    )
+
+    quiz.is_published = (
+
+        not quiz.is_published
+
+    )
+
+    db.session.commit()
+
+    flash(
+
+        "Quiz status updated.",
+
+        "success"
+
+    )
+
+    return redirect(
+
+        url_for(
+
+            "admin.manage_quizzes",
+
+            chapter_id=quiz.chapter_id
+
+        )
+
+    )
+
+@admin_bp.route(
+    "/quizzes/<int:quiz_id>/questions"
+)
+@login_required
+@admin_required
+def manage_questions(quiz_id):
+
+    quiz = Quiz.query.get_or_404(
+        quiz_id
+    )
+
+    questions = (
+
+        Question.query
+
+        .filter_by(
+            quiz_id=quiz.id
+        )
+
+        .order_by(
+            Question.position
+        )
+
+        .all()
+
+    )
+
+    return render_template(
+
+        "admin/questions.html",
+
+        quiz=quiz,
+
+        questions=questions
+
+    )
+
+@admin_bp.route(
+    "/quizzes/<int:quiz_id>/questions/add",
+    methods=[
+        "GET",
+        "POST"
+    ]
+)
+@login_required
+@admin_required
+def add_question(quiz_id):
+
+    quiz = Quiz.query.get_or_404(
+        quiz_id
+    )
+
+    if request.method == "POST":
+
+        question = Question(
+
+            quiz_id=quiz.id,
+
+            title=request.form.get(
+                "title"
+            ),
+
+            question_text=request.form.get(
+                "question_text"
+            ),
+
+            explanation=request.form.get(
+                "explanation"
+            ),
+
+            difficulty=request.form.get(
+                "difficulty"
+            ),
+
+            marks=request.form.get(
+                "marks",
+                type=int
+            ),
+
+            position=request.form.get(
+                "position",
+                type=int
+            ),
+
+            question_type=request.form.get(
+                "question_type"
+            ),
+
+            is_published=True
+
+        )
+
+        db.session.add(
+            question
+        )
+
+        db.session.commit()
+
+        quiz.update_total_questions()
+
+        quiz.update_total_marks()
+
+        db.session.commit()
+
+        flash(
+
+            "Question added successfully.",
+
+            "success"
+
+        )
+
+        return redirect(
+
+            url_for(
+
+                "admin.manage_questions",
+
+                quiz_id=quiz.id
+
+            )
+
+        )
+
+    return render_template(
+
+        "admin/question_form.html",
+
+        quiz=quiz,
+
+        question=None
+
+    )
+
+@admin_bp.route(
+    "/questions/<int:question_id>/edit",
+    methods=[
+        "GET",
+        "POST"
+    ]
+)
+@login_required
+@admin_required
+def edit_question(question_id):
+
+    question = Question.query.get_or_404(
+        question_id
+    )
+
+    if request.method == "POST":
+
+        question.title = request.form.get(
+            "title"
+        )
+
+        question.question_text = request.form.get(
+            "question_text"
+        )
+
+        question.explanation = request.form.get(
+            "explanation"
+        )
+
+        question.difficulty = request.form.get(
+            "difficulty"
+        )
+
+        question.marks = request.form.get(
+            "marks",
+            type=int
+        )
+
+        question.position = request.form.get(
+            "position",
+            type=int
+        )
+
+        question.question_type = request.form.get(
+            "question_type"
+        )
+
+        db.session.commit()
+
+        question.quiz.update_total_marks()
+
+        question.quiz.update_total_questions()
+
+        db.session.commit()
+
+        flash(
+
+            "Question updated successfully.",
+
+            "success"
+
+        )
+
+        return redirect(
+
+            url_for(
+
+                "admin.manage_questions",
+
+                quiz_id=question.quiz_id
+
+            )
+
+        )
+
+    return render_template(
+
+        "admin/question_form.html",
+
+        quiz=question.quiz,
+
+        question=question
+
+    )
+
+@admin_bp.post(
+    "/questions/<int:question_id>/delete"
+)
+@login_required
+@admin_required
+def delete_question(question_id):
+
+    question = Question.query.get_or_404(
+        question_id
+    )
+
+    quiz = question.quiz
+
+    db.session.delete(
+        question
+    )
+
+    db.session.commit()
+
+    quiz.update_total_marks()
+
+    quiz.update_total_questions()
+
+    db.session.commit()
+
+    flash(
+
+        "Question deleted successfully.",
+
+        "success"
+
+    )
+
+    return redirect(
+
+        url_for(
+
+            "admin.manage_questions",
+
+            quiz_id=quiz.id
+
+        )
+
+    )
+
+# ============================================================
+# OPTION LIST
+# ============================================================
+
+@admin_bp.route(
+    "/questions/<int:question_id>/options"
+)
+@login_required
+@admin_required
+def manage_options(question_id):
+
+    question = Question.query.get_or_404(question_id)
+
+    options = (
+        Option.query
+        .filter_by(question_id=question.id)
+        .order_by(Option.position)
+        .all()
+    )
+
+    return render_template(
+        "admin/options.html",
+        question=question,
+        options=options
+    )
+
+
+# ============================================================
+# ADD OPTION
+# ============================================================
+
+@admin_bp.route(
+    "/questions/<int:question_id>/options/add",
+    methods=["GET", "POST"]
+)
+@login_required
+@admin_required
+def add_option(question_id):
+
+    question = Question.query.get_or_404(question_id)
+
+    if request.method == "POST":
+
+        option = Option(
+
+            question_id=question.id,
+
+            option_key=request.form.get(
+                "option_key"
+            ),
+
+            option_text=request.form.get(
+                "option_text"
+            ),
+
+            explanation=request.form.get(
+                "explanation"
+            ),
+
+            position=request.form.get(
+                "position",
+                type=int
+            ),
+
+            is_correct=(
+                request.form.get(
+                    "is_correct"
+                )
+                == "on"
+            )
+
+        )
+
+        db.session.add(option)
+
+        db.session.commit()
+
+        flash(
+            "Option added successfully.",
+            "success"
+        )
+
+        return redirect(
+
+            url_for(
+                "admin.manage_options",
+                question_id=question.id
+            )
+
+        )
+
+    return render_template(
+
+        "admin/option_form.html",
+
+        question=question,
+
+        option=None
+
+    )
+
+
+# ============================================================
+# EDIT OPTION
+# ============================================================
+
+@admin_bp.route(
+    "/options/<int:option_id>/edit",
+    methods=["GET", "POST"]
+)
+@login_required
+@admin_required
+def edit_option(option_id):
+
+    option = Option.query.get_or_404(option_id)
+
+    if request.method == "POST":
+
+        option.option_key = request.form.get(
+            "option_key"
+        )
+
+        option.option_text = request.form.get(
+            "option_text"
+        )
+
+        option.explanation = request.form.get(
+            "explanation"
+        )
+
+        option.position = request.form.get(
+            "position",
+            type=int
+        )
+
+        option.is_correct = (
+            request.form.get(
+                "is_correct"
+            )
+            == "on"
+        )
+
+        db.session.commit()
+
+        flash(
+            "Option updated successfully.",
+            "success"
+        )
+
+        return redirect(
+
+            url_for(
+
+                "admin.manage_options",
+
+                question_id=option.question_id
+
+            )
+
+        )
+
+    return render_template(
+
+        "admin/option_form.html",
+
+        question=option.question,
+
+        option=option
+
+    )
+
+
+# ============================================================
+# DELETE OPTION
+# ============================================================
+
+@admin_bp.post(
+    "/options/<int:option_id>/delete"
+)
+@login_required
+@admin_required
+def delete_option(option_id):
+
+    option = Option.query.get_or_404(option_id)
+
+    question_id = option.question_id
+
+    db.session.delete(option)
+
+    db.session.commit()
+
+    flash(
+        "Option deleted successfully.",
+        "success"
+    )
+
+    return redirect(
+
+        url_for(
+            "admin.manage_options",
+            question_id=question_id
         )
 
     )

@@ -1,0 +1,759 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+
+{{ quiz.title }}
+
+{% endblock %}
+
+{% block content %}
+
+<section
+
+class="quiz-page"
+
+data-attempt="{{ attempt.id }}"
+
+data-current="{{ attempt.current_question }}"
+
+data-total="{{ total_questions }}"
+
+>
+<div class="quiz-container">
+
+    <!-- ======================================= -->
+    <!-- HEADER -->
+    <!-- ======================================= -->
+
+    <div class="quiz-header">
+
+        <div class="quiz-left">
+
+            <span class="quiz-badge">
+
+                SmartLearn AI Assessment
+
+            </span>
+
+            <h2>
+
+                {{ quiz.title }}
+
+            </h2>
+
+            <p>
+
+                {{ quiz.description }}
+
+            </p>
+
+        </div>
+
+
+        <div class="quiz-right">
+
+            <div class="quiz-info-card">
+
+                <span>
+
+                    Questions
+
+                </span>
+
+                <h3>
+
+                    {{ total_questions }}
+
+                </h3>
+
+            </div>
+
+            <div class="quiz-info-card">
+
+                <span>
+
+                    Total Marks
+
+                </span>
+
+                <h3>
+
+                    {{ quiz.total_marks }}
+
+                </h3>
+
+            </div>
+
+            <div class="quiz-info-card">
+
+                <span>
+
+                    Passing
+
+                </span>
+
+                <h3>
+
+                    {{ quiz.passing_percentage }}%
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================= -->
+    <!-- MAIN BODY -->
+    <!-- ======================================= -->
+
+    <div class="quiz-body">
+
+        <!-- LEFT PANEL -->
+
+        <div class="quiz-content">
+            <div
+
+            id="questionContainer"
+
+            data-question="{{ current_question.id }}"
+
+            >
+
+                <div class="question-card">
+
+                    <div class="question-top">
+
+                        <div class="question-number">
+
+                            Question
+
+                            {{ attempt.current_question }}
+
+                            /
+
+                            {{ total_questions }}
+
+                        </div>
+
+                        <div class="question-marks">
+
+                            {{ current_question.marks }}
+
+                            Marks
+
+                        </div>
+
+                    </div>
+
+                    <div class="question-meta">
+
+                        <span class="difficulty">
+
+                            {{ current_question.difficulty }}
+
+                        </span>
+
+                        <span class="question-type">
+
+                            {{ current_question.question_type|upper }}
+
+                        </span>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="question-title">
+
+                        <h3>
+
+                            {{ current_question.title }}
+
+                        </h3>
+
+                    </div>
+
+                    <div class="question-text">
+
+                        {{ current_question.question_text|safe }}
+
+                    </div>
+
+                </div>
+
+                <!-- OPTIONS -->
+
+                <form
+
+                    id="answerForm"
+
+                    method="POST"
+
+                    action="{{ url_for('tests.save_answer',attempt_id=attempt.id) }}"
+
+                    data-attempt="{{ attempt.id }}"
+
+                    data-question="{{ current_question.id }}"
+
+                >
+
+                    <input
+
+                        type="hidden"
+
+                        name="question_id"
+
+                        value="{{ current_question.id }}"
+
+                    >
+
+                    <input
+
+                        type="hidden"
+
+                        id="currentQuestion"
+
+                        name="current_question"
+
+                        value="{{ attempt.current_question }}"
+
+                    >
+
+                    <input
+
+                        type="hidden"
+
+                        id="nextQuestion"
+
+                        name="next_question"
+
+                        value="{{ attempt.current_question + 1 }}"
+
+                    >
+
+                    <input
+
+                        type="hidden"
+
+                        id="reviewFlag"
+
+                        name="review"
+
+                        value="0"
+
+                    >
+
+                    <div class="options-container">
+
+                        {% for option in current_question.options %}
+
+                        <label class="option-card">
+
+                            <input
+
+                                type="radio"
+
+                                name="option_id"
+
+                                value="{{ option.id }}"
+
+                            >
+
+                            <div class="option-letter">
+
+                                {{ option.option_key }}
+
+                            </div>
+
+                            <div class="option-content">
+
+                                {{ option.option_text }}
+
+                            </div>
+
+                        </label>
+
+                        {% endfor %}
+
+                    </div>
+
+                </form>
+
+
+
+
+
+            <!-- ===================================== -->
+            <!-- NAVIGATION -->
+            <!-- ===================================== -->
+
+            <div id="question-navigation">
+
+                <!-- ========================================= -->
+                <!-- QUIZ NAVIGATION -->
+                <!-- ========================================= -->
+
+                <div class="quiz-navigation">
+
+                    <!-- Previous -->
+
+                    {% if attempt.current_question > 1 %}
+
+                    <form
+
+                        method="POST"
+
+                        action="{{ url_for('tests.navigate_question',attempt_id=attempt.id) }}"
+
+                    >
+
+                        <input
+
+                            type="hidden"
+
+                            name="action"
+
+                            value="previous"
+
+                        >
+
+                        <button
+
+                            class="btn btn-secondary"
+
+                            type="submit"
+
+                        >
+
+                            <i class="fa-solid fa-arrow-left"></i>
+
+                            Previous
+
+                        </button>
+
+                    </form>
+
+                    {% else %}
+
+                    <button
+
+                        class="btn btn-secondary"
+
+                        disabled
+
+                    >
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        Previous
+
+                    </button>
+
+                    {% endif %}
+
+
+
+                    <!-- Mark For Review -->
+
+                    <form
+
+                        method="POST"
+
+                        action="{{ url_for('tests.toggle_review',
+                        attempt_id=attempt.id,
+                        question_id=current_question.id) }}"
+
+                    >
+
+                        <button
+
+                        id="reviewBtn"
+
+                        class="btn btn-warning"
+
+                        type="button"
+
+                        >
+
+                            <i class="fa-solid fa-bookmark"></i>
+
+                            Mark For Review
+
+                        </button>
+
+                    </form>
+
+
+
+                    <!-- Save & Next -->
+
+                    <button
+
+                    id="saveNextBtn"
+
+                    class="btn btn-primary"
+
+                    type="submit"
+
+                    form="answerForm"
+
+                    >
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+
+                        Save & Next
+
+                    </button>
+
+
+
+                    <!-- Submit -->
+
+                    <button
+
+                        class="btn btn-success"
+
+                        type="button"
+
+                        onclick="confirmSubmitQuiz()"
+
+                    >
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                        Submit Quiz
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+                <!-- ========================================= -->
+                <!-- HIDDEN SUBMIT FORM -->
+                <!-- ========================================= -->
+
+                <form
+
+                id="submitQuizForm"
+
+                method="POST"
+
+                action="{{ url_for('tests.submit_quiz',attempt_id=attempt.id) }}"
+
+                >
+
+                </form>
+            </div>
+        </div>
+
+
+        <!-- RIGHT PANEL -->
+
+        <aside class="quiz-sidebar">
+
+            <!-- ===================================================== -->
+            <!-- TIMER PANEL -->
+            <!-- ===================================================== -->
+
+            <div class="timer-card">
+
+                <div class="timer-header">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                    <span>
+
+                        Remaining Time
+
+                    </span>
+
+                </div>
+
+                <div class="timer-circle">
+
+                    <svg
+                        width="170"
+                        height="170"
+                    >
+
+                        <circle
+
+                            class="timer-bg"
+
+                            cx="85"
+
+                            cy="85"
+
+                            r="70"
+
+                        ></circle>
+
+                        <circle
+
+                            id="timer-progress"
+
+                            class="timer-progress"
+
+                            cx="85"
+
+                            cy="85"
+
+                            r="70"
+
+                        ></circle>
+
+                    </svg>
+
+                    <div class="timer-text">
+
+                        <span>
+
+                            Time Left
+
+                        </span>
+
+                        <h2
+
+                        id="timer"
+
+                        data-minutes="{{ quiz.time_limit }}"
+
+                        data-attempt="{{ attempt.id }}"
+
+                        >
+
+                            {{ quiz.time_limit }}:00
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="timer-progress-bar">
+
+                    <div
+
+                        id="time-bar"
+
+                        class="time-bar"
+
+                    ></div>
+
+                </div>
+
+                <div class="timer-status">
+
+                    <span>
+
+                        Total Time
+
+                    </span>
+
+                    <strong>
+
+                        {{ quiz.time_limit }}
+
+                        Minutes
+
+                    </strong>
+
+                </div>
+
+                <div
+
+                    id="timer-warning"
+
+                    class="timer-warning"
+
+                    style="display:none;"
+
+                >
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    Less than
+
+                    <b>
+
+                        5 Minutes
+
+                    </b>
+
+                    Remaining!
+
+                </div>
+
+                <div
+
+                    id="timer-danger"
+
+                    class="timer-danger"
+
+                    style="display:none;"
+
+                >
+
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                    Quiz will auto submit soon.
+
+                </div>
+
+            </div>
+
+            <!-- ========================================= -->
+            <!-- QUESTION PALETTE -->
+            <!-- ========================================= -->
+
+            <div class="palette-card">
+
+                <div class="palette-header">
+
+                    <h3>
+
+                        Question Palette
+
+                    </h3>
+
+                    <span>
+
+                        {{ total_questions }} Questions
+
+                    </span>
+
+                </div>
+
+                <div class="palette-grid">
+
+                    {% for item in palette %}
+
+                    <form
+
+                        method="POST"
+
+                        action="{{ url_for('tests.navigate_question',attempt_id=attempt.id) }}"
+
+                    >
+
+                        <input
+
+                            type="hidden"
+
+                            name="action"
+
+                            value="jump"
+
+                        >
+
+                        <input
+
+                            type="hidden"
+
+                            name="page"
+
+                            value="{{ item.number }}"
+
+                        >
+
+                        <button
+
+                        type="button"
+
+                        class="palette-btn
+
+                        {{ item.status }}
+
+                        {% if item.number==attempt.current_question %}
+
+                        active
+
+                        {% endif %}
+
+                        "
+
+                        data-page="{{ item.number }}"
+
+                        data-question="{{ item.question_id }}"
+
+                        >
+
+                            {{ item.number }}
+
+                        </button>
+
+                    </form>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            <!-- ========================================= -->
+            <!-- PALETTE LEGEND -->
+            <!-- ========================================= -->
+
+            <div class="palette-legend">
+
+                <div>
+
+                    <span class="legend answered"></span>
+
+                    Answered
+
+                </div>
+
+                <div>
+
+                    <span class="legend review"></span>
+
+                    Review
+
+                </div>
+
+                <div>
+
+                    <span class="legend skipped"></span>
+
+                    Skipped
+
+                </div>
+
+                <div>
+
+                    <span class="legend visited"></span>
+
+                    Visited
+
+                </div>
+
+                <div>
+
+                    <span class="legend current"></span>
+
+                    Current
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+
+
+</section>
+
+
+{% endblock %}
